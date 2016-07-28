@@ -11,7 +11,7 @@ function drawChart(container_width){
   var defaultSelector = getActiveState() + "-" + getActiveCategory();
   var pdefaultSelector = getActiveState() + "-" + "PROJ"
   var margin = {top: 90, right: 40, bottom: 30, left: 90},
-      width = container_width - margin.left - margin.right,
+      width = container_width*.7 - margin.left - margin.right,
       height = width/1.8 - margin.top - margin.bottom;
 
   var formatDate = d3.time.format("%Y");
@@ -42,11 +42,11 @@ function drawChart(container_width){
     .append('pattern')
       .attr('id', 'diagonalHatch')
       .attr('patternUnits', 'userSpaceOnUse')
-      .attr('width', 4)
-      .attr('height', 4)
+      .attr('width', 8)
+      .attr('height', 8)
     .append('path')
-      .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-      .attr('stroke', '#dedddd')
+      .attr('d', 'M-2,2 l4,-4 M0,8 l8,-8 M6,10 l4,-4')
+      .attr('stroke', '#d2d2d2')
       .attr('stroke-width', 1);
 
   d3.json("data/jridata.json", function(error, data) {
@@ -93,10 +93,25 @@ function drawChart(container_width){
       .attr("width", x(formatDate.parse(JRI[getActiveState()])))
       .style("fill",'url(#diagonalHatch')
       .style("pointer-events","none")
-      .style("stroke","#ccc")
-      .style("stroke-width","3px")
+      .style("stroke","#000")
+      .style("stroke-width","1px")
       .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()])) + height))
 
+    var pointer = svg.append("g")
+          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()])) - 137) + "," + height/2 + ")")
+
+        pointer
+          .append("polygon")
+          .attr("points","0,24.8 119.8,24.8 136,12.1 119.8,0 0,0")
+          .attr("fill","#ffffff")
+          .attr("stroke","#999696")
+          .attr("stroke-width","1.5px")
+        pointer.append("text")
+          .text("JRI Implementation")
+          .style("font-size","12px")
+          .attr("dy",17)
+          .attr("dx",9)
+          .style("font-weight","bold")
 
     var mainLine = svg.append("path")
         .datum(slice)
@@ -205,6 +220,10 @@ function drawChart(container_width){
       .transition()
       .attr("width", x(formatDate.parse(JRI[state])))
       .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[state])) + "," + height + "," + (x(formatDate.parse(JRI[state])) + height))
+
+      pointer
+        .transition()
+        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state])) - 137) + "," + height/2 + ")")
 
 
 
