@@ -1,0 +1,112 @@
+/********************************************************/
+/******************* TEST PAGE LAYOUT ******************/
+/******************************************************/
+.states{
+	margin-bottom: 70px;
+	float: right;
+	clear: both;
+}
+
+/********************************************************/
+/******************* LINE CHART ************************/
+/******************************************************/
+
+.line{
+	stroke: #1696d2;
+	stroke-width: 3px;
+	fill: none;
+}
+.proj_line{
+	stroke: #ec008b;
+	stroke-width: 3px;
+	fill: none;
+}
+.dot{
+	fill: none;
+	stroke: none;
+}
+path.domain{
+	display: none;
+}
+.axis .tick text{
+	font-family: Lato;
+}
+
+/********************************************************/
+/********************** TABS ***************************/
+/******************************************************/
+#tab_container{
+	width: 100%;
+	clear: both;
+}
+.tab{
+	cursor: pointer;
+	width: 150px;
+	text-align: center;
+	font-family: Lato;
+	font-size: 16px;
+	display: inline-block;
+	padding: 9 25 9 25px;
+	background: #f0f0f0;
+	border-top: none;
+	border-right: none;
+	border-left: none;
+	border-bottom: 1px solid black;
+	float: left;
+	height: 16px;
+}
+.tab.gap{
+	width: calc(100% - 675px);
+	background: white;
+	border-top: none;
+	border-right: 1px solid #fff;
+	border-left: none;
+	border-bottom: 1px solid black;
+
+}
+.tab.active{
+	background: white;
+	border-top: 1px solid black;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+	border-bottom: none;
+}
+
+/********************************************************/
+/******************* STYLED SELECT *********************/
+/******************************************************/
+
+
+.styled-select.filter select{
+  pointer-events: none;
+}
+.styled-select select {
+   background: transparent;
+   width: 330px;
+   height: 45px;
+   padding-left: 10px;
+   font: 16px Lato;
+   color: #818385;
+   line-height: 1;
+   border: 0;
+   border-radius: 0;
+   -webkit-appearance: none;
+   pointer-events: none;
+}
+.styled-select select::-ms-expand {
+ display: none !important;
+}
+.styled-select {
+   width: 280px;
+   height: 45px;
+   overflow: hidden;
+   background: url(../images/urban-select-2x.png) no-repeat right #EFEFEF;
+   background-size: 45px 45px;
+   border: none;
+   z-index: 2;
+   /*position: relative;*/
+   overflow: hidden;
+}
+*:focus{
+   outline: 0;
+}
