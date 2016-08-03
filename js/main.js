@@ -6,6 +6,50 @@ function getActiveState(){
   return $(".styled-select.states select").val()
 }
 
+function moveTooltip(dot){
+        var TT_WIDTH = 200
+        var d = d3.select(dot).datum()
+        var main_val = d[getActiveState() + "-" + getActiveCategory()]
+        var proj_val = d[getActiveState() + "-" + "PROJ"]
+        var comma = d3.format(",")
+        var year = d.year
+        d3.select("#tt_year").text(year)
+        if(main_val != 0 && ! isNaN(main_val)){
+          d3.select("#tt_main_text").text("Population: ")
+          d3.select("#tt_main_val").text(comma(main_val))
+        }else{
+          d3.select("#tt_main_text").text("")
+          d3.select("#tt_main_val").text("")
+        }
+        if(proj_val != 0 && ! isNaN(proj_val) && getActiveCategory() == "PRI"){
+          d3.select("#tt_proj_text").text("Projected Population: ")
+          d3.select("#tt_proj_val").text(comma(proj_val))
+        }else{
+          d3.select("#tt_proj_text").text("")
+          d3.select("#tt_proj_val").text("")
+        }
+
+        if(dot == null){
+          hideTooltip();
+          return false
+        }else{
+          d3.select("#tooltip")
+          .style("opacity",1)
+          .style("top", function(){
+            return dot.getBoundingClientRect().top + 12
+          })
+          .style("left", function(){
+            if(d3.select("svg").node().getBoundingClientRect().width - dot.getBoundingClientRect().left - TT_WIDTH < 0){
+              return dot.getBoundingClientRect().left - 6 - TT_WIDTH
+            }
+            return dot.getBoundingClientRect().left + 12
+          })
+        }
+}
+function hideTooltip(){
+  d3.select("#tooltip")
+    .style("opacity",0)
+}
 function drawChart(container_width){
   d3.selectAll("svg").remove()
   var defaultSelector = getActiveState() + "-" + getActiveCategory();
@@ -35,8 +79,38 @@ function drawChart(container_width){
   var svg = d3.select("#chart").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
+            .on("mousemove", mousemove)
+
     .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+
+  bisectDate = d3.bisector(function(d) { return parseFloat(d.year); }).left
+  function mousemove() {
+// return typeof(d[selector]) != "undefined" && d[selector] != 0
+    var x0 = x.invert(d3.mouse(this)[0]-margin.left)
+    var year = x0.getFullYear()
+    d3.selectAll(".active.dot").classed("active",false)
+    d3.selectAll(".active.pdot").classed("active",false)
+    d3.selectAll(".dot.y" + year)
+      .classed("active", function(d){
+        return (typeof(d[defaultSelector]) != "undefined" && d[defaultSelector] != 0)
+      })
+    d3.selectAll(".pdot.y" + year)
+      .classed("active", function(d){
+        if(getActiveCategory() == "PRI"){
+          return (typeof(d[pdefaultSelector]) != "undefined" && d[pdefaultSelector] != 0)
+        } else return false
+      })
+      // d3.select("#tooltip")
+      //   .style("top", function(){
+      //     return d3.select("circle.active").node().getBoundingClientRect().top + 12
+      //   })
+      //   .style("left", function(){
+      //     return d3.select("circle.active").node().getBoundingClientRect().left + 12
+      //   })
+      moveTooltip(d3.select("circle.active").node())
+  }
   svg
     .append('defs')
     .append('pattern')
@@ -93,8 +167,8 @@ function drawChart(container_width){
       .attr("width", x(formatDate.parse(JRI[getActiveState()])))
       .style("fill",'url(#diagonalHatch')
       .style("pointer-events","none")
-      .style("stroke","#000")
-      .style("stroke-width","1px")
+      .style("stroke","#fdbf11")
+      .style("stroke-width","2px")
       .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()])) + height))
 
     var pointer = svg.append("g")
@@ -104,8 +178,8 @@ function drawChart(container_width){
           .append("polygon")
           .attr("points","0,24.8 119.8,24.8 136,12.1 119.8,0 0,0")
           .attr("fill","#ffffff")
-          .attr("stroke","#999696")
-          .attr("stroke-width","1.5px")
+          .attr("stroke","#fdbf11")
+          .attr("stroke-width","2px")
         pointer.append("text")
           .text("JRI Implementation")
           .style("font-size","12px")
@@ -123,18 +197,35 @@ function drawChart(container_width){
         .attr("d", pline)
         .style("opacity", function(){ return (getActiveCategory() == "PRI") ? 1 : 0});
 
-    svg.selectAll(".dot")
-      .data(slice)
+    var mainDot = svg.selectAll(".dot")
+      .data(data)
       .enter()
       .append("circle")
-      .attr("class","dot")
+      .attr("class",function(d){
+        return "dot y" + d.year
+      })
       .attr("cx", function(d){ 
         return x(formatDate.parse(d.year))
       })
       .attr("cy", function(d){
          return y(+d[defaultSelector])
       })
-      .attr("r",5)
+      .attr("r",6)
+
+    var projDot = svg.selectAll(".pdot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class",function(d){
+        return "pdot y" + d.year
+      })
+      .attr("cx", function(d){ 
+        return x(formatDate.parse(d.year))
+      })
+      .attr("cy", function(d){
+         return y(+d[pdefaultSelector])
+      })
+      .attr("r",6)
 
     $(".styled-select").click(function () {
         var element = $(this).children("select")[0],
@@ -178,12 +269,24 @@ function drawChart(container_width){
       })
 
     function updateChart(state, category){
+      hideTooltip();
       console.log(state, category)
       var selector = state + "-" + category
       var pselector = state + "-PROJ"
       var slice = data.filter(function(d){ return typeof(d[selector]) != "undefined" && d[selector] != 0})
       var pslice = data.filter(function(d){ return typeof(d[pselector]) != "undefined" && d[pselector] != 0})
 
+      if (category != "PRI"){
+        d3.select("#l_proj")
+          .transition()
+          .style("opacity", 0)
+      }else{
+        d3.select("#l_proj")
+          .transition()
+          .style("opacity", 1)
+      }
+      var FULL = {"PRI" : "Prison", "PAR": "Parole", "PRO": "Probation"}
+      d3.select("#l_main_text span").text(FULL[category])
       // x.domain(d3.extent(slice, function(d) { return formatDate.parse(d.year) }));
       var max = d3.max(slice, function(d){ return +d[selector]})
       var pmax = (category == "PRI") ? d3.max(pslice, function(d){ return +d[pselector]}) : max
@@ -204,12 +307,39 @@ function drawChart(container_width){
         .datum(slice)
         .transition()
         .attr("d", line);
+
+
+      mainDot
+      .data(data)
+      .attr("class",function(d){
+        return "dot y" + d.year
+      })
+      .transition()
+      .attr("cx", function(d){ 
+        return x(formatDate.parse(d.year))
+      })
+      .attr("cy", function(d){
+         return y(+d[selector])
+      })
+      
       if(category == "PRI"){
         projLine
           .datum(pslice)
           .transition()
           .style("opacity",1)
           .attr("d", pline);
+      projDot
+        .data(data)
+        .attr("class",function(d){
+          return "pdot y" + d.year
+        })
+        .transition()
+        .attr("cx", function(d){ 
+          return x(formatDate.parse(d.year))
+        })
+        .attr("cy", function(d){
+           return y(+d[pselector])
+        })
       }else{
         projLine
           .transition()
@@ -234,6 +364,38 @@ function drawChart(container_width){
         .style("stroke-width","1px")
         .attr("x2",0)
         .attr("x1",width)
+
+    d3.select("svg")
+    .on("mousemove", function(){
+      var x0 = x.invert(d3.mouse(this)[0]-margin.left)
+      var year = x0.getFullYear()
+      d3.selectAll(".active.dot").classed("active",false)
+      d3.selectAll(".active.pdot").classed("active",false)
+      d3.selectAll(".dot.y" + year)
+        .classed("active", function(d){
+          if(typeof(d[selector]) != "undefined" && d[selector] != 0){
+           var dot = this;
+           moveTooltip(dot)
+            return true
+          }else{
+            hideTooltip();
+            return false
+         }
+        })
+      d3.selectAll(".pdot.y" + year)
+        .classed("active", function(d){
+          if(getActiveCategory() == "PRI"){
+          if(typeof(d[pselector]) != "undefined" && d[pselector] != 0){
+           var dot = this;
+           moveTooltip(dot)
+            return true
+            }
+          }else{
+            // hideTooltip()
+            return false
+          }
+        })
+      })
 
     }
 

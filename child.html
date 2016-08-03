@@ -39,9 +39,27 @@
 		<div class ="tab" id="tab_PAR">Parole Population</div>
 		<div class ="tab gap" id="tab_GAP"></div>
 	</div>
+	<div id = "legend">
+		<div id = "l_main">
+			<div id = "l_main_key"></div>
+			<div id = "l_main_text">Actual <span>Prison</span> Population</div>
+		</div>
+		<div id = "l_proj">
+			<div id = "l_proj_key"></div>
+			<div id = "l_proj_text">Baseline Prison Projection</div>
+		</div>
+	</div>
 
-	<div id = "chart"></div>
+	<div id = "chart">
+		<div id = "tooltip">
+			<div id = "tt_year"></div>
+			<div id = "tt_main"><span id = "tt_main_text"></span><span id = "tt_main_val"></span></div>
+			<div id = "tt_proj"><span id = "tt_proj_text"></span><span id = "tt_proj_val"></span></div>
+		</div>
+
+	</div>
 	<div class="div-reinvestment-ratio"><p class="block-ratio-label">Total Savings:</p><p class="block-ratio-stat">$20,000,000</p><p class="block-ratio-label">Total Reinvestment:</p><p class="block-ratio-stat">$17,660,000</p><div class="div-reinvestment-context-block">Georgia invested more than <strong>$17.5 million</strong> upfront into accountability courts, substance abuse programs and risk assessment tool development.</div></div>
+
 
 	<script type="text/javascript" src = "js/vendor/d3.v3.min.js"></script>
 	<script type="text/javascript" src = "js/vendor/jquery-1.12.4.min.js"></script>

@@ -22,7 +22,9 @@
 /********************************************************/
 /******************* LINE CHART ************************/
 /******************************************************/
-
+#chart{
+	/*position: relative;*/
+}
 .line{
 	stroke: #1696d2;
 	stroke-width: 3px;
@@ -36,6 +38,22 @@
 .dot{
 	fill: none;
 	stroke: none;
+	stroke-width: 3px;
+	pointer-events: none;
+}
+.pdot{
+	fill: none;
+	stroke: none;
+	stroke-width: 3px;
+	pointer-events: none;	
+}
+.dot.active{
+	stroke: #1696d2;
+	fill: white;
+}
+.pdot.active{
+	stroke: #ec008b;
+	fill: white;
 }
 path.domain{
 	display: none;
@@ -121,4 +139,52 @@ path.domain{
 }
 *:focus{
    outline: 0;
+}
+
+/********************************************************/
+/******************** TOOLTIP **************************/
+/******************************************************/
+#tooltip{
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	left: 0;
+	width: 200px;
+	height: 100px;
+	background: #00ff00;
+	pointer-events: none;
+}
+
+/********************************************************/
+/********************* LEGEND **************************/
+/******************************************************/
+
+
+#l_main, #l_proj{
+    position: absolute;
+    top: 183px;
+    font-weight: bold;
+}
+#l_main{
+	left: 40px;
+}
+#l_proj{
+	left: 290px;
+}
+#l_main_key, #l_proj_key{
+	width: 40px;
+    height: 4px;
+    float: left;
+    margin-right: 10px;
+    border-radius: 13px;
+    margin-top: 10px;
+}
+#l_main_text, #l_proj_text{
+	float: left;
+}
+#l_main_key{
+	background: #1696d2;
+}
+#l_proj_key{
+	background: #ec008b;
 }
