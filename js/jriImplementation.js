@@ -3,7 +3,7 @@ var JRI = {
 	"Alaska": "2011",
 	"Arkansas": "2010",
 	"Delaware": "2012",
-	"Georgia": "2009",
+	"Georgia": "2012",
 	"Hawaii": "2013",
 	"Idaho": "2014",
 	"Kansas": "2013",
