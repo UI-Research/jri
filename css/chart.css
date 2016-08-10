@@ -45,7 +45,7 @@
 	fill: none;
 }
 .proj_line{
-	stroke: #ec008b;
+	stroke: #fdbf11;
 	stroke-width: 3px;
 	fill: none;
 }
@@ -66,7 +66,7 @@
 	fill: white;
 }
 .pdot.active{
-	stroke: #ec008b;
+	stroke: #fdbf11;
 	fill: white;
 }
 path.domain{
@@ -214,5 +214,5 @@ path.domain{
 	background: #1696d2;
 }
 #l_proj_key{
-	background: #ec008b;
+	background: #fdbf11;
 }
