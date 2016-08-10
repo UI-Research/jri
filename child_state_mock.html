@@ -1,0 +1,72 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="css/chart_state_mock.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+	<div class="styled-select states">
+	 <select>
+		<option value = "Alabama">Alabama</option>
+		<option value = "Alaska">Alaska</option>
+		<option value = "Arkansas">Arkansas</option>
+		<option value = "Delaware">Delaware</option>
+		<option value = "Georgia">Georgia</option>
+		<option value = "Hawaii">Hawaii</option>
+		<option value = "Idaho">Idaho</option>
+		<option value = "Kansas">Kansas</option>
+		<option value = "Kentucky">Kentucky</option>
+		<option value = "Louisiana">Louisiana</option>
+		<option value = "Michigan">Michigan</option>
+		<option value = "Mississippi">Mississippi</option>
+		<option value = "Missouri">Missouri</option>
+		<option value = "Nebraska">Nebraska</option>
+		<option value = "New_Hampshire">New Hampshire</option>
+		<option value = "North_Carolina">North Carolina</option>
+		<option value = "Ohio">Ohio</option>
+		<option value = "Oklahoma">Oklahoma</option>
+		<option value = "Oregon">Oregon</option>
+		<option value = "Pennsylvania">Pennsylvania</option>
+		<option value = "South_Carolina">South Carolina</option>
+		<option value = "South_Dakota">South Dakota</option>
+		<option value = "Utah">Utah</option>
+		<option value = "Washington">Washington</option>
+		<option value = "West_Virginia">West Virginia</option>
+	 </select>
+	</div>
+	<div id = "tab_container">
+		<div class ="tab active" id="tab_PRI">Prison Population</div>
+		<div class ="tab" id="tab_PRO">Probation Population</div>
+		<div class ="tab" id="tab_PAR">Parole Population</div>
+		<div class ="tab gap" id="tab_GAP"></div>
+	</div>
+	<div id = "legend">
+		<div id = "l_main">
+			<div id = "l_main_key"></div>
+			<div id = "l_main_text">Actual <span>Prison</span> Population</div>
+		</div>
+		<div id = "l_proj">
+			<div id = "l_proj_key"></div>
+			<div id = "l_proj_text">Baseline Prison Projection</div>
+		</div>
+	</div>
+
+	<div id = "chart">
+		<div id = "tooltip">
+			<!-- <div id = "tt_year"></div> -->
+			<div id = "tt_main"><span class ="tt_year"></span><span id = "tt_main_text"></span><span id = "tt_main_val"></span></div>
+			<div id = "tt_proj"><span class ="tt_year"></span><span id = "tt_proj_text"></span><span id = "tt_proj_val"></span></div>
+		</div>
+
+	</div>
+	<div class="div-reinvestment-ratio"><p class="block-ratio-label">Total Savings:</p><p class="block-ratio-stat">$20,000,000</p><p class="block-ratio-label">Total Reinvestment:</p><p class="block-ratio-stat">$17,660,000</p><div class="div-reinvestment-context-block">Georgia invested more than <strong>$17.5 million</strong> upfront into accountability courts, substance abuse programs and risk assessment tool development.</div></div>
+
+
+	<script type="text/javascript" src = "js/vendor/d3.v3.min.js"></script>
+	<script type="text/javascript" src = "js/vendor/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="js/vendor/pym.min.js"></script>
+	<script type="text/javascript" src = "js/jriImplementation.js"></script>
+	<script type="text/javascript" src = "js/main.js"></script>
+	
+
+</body>
+</html>

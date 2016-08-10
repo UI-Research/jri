@@ -10,7 +10,7 @@
 	width: 25%;
  	display: inline-block;
     position: absolute;
-    top: -10px;
+    top: 70px;
     right: 0px;
 
 	/*float: left;*/
@@ -21,12 +21,12 @@
 }
 
 .styled-select.states{
-	display: none;
+	/*display: none;*/
 }
 
 #l_main, #l_proj{
     position: absolute;
-    top: 73px !important;
+    top: 183px !important;
     font-weight: bold;
 }
 /********************************************************/
