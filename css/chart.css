@@ -8,9 +8,9 @@
 }
 .div-reinvestment-ratio{
 	width: 25%;
- display: inline-block;
+ 	display: inline-block;
     position: absolute;
-    top: 71px;
+    top: 0px;
     right: 0px;
 
 	/*float: left;*/
@@ -18,6 +18,16 @@
 #chart{
 	width: 70%;
 	/*float: left;*/
+}
+
+.styled-select.states{
+	display: none;
+}
+
+#l_main, #l_proj{
+    position: absolute;
+    top: 73px !important;
+    font-weight: bold;
 }
 /********************************************************/
 /******************* LINE CHART ************************/
@@ -149,12 +159,26 @@ path.domain{
 	opacity: 0;
 	top: 0;
 	left: 0;
-	width: 200px;
-	height: 100px;
-	background: #00ff00;
+	width: 170px;
+	background: #ffffff;
+	border: 1px #d2d2d2 solid;
+	font-size: 14px;
 	pointer-events: none;
+	-webkit-box-shadow: 5px 5px 0px 0px rgba(210,210,210,0.55);
+	-moz-box-shadow: 5px 5px 0px 0px rgba(210,210,210,0.55);
+	box-shadow: 5px 5px 0px 0px rgba(210,210,210,0.55);
+	padding: 6px;
+	height: 24px;
 }
-
+.tt_year{
+	margin-right: 3px;
+}
+#tt_proj_val, #tt_main_val{
+	font-weight: bold;
+}
+#tt_proj{
+	line-height: 18px;
+}
 /********************************************************/
 /********************* LEGEND **************************/
 /******************************************************/
@@ -166,10 +190,10 @@ path.domain{
     font-weight: bold;
 }
 #l_main{
-	left: 40px;
+	left: 20px;
 }
 #l_proj{
-	left: 290px;
+	left: 270px;
 }
 #l_main_key, #l_proj_key{
 	width: 40px;

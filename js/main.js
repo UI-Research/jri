@@ -13,13 +13,15 @@ function moveTooltip(dot){
         var proj_val = d[getActiveState() + "-" + "PROJ"]
         var comma = d3.format(",")
         var year = d.year
-        d3.select("#tt_year").text(year)
+        d3.selectAll(".tt_year").text(year)
         if(main_val != 0 && ! isNaN(main_val)){
           d3.select("#tt_main_text").text("Population: ")
           d3.select("#tt_main_val").text(comma(main_val))
         }else{
           d3.select("#tt_main_text").text("")
           d3.select("#tt_main_val").text("")
+          d3.select("#tt_main .tt_year").text("")
+          d3.select("#tooltip").style("height","36px")
         }
         if(proj_val != 0 && ! isNaN(proj_val) && getActiveCategory() == "PRI"){
           d3.select("#tt_proj_text").text("Projected Population: ")
@@ -27,6 +29,11 @@ function moveTooltip(dot){
         }else{
           d3.select("#tt_proj_text").text("")
           d3.select("#tt_proj_val").text("")
+          d3.select("#tt_proj .tt_year").text("")
+          d3.select("#tooltip").style("height","24px")
+        }
+        if( (proj_val != 0 && ! isNaN(proj_val) && getActiveCategory() == "PRI") && (main_val != 0 && ! isNaN(main_val)) ){
+            d3.select("#tooltip").style("height","62px")
         }
 
         if(dot == null){
@@ -47,6 +54,7 @@ function moveTooltip(dot){
         }
 }
 function hideTooltip(){
+  d3.selectAll("circle.active").classed("active",false)
   d3.select("#tooltip")
     .style("opacity",0)
 }
@@ -54,7 +62,7 @@ function drawChart(container_width){
   d3.selectAll("svg").remove()
   var defaultSelector = getActiveState() + "-" + getActiveCategory();
   var pdefaultSelector = getActiveState() + "-" + "PROJ"
-  var margin = {top: 90, right: 40, bottom: 30, left: 90},
+  var margin = {top: 90, right: 40, bottom: 30, left: 70},
       width = container_width*.7 - margin.left - margin.right,
       height = width/1.8 - margin.top - margin.bottom;
 
@@ -80,6 +88,8 @@ function drawChart(container_width){
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
             .on("mousemove", mousemove)
+            .on("mouseout",hideTooltip)
+
 
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -155,7 +165,7 @@ function drawChart(container_width){
         .call(yAxis)
 
     d3.selectAll(".y.axis .tick line")
-      .style("stroke","#dedddd")
+      .style("stroke","#e3e3e3")
       .style("stroke-width","1px")
       .attr("x2",0)
       .attr("x1",width)
@@ -167,7 +177,7 @@ function drawChart(container_width){
       .attr("width", x(formatDate.parse(JRI[getActiveState()])))
       .style("fill",'url(#diagonalHatch')
       .style("pointer-events","none")
-      .style("stroke","#fdbf11")
+      .style("stroke","#5c5859")
       .style("stroke-width","2px")
       .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()])) + height))
 
@@ -177,15 +187,17 @@ function drawChart(container_width){
         pointer
           .append("polygon")
           .attr("points","0,24.8 119.8,24.8 136,12.1 119.8,0 0,0")
-          .attr("fill","#ffffff")
-          .attr("stroke","#fdbf11")
+          .attr("fill","#5c5859")
+          .attr("stroke","#5c5859")
           .attr("stroke-width","2px")
         pointer.append("text")
           .text("JRI Implementation")
           .style("font-size","12px")
           .attr("dy",17)
-          .attr("dx",9)
-          .style("font-weight","bold")
+          .attr("dx",5)
+          .style("font-weight","500")
+          .style("fill","white")
+          .style("letter-spacing",".7px")
 
     var mainLine = svg.append("path")
         .datum(slice)
@@ -382,6 +394,7 @@ function drawChart(container_width){
             return false
          }
         })
+
       d3.selectAll(".pdot.y" + year)
         .classed("active", function(d){
           if(getActiveCategory() == "PRI"){
