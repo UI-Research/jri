@@ -3,7 +3,8 @@ function getActiveCategory(){
   return tab.node().id.replace("tab_","")
 }
 function getActiveState(){
-  return $(".styled-select.states select").val()
+  // return $(".styled-select.states select").val()
+  return "Georgia"
 }
 
 function moveTooltip(dot){
@@ -416,4 +417,5 @@ function drawChart(container_width){
   });
 }
 
-var child = new pym.Child({ renderCallback: drawChart });
+drawChart(900)
+// var child = new pym.Child({ renderCallback: drawChart });

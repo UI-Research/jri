@@ -1,41 +1,40 @@
 /********************************************************/
 /******************* TEST PAGE LAYOUT ******************/
 /******************************************************/
-.states{
-	margin-bottom: 70px;
-	float: right;
-	clear: both;
-}
-.div-reinvestment-ratio{
-	width: 25%;
- 	display: inline-block;
-    position: absolute;
-    top: -10px;
-    right: 0px;
 
-	/*float: left;*/
-}
-#chart{
-	width: 70%;
-	/*float: left;*/
-}
+	.states{
+		margin-bottom: 70px;
+		float: right;
+		clear: both;
+	}
+	.div-reinvestment-ratio{
+		/*width: 25%;*/
+	 	/*display: inline-block;*/
+/*	    position: absolute;
+	    top: -10px;
+	    right: 0px;*/
 
-.styled-select.states{
-	display: none;
-}
+	}
+	#chart{
+		width: 70%;
+	}
 
-#l_main, #l_proj{
-    position: absolute;
-    top: 73px !important;
-    font-weight: bold;
-}
-.div-dash-block{
-	width: 65%;
-    margin-left: 20px;
-}
-p{
-	margin-top: 0 !important;
-}
+	.styled-select.states{
+		display: none;
+	}
+
+	#l_main, #l_proj{
+	    position: absolute;
+	    top: 73px !important;
+	    font-weight: bold;
+	}
+	.div-dash-block{
+		width: 65%;	
+	    margin-left: 20px;
+	}
+	p{
+		margin-top: 0 !important;
+	}
 /********************************************************/
 /******************* LINE CHART ************************/
 /******************************************************/
