@@ -1,7 +1,382 @@
-<div id="chart"></div>
-<script src ="http://apps-staging.urban.org/features/jri/js/vendor/pym.min.js"></script>
-<script src = "http://apps-staging.urban.org/features/jri/js/vendor/d3.v3.min.js"></script>
+<!-- This site was created in Webflow. http://www.webflow.com-->
+<!-- Last Published: Wed Aug 10 2016 15:27:02 GMT+0000 (UTC) -->
 
-<script>
-var pymParent = new pym.Parent('chart', 'child.html', {});
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="css/chart.css">	
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js" type="text/javascript"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <base target="_blank" />
+   <!-- <meta name="viewport" content="width=device-width"> -->
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link href="css/print.css" rel="stylesheet" media="print" type="text/css" />
+
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+    <title>JRI Test</title> 
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="@urbaninstitute">
+	<meta name="twitter:creator" content="@urbaninstitute">
+	<meta name="twitter:title" content="The cost of affordable housing: Does it pencil out?">
+	<meta name="twitter:description" content="Building affordable housing is not particularly affordable.">
+	<meta name="twitter:image" content="http://apps.urban.org/features/cost-of-affordable-housing/images/social-img.jpg">
+	<meta property="og:title" content="The cost of affordable housing: Does it pencil out?" />
+	<meta property="og:description" content="Building affordable housing is not particularly affordable." />
+	<meta property="og:image" content="http://apps.urban.org/features/cost-of-affordable-housing/images/social-img.jpg" />
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:url" content="http://urbn.is/affhou">
+
+    
+   
+      
+
+ 
+
+    <!-- Bootstrap 
+    <link href="css/bootstrap.min.css" rel="stylesheet">-->
+      
+    <!--fonts for the site -->
+      <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:100,200,300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/urban-header.css">
+  <script src="https://daks2k3a4ib2z.cloudfront.net/0globals/modernizr-2.7.1.js" type="text/javascript"></script>
+
+
+<body>
+  <div class="div-floating-wrapper w-hidden-small w-hidden-tiny" data-ix="start-dataviz">
+    <div class="div-mol-1col no-fill">
+      <div class="div-mol-2col w-clearfix">
+        <div class="div-mol-2col-left no-rule"></div>
+
+        <div class="div-mol-2col-right">
+          <div class="div-float-dataviz">
+            <div class="div-floater-chart1"><img class="img-dataviz" src=
+            "http://uploads.webflow.com/5785627de5e18fa37e63632e/5785627de5e18fa37e636335_chart-ex1.jpg" /></div>
+
+            <div class="div-floater-chart2"><img class="img-dataviz" src=
+            "http://uploads.webflow.com/5785627de5e18fa37e63632e/5785627de5e18fa37e63633e_chart-ex2.jpg" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-navigation">
+    <div class="div-mol-1col">
+      <div class="w-row">
+        <div class=
+        "col-no-padding w-clearfix w-col w-col-10 w-col-small-10 w-col-tiny-10">
+          <img class="img-brand" src=
+          "http://uploads.webflow.com/5785627de5e18fa37e63632e/5785627de5e18fa37e636340_logo-mini-dark.png" />
+
+          <div class="block-feature-title w-hidden-tiny">
+            Features : : Justice Reinvestment Initiative State Data Tracker
+          </div>
+        </div>
+
+        <div class="col-no-padding share w-col w-col-2 w-col-small-2 w-col-tiny-2">
+          <div class="block-feature-title">
+            share
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-spacer"></div>
+
+  <div class="section-banner">
+    <div class="div-mol-title-area">
+      <div class="div-title-block">
+        <h1 class="jri-title">Justice Reinvestment Initiative (JRI) State Data
+        Tracker</h1>
+      </div>
+    </div>
+
+    <div class="div-banner-area"></div>
+  </div>
+
+  <div class="section-jri-global">
+    <div class="div-mol-1col">
+      <div class="div-org-intro w-clearfix">
+        <div class="div-drop-cap">
+          <div class="block-cap">
+            J
+          </div>
+        </div>
+
+        <p><span>ustice reinvestment is a data-driven approach to criminal justice reform
+        designed to examine and address jail and prison cost and population drivers and
+        generate cost savings that can be reinvested in high-performing public safety
+        strategies.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-feature-content">
+    <div class="div-mol-1col">
+      <div class="div-mol-2col w-clearfix">
+        <div class="div-state-header">
+          <div class="div-state-header-col2">
+            <div class="div-ghost-drop">
+              <div class="w-form">
+
+
+                <div class="w-form-done">
+                  <div>
+                    Thank you! Your submission has been received!
+                  </div>
+                </div>
+
+                <div class="w-form-fail">
+                  <div>
+                    Oops! Something went wrong while submitting the form
+                  </div>
+                </div>
+              </div>
+            </div>
+
+<!--             <div class="div-dropdown-ui w-clearfix">
+              <div class="block-dropdown-label">
+                Alabama
+              </div>
+
+              <div class="div-dropdown-btn"></div>
+            </div> -->
+	<div class="styled-select states">
+	 <select>
+		<option value = "Georgia">Georgia</option>
+
+		<option value = "Alabama">Alabama</option>
+		<option value = "Alaska">Alaska</option>
+		<option value = "Arkansas">Arkansas</option>
+		<option value = "Delaware">Delaware</option>
+		<option value = "Hawaii">Hawaii</option>
+		<option value = "Idaho">Idaho</option>
+		<option value = "Kansas">Kansas</option>
+		<option value = "Kentucky">Kentucky</option>
+		<option value = "Louisiana">Louisiana</option>
+		<option value = "Michigan">Michigan</option>
+		<option value = "Mississippi">Mississippi</option>
+		<option value = "Missouri">Missouri</option>
+		<option value = "Nebraska">Nebraska</option>
+		<option value = "New_Hampshire">New Hampshire</option>
+		<option value = "North_Carolina">North Carolina</option>
+		<option value = "Ohio">Ohio</option>
+		<option value = "Oklahoma">Oklahoma</option>
+		<option value = "Oregon">Oregon</option>
+		<option value = "Pennsylvania">Pennsylvania</option>
+		<option value = "South_Carolina">South Carolina</option>
+		<option value = "South_Dakota">South Dakota</option>
+		<option value = "Utah">Utah</option>
+		<option value = "Washington">Washington</option>
+		<option value = "West_Virginia">West Virginia</option>
+	 </select>
+	</div>
+
+          </div>
+
+          <h2 class="jri-state">Georgia</h2>
+        </div>
+
+        <div class="div-mol-2col-left">
+          <div class="div-subsection-block first">
+            <p>In 2012, Georgia passed comprehensive justice reinvestment reform through
+            H.B.1176 which reclassified certain drug and property offenses, revised
+            sentencing enhancements and mandatory minimums, expanded the use of
+            electronic monitoring, authorized the use of graduated sanctions in response
+            to probation violations, required the use of evidence based supervision
+            practices, and streamlined the transfer process from jail to prison.</p>
+          </div>
+        </div>
+
+        <div class="div-mol-2col-right">
+          <div class="div-utilities">
+            <a class="w-button" data-ix="hide-ratio" href="#">DOWNLOAD STATE
+            DATA</a><a class="print w-button" href="/"><span class=
+            "icon-font">&#61487;</span>&nbsp; Print This REport</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="div-dashboard">
+        <div class="w-embed w-script">
+
+
+
+
+
+
+
+
+  <div id = "tab_container">
+    <div class ="tab active" id="tab_PRI">Prison Population</div>
+    <div class ="tab" id="tab_PRO">Probation Population</div>
+    <div class ="tab" id="tab_PAR">Parole Population</div>
+    <div class ="tab gap" id="tab_GAP"></div>
+  </div>
+  <div id = "legend">
+    <div id = "l_main">
+      <div id = "l_main_key"></div>
+      <div id = "l_main_text">Actual <span>Prison</span> Population</div>
+    </div>
+    <div id = "l_proj">
+      <div id = "l_proj_key"></div>
+      <div id = "l_proj_text">Baseline Prison Projection</div>
+    </div>
+  </div>
+<div class="div-dash-viz">
+  <div id = "chart">
+    <div id = "tooltip">
+      <!-- <div id = "tt_year"></div> -->
+      <div id = "tt_main"><span class ="tt_year"></span><span id = "tt_main_text"></span><span id = "tt_main_val"></span></div>
+      <div id = "tt_proj"><span class ="tt_year"></span><span id = "tt_proj_text"></span><span id = "tt_proj_val"></span></div>
+    </div>
+  </div>
+</div>
+<div class="div-dash-block"><p>In 2015, Georgia prisons held 53,102 individuals, <strong>a 5% decline from 2012</strong>. There were 5,563 fewer people in prison than experts projected for 2015 in the absence of reform. <span class="inline-footnote-number">1</span></p></div>
+
+<div class="div-dash-col-right"><div class="div-reinvestment-ratio"><p class="block-ratio-label">Total Savings*:</p><p class="block-ratio-stat">$20,000,000</p><p class="block-ratio-label">Total Reinvestment:</p><p class="block-ratio-stat">$17,660,000</p><div class="div-reinvestment-context-block">Georgia invested more than <strong>$17.5 million</strong> upfront into accountability courts, substance abuse programs and risk assessment tool development.</div><div class="block-savings-disclaimer"><span class="disclaimer-asterisk">*&nbsp;</span>Limited to State Published Savings</div></div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+
+      <div class="div-mol-2col w-clearfix">
+        <div class="div-mol-2col-left">
+          <div class="div-more-info">
+            <h3>More About Georgia</h3>
+
+            <ul class="ul-list">
+              <li class="list-item">Georgia has significantly reduced the jail backlog of
+              individuals awaiting transfer to a prison or other facility. Prior to
+              reform, the state spent more than $20 million annually&nbsp; on subsidies
+              to local jails to house these people. In FY2015, Georgia spent only $5,760.
+              <span class="inline-footnote-number">2</span></li>
+
+              <li class="list-item">Placeholder for key findings from the policy
+              assessment of the impact of sentencing reforms <span class=
+              "inline-footnote-number">3</span></li>
+            </ul>
+
+            <ul class="ul-footnotes w-list-unstyled">
+              <li class="ul-footnotes-item"><span class="inline-footnote-number">1</span>
+              Update information architecture goals nomenclature audit</li>
+
+              <li class="ul-footnotes-item"><span class="inline-footnote-number">2</span>
+              Relevant images curation inventory findability needs audio ecosystems
+              model. Audio ecosystems quality tag images governance, analysis data
+              publishing everything accessibility. Personalization translation
+              findability audit context everything taxonomy text. Localization sitemap
+              strategic everything needs information architecture accessibility
+              wireframes research, stakeholders analysis personalization delivery
+              translation.<span class="inline-footnote-number">&nbsp;</span></li>
+
+              <li class="ul-footnotes-item"><span class="inline-footnote-number">3</span>
+              Qualitative accessibility writing taxonomy Kissane information architecture
+              prototypes, users tag data planning.</li>
+            </ul>
+          </div>
+
+          <div class="div-state-nav">
+            <a class="print w-button" href="#">&nbsp; <span class=
+            "icon-font">&#61700;&nbsp;</span>Previous State</a><a class=
+            "next print w-button" href="#">Next State&nbsp;<span class=
+            "icon-font">&#61701;</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-credits">
+    <div class="div-mol-1col no-fill">
+      <div class="w-row">
+        <div class="col-no-padding w-col w-col-6">
+          <div class="div-credit-block">
+            <h4>About This project</h4>
+
+            <p>This project was supported by Grant No. 2015-ZB-BX-K005 awarded by the
+            Bureau of Justice Assistance. The Bureau of Justice Assistance is a component
+            of the Department of Justice&#8217;s Office of Justice Programs, which also
+            includes the Bureau of Justice Statistics, the National Institute of Justice,
+            the Office of Juvenile Justice and Delinquency Prevention, the Office for
+            Victims of Crime, and the SMART office. Points of view or opinions in this
+            document are those the author and do not necessarily represent the official
+            position or policies of the U.S. Department of Justice.</p>
+          </div>
+        </div>
+
+        <div class="col-no-padding w-col w-col-6">
+          <div class="div-credit-block">
+            <h4>Project Credits</h4>
+
+            <p class="p-credits">As an organization, the Urban Institute does not take
+            positions on issues, but it does empower and support its experts in sharing
+            their own evidence-based views and policy recommendations that have been
+            shaped by scholarship.</p>
+
+            <h5>Research</h5>
+
+            <p><span class="span-inline-link">Samantha Harvell</span></p>
+
+            <h5>Design and Development</h5>
+
+            <p><span class="span-inline-link">John Wehmann</span> and <span class=
+            "span-inline-link">Ben Chartoff</span></p>
+
+            <h5>Writing</h5>
+
+            <p><span class="span-inline-link">Name</span></p>
+
+            <h5>Editorial</h5>
+
+            <p><span class="span-inline-link">Fiona Blackshaw</span></p>
+
+            <p>Copyright &#169;&nbsp;Urban Institute&nbsp;2016.&nbsp;View this project on
+            Github.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"
+  type="text/javascript">
+</script><script src=
+"https://daks2k3a4ib2z.cloudfront.net/5785627de5e18fa37e63632e/js/webflow.36c960515.js"
+type="text/javascript">
 </script>
+  <script type="text/javascript" src = "js/vendor/d3.v3.min.js"></script>
+  <script type="text/javascript" src = "js/vendor/jquery-1.12.4.min.js"></script>
+  <script type="text/javascript" src="js/vendor/pym.min.js"></script>
+  <script type="text/javascript" src = "js/jriImplementation.js"></script>
+  <script type="text/javascript" src = "js/main.js"></script>
+
+
+<!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
+</body>
+</html>
