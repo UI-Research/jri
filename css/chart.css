@@ -1,45 +1,89 @@
 /********************************************************/
 /******************* TEST PAGE LAYOUT ******************/
 /******************************************************/
+.states{
+	margin-bottom: 70px;
+	float: right;
+	clear: both;
+}
+.div-reinvestment-ratio{
+  /*padding-bottom: 1px;*/
+/*width: 25%;*/
+    /*display: inline-block;*/
+    /*float: right;  */
+}
 
-	.states{
-		margin-bottom: 70px;
-		float: right;
-		clear: both;
-	}
-	.div-reinvestment-ratio{
-		/*width: 25%;*/
-	 	/*display: inline-block;*/
-/*	    position: absolute;
-	    top: -10px;
-	    right: 0px;*/
+.div-dash-col-right {
+  /*width: 25%;*/
+  /*float: right;*/
+  padding-bottom: 1px;
+width: 25%;
+    display: inline-block;
+    /*float: right;  */
+}
+#chart{
+	width: 70%;
+	float: left;
+	/*clear: both;*/
+}
 
-	}
-	#chart{
-		width: 70%;
-	}
+.styled-select.states{
+	display: none;
+}
 
-	.styled-select.states{
-		display: none;
-	}
+#l_main, #l_proj{
+    position: absolute;
+    top: 73px !important;
+    font-weight: bold;
+}
+.div-dash-block{
+	width: 100%;
+    margin-left: 20px;
+    margin-top: 30px;
+    display: inline;
+    /*clear: */
+}
+p{
+	margin-top: 0 !important;
+}
 
-	#l_main, #l_proj{
-	    position: absolute;
-	    top: 73px !important;
-	    font-weight: bold;
+
+
+/********************************************************/
+/**************** MOBILE INDICATORS ********************/
+/******************************************************/
+
+
+@media (max-width: 767px) {
+	#is_tablet{
+		display: block !important;
 	}
-	.div-dash-block{
-		width: 65%;	
-	    margin-left: 20px;
+}
+@media (max-width: 540px) {
+	#is_mobile{
+		display: block !important;
 	}
-	p{
-		margin-top: 0 !important;
-	}
+}
+#is_tablet, #is_mobile{
+	position: fixed;
+	z-index: -1;
+	width: 0;
+	height: 0;
+	top: 0;
+	left: 0;
+	display: none;
+}
+
 /********************************************************/
 /******************* LINE CHART ************************/
 /******************************************************/
 #chart{
 	/*position: relative;*/
+}
+@media (max-width: 767px) {
+	#chart{
+		width: 90%;
+	}
 }
 .line{
 	stroke: #1696d2;
@@ -82,15 +126,16 @@ path.domain{
 /********************** TABS ***************************/
 /******************************************************/
 #tab_container{
-	width: 70%;
+	width: 100%;	
 	clear: both;
+	z-index: 100;
 }
 .tab{
 	cursor: pointer;
 	width: 150px;
 	text-align: center;
 	font-family: Lato;
-	font-size: 16px;
+	font-size: 16px !important;
 	display: inline-block;
 	padding: 9 25 9 25px;
 	background: #f0f0f0;
@@ -99,15 +144,19 @@ path.domain{
 	border-left: none;
 	border-bottom: 1px solid black;
 	float: left;
-	height: 16px;
+	height: 20px;
+	-webkit-box-sizing: initial; 
+    -moz-box-sizing: initial;
+    box-sizing: initial; 
 }
 .tab.gap{
-	width: calc(70% - 675px);
+	/*width: calc(100% - 750px);*/
 	background: white;
 	border-top: none;
 	border-right: 1px solid #fff;
 	border-left: none;
 	border-bottom: 1px solid black;
+	padding: 9 0 9 0px !important;
 
 }
 .tab.active{
@@ -118,6 +167,11 @@ path.domain{
 	border-bottom: none;
 }
 
+@media (max-width: 991px) {
+	.tab{
+			padding: 9 5 9 5px !important;
+	}
+}
 /********************************************************/
 /******************* STYLED SELECT *********************/
 /******************************************************/
@@ -175,6 +229,9 @@ path.domain{
 	box-shadow: 5px 5px 0px 0px rgba(210,210,210,0.55);
 	padding: 6px;
 	height: 24px;
+	-webkit-box-sizing: initial; 
+    -moz-box-sizing: initial;
+    box-sizing: initial; 
 }
 .tt_year{
 	margin-right: 3px;
@@ -201,6 +258,17 @@ path.domain{
 #l_proj{
 	left: 270px;
 }
+@media (max-width: 540px) {
+	#l_main{
+		top: 58 !important;
+	}
+	#l_proj{
+		top: 88 !important;
+		left: 20px !important;
+	}
+}
+
+
 #l_main_key, #l_proj_key{
 	width: 40px;
     height: 4px;

@@ -1,6 +1,7 @@
 function getActiveCategory(){
   var tab = d3.select("#tab_container .tab.active")
   return tab.node().id.replace("tab_","")
+  // return "PRI"
 }
 function getActiveState(){
   // return $(".styled-select.states select").val()
@@ -59,13 +60,33 @@ function hideTooltip(){
   d3.select("#tooltip")
     .style("opacity",0)
 }
-function drawChart(container_width){
+function drawChart(){
+  container_width = $("h2.jri-state")[0].getBoundingClientRect().width
+  var IS_TABLET = d3.select("#is_tablet").style("display") == "block"
+  var IS_MOBILE = d3.select("#is_mobile").style("display") == "block"
+
+  // d3.select("#tab_PRI").text(function(){return (IS_MOBILE) ? "Prison" : "Prison Population" })
+  // d3.select("#tab_PRO").text(function(){return (IS_MOBILE) ? "Probation" : "Probation Population" })
+  // d3.select("#tab_PAR").text(function(){return (IS_MOBILE) ? "Parole" : "Parole Population" })
+
+  // console.log(container_width)
+
   d3.selectAll("svg").remove()
   var defaultSelector = getActiveState() + "-" + getActiveCategory();
   var pdefaultSelector = getActiveState() + "-" + "PROJ"
-  var margin = {top: 90, right: 40, bottom: 30, left: 70},
-      width = container_width*.7 - margin.left - margin.right,
-      height = width/1.8 - margin.top - margin.bottom;
+  var container_height = d3.select("#contents").node().getBoundingClientRect().height
+  // var container_height = 320
+  var margin = {top: 90, right: 40, bottom: 50, left: 70},
+      width = (IS_TABLET) ? container_width - margin.left - margin.right : container_width*.7 - margin.left - margin.right,
+      height = (IS_TABLET) ? container_height-90 - margin.top - margin.bottom : container_height - 40 - margin.top - margin.bottom;
+  d3.select(".tab.gap").style("width", function(){
+    if(IS_TABLET){
+      return container_width - 50 - (150+10)*3
+    }else{
+      return container_width*.7 - 50 - (150+50)*3
+    }
+  })
+
 
   var formatDate = d3.time.format("%Y");
 
@@ -85,7 +106,7 @@ function drawChart(container_width){
       .ticks((Math.floor(width/60) > 8) ? 8 : Math.floor(width/60))
       .tickFormat(d3.format(","));
 
-  var svg = d3.select("#chart").append("svg")
+  var svg = d3.select("#chart").insert("svg",".div-dash-block")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
             .on("mousemove", mousemove)
@@ -140,8 +161,8 @@ function drawChart(container_width){
 
     if (error) throw error;
 
-    x.domain([formatDate.parse("2007"),formatDate.parse("2020")]);
-    y.domain([0, d3.max(slice, function(d){ return +d[defaultSelector]})])
+    x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
+    y.domain([0, d3.max(slice, function(d){ return +d[defaultSelector]*1.5})])
 
 
   var line = d3.svg.line()
@@ -304,7 +325,14 @@ function drawChart(container_width){
       var max = d3.max(slice, function(d){ return +d[selector]})
       var pmax = (category == "PRI") ? d3.max(pslice, function(d){ return +d[pselector]}) : max
 
-      y.domain([0, Math.max(max, pmax)])
+      if(category != "PRI"){
+        x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(slice, function(d){ return formatDate.parse(d.year)})]);
+      }else{
+        x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
+      }
+
+
+      y.domain([0, Math.max(max*1.5, pmax*1.5)])
       line = d3.svg.line()
           .x(function(d) { return x(formatDate.parse(d.year)); })
           .y(function(d) {
@@ -370,7 +398,7 @@ function drawChart(container_width){
 
 
 
-
+      svg.select(".x.axis").transition().duration(1700).call(xAxis)
       svg.select(".y.axis").transition().duration(1700).call(yAxis)
       d3.selectAll(".y.axis .tick line")
         .style("stroke","#dedddd")
@@ -415,7 +443,12 @@ function drawChart(container_width){
 
 
   });
+// if(IS_TABLET){
+//   d3.select("body").style("height", function(){ return d3.select("#contents").node().getBoundingClientRect().height})
+// }else{
+//   d3.select("body").style("height", function(){ return d3.select("#chart").node().getBoundingClientRect().height + 30})
+// }
 }
 
-drawChart(900)
-// var child = new pym.Child({ renderCallback: drawChart });
+drawChart()
+$(window).on("resize",drawChart)

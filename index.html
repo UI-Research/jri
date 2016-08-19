@@ -49,6 +49,8 @@
 
 
 <body>
+  <div id = "is_tablet"></div>
+  <div id = "is_mobile"></div>
   <div class="div-floating-wrapper w-hidden-small w-hidden-tiny" data-ix="start-dataviz">
     <div class="div-mol-1col no-fill">
       <div class="div-mol-2col w-clearfix">
@@ -89,7 +91,7 @@
     </div>
   </div>
 
-  <div class="nav-spacer"></div>
+  <!-- <div class="nav-spacer"></div> -->
 
   <div class="section-banner">
     <div class="div-mol-title-area">
@@ -206,7 +208,7 @@
       </div>
 
       <div class="div-dashboard">
-        <div class="w-embed w-script">
+        <div class="w-embed w-script" >
 
 
 
@@ -215,34 +217,34 @@
 
 
 
-  <div id = "tab_container">
-    <div class ="tab active" id="tab_PRI">Prison Population</div>
-    <div class ="tab" id="tab_PRO">Probation Population</div>
-    <div class ="tab" id="tab_PAR">Parole Population</div>
-    <div class ="tab gap" id="tab_GAP"></div>
-  </div>
-  <div id = "legend">
-    <div id = "l_main">
-      <div id = "l_main_key"></div>
-      <div id = "l_main_text">Actual <span>Prison</span> Population</div>
+    <div id = "tab_container">
+      <div class ="tab active" id="tab_PRI">Prison Population</div>
+      <div class ="tab" id="tab_PRO">Probation Population</div>
+      <div class ="tab" id="tab_PAR">Parole Population</div>
+      <div class ="tab gap" id="tab_GAP"></div>
     </div>
-    <div id = "l_proj">
-      <div id = "l_proj_key"></div>
-      <div id = "l_proj_text">Baseline Prison Projection</div>
+    <div id = "legend">
+      <div id = "l_main">
+        <div id = "l_main_key"></div>
+        <div id = "l_main_text">Actual <span>Prison</span> Population</div>
+      </div>
+      <div id = "l_proj">
+        <div id = "l_proj_key"></div>
+        <div id = "l_proj_text">Baseline Prison Projection</div>
+      </div>
     </div>
-  </div>
-<div class="div-dash-viz">
-  <div id = "chart">
-    <div id = "tooltip">
-      <!-- <div id = "tt_year"></div> -->
-      <div id = "tt_main"><span class ="tt_year"></span><span id = "tt_main_text"></span><span id = "tt_main_val"></span></div>
-      <div id = "tt_proj"><span class ="tt_year"></span><span id = "tt_proj_text"></span><span id = "tt_proj_val"></span></div>
-    </div>
-  </div>
-</div>
+    <div id = "chart">
+      <div id = "tooltip">
+        <!-- <div id = "tt_year"></div> -->
+        <div id = "tt_main"><span class ="tt_year"></span><span id = "tt_main_text"></span><span id = "tt_main_val"></span></div>
+        <div id = "tt_proj"><span class ="tt_year"></span><span id = "tt_proj_text"></span><span id = "tt_proj_val"></span></div>
+      </div>
 <div class="div-dash-block"><p>In 2015, Georgia prisons held 53,102 individuals, <strong>a 5% decline from 2012</strong>. There were 5,563 fewer people in prison than experts projected for 2015 in the absence of reform. <span class="inline-footnote-number">1</span></p></div>
 
-<div class="div-dash-col-right"><div class="div-reinvestment-ratio"><p class="block-ratio-label">Total Savings*:</p><p class="block-ratio-stat">$20,000,000</p><p class="block-ratio-label">Total Reinvestment:</p><p class="block-ratio-stat">$17,660,000</p><div class="div-reinvestment-context-block">Georgia invested more than <strong>$17.5 million</strong> upfront into accountability courts, substance abuse programs and risk assessment tool development.</div><div class="block-savings-disclaimer"><span class="disclaimer-asterisk">*&nbsp;</span>Limited to State Published Savings</div></div></div>
+    </div>
+
+
+  <div class="div-dash-col-right"><div class="div-reinvestment-ratio"><p class="block-ratio-label">Total Savings*:</p><p class="block-ratio-stat">$20,000,000</p><p class="block-ratio-label">Total Reinvestment:</p><p class="block-ratio-stat">$17,660,000</p><div class="div-reinvestment-context-block">Georgia invested more than <strong>$17.5 million</strong> upfront into accountability courts, substance abuse programs and risk assessment tool development.</div><div class="block-savings-disclaimer"><span class="disclaimer-asterisk">*&nbsp;</span>Limited to State Published Savings</div></div></div>
 
 
 
@@ -252,20 +254,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-      </div>
 
       <div class="div-mol-2col w-clearfix">
         <div class="div-mol-2col-left">
@@ -313,6 +301,21 @@
       </div>
     </div>
   </div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+      </div>
+
+
 
   <div class="section-credits">
     <div class="div-mol-1col no-fill">
@@ -374,7 +377,7 @@ type="text/javascript">
   <script type="text/javascript" src = "js/vendor/jquery-1.12.4.min.js"></script>
   <script type="text/javascript" src="js/vendor/pym.min.js"></script>
   <script type="text/javascript" src = "js/jriImplementation.js"></script>
-  <script type="text/javascript" src = "js/main.js"></script>
+  <script type="text/javascript" src = "js/main_index.js"></script>
 
 
 <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
