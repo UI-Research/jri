@@ -4,8 +4,45 @@ function getActiveCategory(){
   // return "PRI"
 }
 function getActiveState(){
-  // return $(".styled-select.states select").val()
-  return "Georgia"
+  return $(".styled-select.states select").val()
+  // return "Georgia"
+}
+
+function countup_val(val_id, new_val){
+  var prefix, separator, suffix, precision
+  if(val_id == "tot_savings" || val_id == "tot_reinvest") prefix = "$"
+  else prefix = ""
+
+  if(val_id.search("_percent") != -1){
+    suffix = "%";
+    precision = 1;
+  }else{
+    suffix = '';
+    precision = 0;
+  }
+
+  if(val_id.search("_yr") != -1) separator = ''
+  else separator = ','
+
+
+  var current_val = parseFloat(d3.select("#" + val_id).text().replace("$","").replace(/\,/g,""))
+  var countup_options = {
+    useEasing : true, 
+    useGrouping : true,
+    separator : separator, 
+    decimal : '.', 
+    prefix : prefix, 
+    suffix : suffix
+  };
+  var amount_countup = new CountUp(val_id, current_val, new_val, precision, .5, countup_options);
+  amount_countup.start();
+}
+
+function getArticle(val){
+  val = Math.max( Math.round(val * 10) / 10, 2.8 ).toFixed(2);
+  var num = String(val).split(".")[0]
+  if(num == "8" || num == "18" || num == "80" || num == "11") return "an"
+  else return "a"
 }
 
 function moveTooltip(dot){
@@ -201,15 +238,15 @@ function drawChart(){
       .attr("x",0)
       .attr("y",0)
       .attr("height",height)
-      .attr("width", x(formatDate.parse(JRI[getActiveState()])))
+      .attr("width", x(formatDate.parse(JRI[getActiveState()]["leg_yr"])))
       .style("fill",'url(#diagonalHatch')
       .style("pointer-events","none")
       .style("stroke","#5c5859")
       .style("stroke-width","2px")
-      .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()])) + height))
+      .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) + height))
 
     var pointer = svg.append("g")
-          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()])) - 137) + "," + height/2 + ")")
+          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) - 137) + "," + height/2 + ")")
 
         pointer
           .append("polygon")
@@ -266,7 +303,7 @@ function drawChart(){
       })
       .attr("r",6)
 
-    $(".styled-select").click(function () {
+    $(".styled-select.states").on("click",function () {
         var element = $(this).children("select")[0],
             worked = false;
         if(document.createEvent) { // all browsers
@@ -284,6 +321,7 @@ function drawChart(){
     $(".styled-select select")
       .change(function(){
         updateChart($(".styled-select.states select").val(), getActiveCategory());
+        updateText($(".styled-select.states select").val(), getActiveCategory());
         var m = $(this);
         if(m.val() == ""){
           m.css("color", "#818385");
@@ -304,12 +342,111 @@ function drawChart(){
           d3.selectAll("#tab_container .tab").classed("active",false)
           d3.select(this).classed("active",true)
           updateChart(getActiveState(), category)
+          updateText(getActiveState(), category)
         }
       })
+    function updateText(state, category){
+      d3.selectAll(".caption").style("display","none")
+      console.log(category)
+      d3.select("#" + category + "-caption").style("display","inline")
+      // console.log(data)
+      var recentpri_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentpri_yr"]})[0]
+      var recentproj_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentproj_yr"]})[0]
+      var recentpro_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentpro_yr"]})[0]
+      var recentpar_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentpar_yr"]})[0]
+
+      var base_yr_data = data.filter(function(d){ return d.year == JRI[state]["base_yr"]})[0]
+
+      countup_val("tot_savings", JRI[state]["tot_savings"])
+      countup_val("tot_reinvest", JRI[state]["tot_reinvest"])
+      d3.selectAll(".state_name_text").text(state.replace(/_/g," "))
+
+//*************** PRISON TAB
+      countup_val("recentpri_yr", JRI[state]["recentpri_yr"])
+      countup_val("recentpri-num", recentpri_yr_data[state + "-PRI"])
+      countup_val("recentpri_percent", Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"]) )
+      countup_val("pri_base_yr", JRI[state]["base_yr"])
+      countup_val("recentproj-num", Math.abs(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]))
+      countup_val("recentproj_percent", 100*(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]) / recentproj_yr_data[state+"-PROJ"])
+      countup_val("recentproj_yr", JRI[state]["recentproj_yr"])
+
+      d3.select("#recentpri_article").text(getArticle(Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"])))
+
+
+      if(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"] < 0){
+        d3.select("#recentpri_textpercent").text("decrease")
+      }else{
+        d3.select("#recentpri_textpercent").text("increase")
+      }
+      if(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"] < 0){
+        d3.select("#recentproj-textnum").text("fewer")
+      }else{
+        d3.select("#recentproj-textnum").text("more")
+      }
+
+
+      if(JRI[state]["recentpri_dt"] == ""){
+        d3.select("#recentpri_dt").text("In ")
+      }else{
+        d3.select("#recentpri_dt").text(JRI[state]["recentpri_dt"])
+      }
+
+//*************** PROBATION TAB
+      countup_val("recentpro_yr", JRI[state]["recentpro_yr"])
+      countup_val("recentpro-num", recentpro_yr_data[state + "-PRO"])
+      countup_val("recentpro_percent", Math.abs(100*(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"])/base_yr_data[state + "-PRO"]) )
+      countup_val("pro_base_yr", JRI[state]["base_yr"])
+
+      d3.select("#recentpro_article").text(getArticle(Math.abs(100*(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"])/base_yr_data[state + "-PRO"])))
+
+
+
+      if(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"] < 0){
+        d3.select("#recentpro_textpercent").text("decrease")
+      }else{
+        d3.select("#recentpro_textpercent").text("increase")
+      }
+
+
+      if(JRI[state]["recentpro_dt"] == ""){
+        d3.select("#recentpro_dt").text("In ")
+      }else{
+        d3.select("#recentpro_dt").text(JRI[state]["recentpro_dt"])
+      }
+//*************** PAROLE TAB
+      countup_val("recentpar_yr", JRI[state]["recentpar_yr"])
+      countup_val("recentpar-num", recentpar_yr_data[state + "-PAR"])
+      countup_val("recentpar_percent", Math.abs(100*(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"])/base_yr_data[state + "-PAR"]) )
+      countup_val("par_base_yr", JRI[state]["base_yr"])
+
+      d3.select("#recentpar_article").text(getArticle(Math.abs(100*(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"])/base_yr_data[state + "-PAR"])))
+
+
+
+      if(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"] < 0){
+        d3.select("#recentpar_textpercent").text("decrease")
+      }else{
+        d3.select("#recentpar_textpercent").text("increase")
+      }
+
+
+      if(JRI[state]["recentpar_dt"] == ""){
+        d3.select("#recentpar_dt").text("In ")
+      }else{
+        d3.select("#recentpar_dt").text(JRI[state]["recentpar_dt"])
+      }
+
+
+
+
+    }
+
+
+
+
 
     function updateChart(state, category){
       hideTooltip();
-      console.log(state, category)
       var selector = state + "-" + category
       var pselector = state + "-PROJ"
       var slice = data.filter(function(d){ return typeof(d[selector]) != "undefined" && d[selector] != 0})
@@ -352,7 +489,11 @@ function drawChart(){
       mainLine
         .datum(slice)
         .transition()
-        .attr("d", line);
+        .attrTween('d', function (d) {
+          var previous = d3.select(this).attr('d');
+          var current = line(d);
+          return d3.interpolatePath(previous, current);
+        });
 
 
       mainDot
@@ -373,7 +514,11 @@ function drawChart(){
           .datum(pslice)
           .transition()
           .style("opacity",1)
-          .attr("d", pline);
+          .attrTween('d', function (d) {
+            var previous = d3.select(this).attr('d');
+            var current = pline(d);
+            return d3.interpolatePath(previous, current);
+          });
       projDot
         .data(data)
         .attr("class",function(d){
@@ -394,12 +539,12 @@ function drawChart(){
       yAxis.scale(y)
     jri
       .transition()
-      .attr("width", x(formatDate.parse(JRI[state])))
-      .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[state])) + "," + height + "," + (x(formatDate.parse(JRI[state])) + height))
+      .attr("width", x(formatDate.parse(JRI[state]["leg_yr"])))
+      .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[state]["leg_yr"])) + "," + height + "," + (x(formatDate.parse(JRI[state]["leg_yr"])) + height))
 
       pointer
         .transition()
-        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state])) - 137) + "," + height/2 + ")")
+        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state]["leg_yr"])) - 137) + "," + height/2 + ")")
 
 
 
@@ -456,4 +601,5 @@ if(IS_TABLET){
 }
 
 drawChart()
+
 $(window).on("resize",drawChart)

@@ -126,7 +126,7 @@
       <div class="div-mol-2col w-clearfix">
         <div class="div-state-header">
           <div class="div-state-header-col2">
-            <div class="div-ghost-drop">
+<!--             <div class="div-ghost-drop">
               <div class="w-form">
 
 
@@ -143,7 +143,7 @@
                 </div>
               </div>
             </div>
-
+ -->
 <!--             <div class="div-dropdown-ui w-clearfix">
               <div class="block-dropdown-label">
                 Alabama
@@ -154,7 +154,6 @@
 	<div class="styled-select states">
 	 <select>
 		<option value = "Georgia">Georgia</option>
-
 		<option value = "Alabama">Alabama</option>
 		<option value = "Alaska">Alaska</option>
 		<option value = "Arkansas">Arkansas</option>
@@ -184,7 +183,7 @@
 
           </div>
 
-          <h2 class="jri-state">Georgia</h2>
+          <h2 class="jri-state"><span class = "state_name_text">Georgia</span></h2>
         </div>
 
         <div class="div-mol-2col-left">
@@ -239,12 +238,38 @@
         <div id = "tt_main"><span class ="tt_year"></span><span id = "tt_main_text"></span><span id = "tt_main_val"></span></div>
         <div id = "tt_proj"><span class ="tt_year"></span><span id = "tt_proj_text"></span><span id = "tt_proj_val"></span></div>
       </div>
-<div class="div-dash-block"><p>In 2015, Georgia prisons held 53,102 individuals, <strong>a 5% decline from 2012</strong>. There were 5,563 fewer people in prison than experts projected for 2015 in the absence of reform. <span class="inline-footnote-number">1</span></p></div>
+<div id = 'PRI-caption' class="caption div-dash-block"><p><span id = "recentpri_dt">In </span><span id = "recentpri_yr">2015</span>, <span class = "state_name_text">Georgia</span> prisons held <span id = "recentpri-num">53,102</span> individuals, <strong><span id = "recentpri_article">a</span> <span id = "recentpri_percent">5.1%</span> <span id = "recentpri_textpercent">decrease</span> from <span id = "pri_base_yr">2012</span></strong>. There were <span id = "recentproj-num">5,562</span> <span id ="recentproj-textnum">fewer</span> people (<span id = "recentproj_percent">-9.5%</span>) in prison than experts projected for <span id ="recentproj_yr">2015</span> in the absence of reform. <span class="inline-footnote-number">1</span></p></div>
+
+
+<!-- On December 31st, 2015, the state probation system supervised 12,418 individuals, a 8% increase from 2010. -->
+
+<div id = 'PRO-caption' class="caption div-dash-block"><p><span id = "recentpro_dt">In </span><span id = "recentpro_yr">2015</span>, the <span class = "state_name_text">Georgia</span> probation system supervised <span id = "recentpro-num">167,388</span> individuals, <strong><span id = "recentpro_article">an</span> <span id = "recentpro_percent">5.1%</span> <span id = "recentpro_textpercent">increase</span> from <span id = "pro_base_yr">2012</span></strong>.</p></div>
+
+<div id = 'PAR-caption' class="caption div-dash-block"><p><span id = "recentpar_dt">In </span><span id = "recentpar_yr">2015</span>, the <span class = "state_name_text">Georgia</span> parole system supervised <span id = "recentpar-num">167,388</span> individuals, <strong><span id = "recentpar_article">an</span> <span id = "recentpar_percent">5.1%</span> <span id = "recentpar_textpercent">increase</span> from <span id = "par_base_yr">2012</span></strong>.</p></div>
 
     </div>
 
 
-  <div class="div-dash-col-right"><div class="div-reinvestment-ratio"><p class="block-ratio-label">Total Savings*:</p><p class="block-ratio-stat">$20,000,000</p><p class="block-ratio-label">Total Reinvestment:</p><p class="block-ratio-stat">$17,660,000</p><div class="div-reinvestment-context-block">Georgia invested more than <strong>$17.5 million</strong> upfront into accountability courts, substance abuse programs and risk assessment tool development.</div><div class="block-savings-disclaimer"><span class="disclaimer-asterisk">*&nbsp;</span>Limited to State Published Savings</div></div></div>
+  <div class="div-dash-col-right div-reinvestment-ratio">
+    <p class="block-ratio-label">Total Savings*:</p>
+
+    <p class="block-ratio-stat"><span id = "tot_savings">$20,000,000</span></p>
+
+    <p class="block-ratio-label">Total Reinvestment:</p>
+
+    <p class="block-ratio-stat"><span id = "tot_reinvest">$17,660,000</span></p>
+
+    <div class="div-reinvestment-context-block">
+      Georgia invested more than <strong>$17.5 million</strong> upfront into
+      accountability courts, substance abuse programs and risk assessment tool
+      development.
+    </div>
+
+    <div class="block-savings-disclaimer">
+      <span class="disclaimer-asterisk">*&nbsp;</span>Limited to State Published Savings
+    </div>
+  </div>
+
 
 
 
@@ -258,7 +283,7 @@
       <div class="div-mol-2col w-clearfix">
         <div class="div-mol-2col-left">
           <div class="div-more-info">
-            <h3>More About Georgia</h3>
+            <h3>More About <span class = "state_name_text">Georgia</span></h3>
 
             <ul class="ul-list">
               <li class="list-item">Georgia has significantly reduced the jail backlog of
@@ -375,8 +400,10 @@ type="text/javascript">
 </script>
   <script type="text/javascript" src = "js/vendor/d3.v3.min.js"></script>
   <script type="text/javascript" src = "js/vendor/jquery-1.12.4.min.js"></script>
+  <script src="js/vendor/countup.min.js"></script>
   <script type="text/javascript" src="js/vendor/pym.min.js"></script>
-  <script type="text/javascript" src = "js/jriImplementation.js"></script>
+  <script type="text/javascript" src = "data/textData.js"></script>
+  <script type="text/javascript" src = "js/vendor/interpolatePath.js"></script>
   <script type="text/javascript" src = "js/main_index.js"></script>
 
 
