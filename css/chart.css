@@ -55,6 +55,12 @@ p{
 
 
 @media (max-width: 767px) {
+	.div-utilities{
+		padding-left: 0 !important;
+		border: none !important;
+    	margin-top: -40px;
+    	margin-bottom: 30px;
+	}
 	#is_tablet{
 		display: block !important;
 	}
@@ -62,6 +68,15 @@ p{
 @media (max-width: 540px) {
 	#is_mobile{
 		display: block !important;
+	}
+	#tab_container{
+		display: none;
+	}
+	#mobile_tabs-button{
+		display: block !important;
+	}
+	.caption p{
+		margin-left: 20px;
 	}
 }
 #is_tablet, #is_mobile{
@@ -296,4 +311,41 @@ path.domain{
 }
 #l_proj_key{
 	background: #fdbf11;
+}
+
+/********************************************************/
+/****************** MISC_LAYOUT ************************/
+/******************************************************/
+.dummy_text{
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+.savings-emph{
+	font-weight: bold;
+}
+.disclaimer-asterisk{
+	/*display: block;*/
+}
+#state-selector, #mobile_tabs, #mobile_tabs-button{
+	display: none;
+}
+.ul-footnotes-item a{
+	font-size: 11px;
+    line-height: 14px;
+    font-style: italic;
+    text-transform: none;
+    padding:0;
+}
+.ul-footnotes-item a:hover{
+	background-color: none;
+	background: none;
+	color: #1696d2;
+	text-decoration: underline;
+}
+.inline-footnote-number.footer{
+	top: 0px;
+}
+#top_text_wrapper{
+	z-index: -1;
 }

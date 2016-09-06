@@ -5,6 +5,8 @@
 <head>
   <link rel="stylesheet" type="text/css" href="css/chart.css">	
   <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" href="css/vendor/jquery-ui.1.12.0.css">
+
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js" type="text/javascript"></script>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <base target="_blank" />
@@ -19,7 +21,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
-    <title>JRI Test</title> 
+    <title>Justice Reinvestment Initiative (JRI) State Data
+        Tracker</title> 
 	<meta name="twitter:card" content="summary">
 	<meta name="twitter:site" content="@urbaninstitute">
 	<meta name="twitter:creator" content="@urbaninstitute">
@@ -113,10 +116,7 @@
           </div>
         </div>
 
-        <p><span>ustice reinvestment is a data-driven approach to criminal justice reform
-        designed to examine and address jail and prison cost and population drivers and
-        generate cost savings that can be reinvested in high-performing public safety
-        strategies.</span></p>
+        <p><span>ustice reinvestment is a data-driven approach to criminal justice reform designed to examine and address correctional cost and population drivers to generate cost savings that can be reinvested in high-performing public safety strategies. The JRI state data tracker provides information on system-level indicators including prison, probation, and parole populations and overall state savings and reinvestment.  While these indicators track trends on key JRI objectives, accurate interpretation requires careful consideration of contextual factors; changes in these measures are impacted by a wide range of policies and practices that extend beyond the reforms passed during JRI engagement.</span></p>
       </div>
     </div>
   </div>
@@ -151,8 +151,8 @@
 
               <div class="div-dropdown-btn"></div>
             </div> -->
-	<div class="styled-select states">
-	 <select>
+	<!-- <div class="styled-select states"> -->
+	 <select name = "state-selector" id = "state-selector">
 		<option value = "Georgia">Georgia</option>
 		<option value = "Alabama">Alabama</option>
 		<option value = "Alaska">Alaska</option>
@@ -179,16 +179,22 @@
 		<option value = "Washington">Washington</option>
 		<option value = "West_Virginia">West Virginia</option>
 	 </select>
-	</div>
+	<!-- </div> -->
 
           </div>
 
           <h2 class="jri-state"><span class = "state_name_text">Georgia</span></h2>
         </div>
 
-        <div class="div-mol-2col-left">
+        <div class="div-mol-2col-left" id = "top_text_wrapper">
           <div class="div-subsection-block first">
-            <p>In 2012, Georgia passed comprehensive justice reinvestment reform through
+            <p id = "dummy_top_text" class = "dummy_text">In 2012, Georgia passed comprehensive justice reinvestment reform through
+            H.B.1176 which reclassified certain drug and property offenses, revised
+            sentencing enhancements and mandatory minimums, expanded the use of
+            electronic monitoring, authorized the use of graduated sanctions in response
+            to probation violations, required the use of evidence based supervision
+            practices, and streamlined the transfer process from jail to prison.</p>
+            <p id = "top_text">In 2012, Georgia passed comprehensive justice reinvestment reform through
             H.B.1176 which reclassified certain drug and property offenses, revised
             sentencing enhancements and mandatory minimums, expanded the use of
             electronic monitoring, authorized the use of graduated sanctions in response
@@ -214,7 +220,11 @@
 
 
 
-
+    <select id = "mobile_tabs" name = "mobile_tabs">
+      <option value = "tab_PRI">Prison Population</option>
+      <option value = "tab_PRO">Probation Population</option>
+      <option value = "tab_PAR">Parole Population</option>
+    </select>
 
     <div id = "tab_container">
       <div class ="tab active" id="tab_PRI">Prison Population</div>
@@ -238,7 +248,7 @@
         <div id = "tt_main"><span class ="tt_year"></span><span id = "tt_main_text"></span><span id = "tt_main_val"></span></div>
         <div id = "tt_proj"><span class ="tt_year"></span><span id = "tt_proj_text"></span><span id = "tt_proj_val"></span></div>
       </div>
-<div id = 'PRI-caption' class="caption div-dash-block"><p><span id = "recentpri_dt">In </span><span id = "recentpri_yr">2015</span>, <span class = "state_name_text">Georgia</span> prisons held <span id = "recentpri-num">53,102</span> individuals, <strong><span id = "recentpri_article">a</span> <span id = "recentpri_percent">5.1%</span> <span id = "recentpri_textpercent">decrease</span> from <span id = "pri_base_yr">2012</span></strong>. There were <span id = "recentproj-num">5,562</span> <span id ="recentproj-textnum">fewer</span> people (<span id = "recentproj_percent">-9.5%</span>) in prison than experts projected for <span id ="recentproj_yr">2015</span> in the absence of reform. <span class="inline-footnote-number">1</span></p></div>
+<div id = 'PRI-caption' class="caption div-dash-block"><p><span id = "recentpri_dt">In </span><span id = "recentpri_yr">2015</span>, <span class = "state_name_text">Georgia</span> prisons held <span id = "recentpri-num">53,102</span> individuals, <strong><span id = "recentpri_article">a</span> <span id = "recentpri_percent">5.1%</span> <span id = "recentpri_textpercent">decrease</span> from <span id = "pri_base_yr">2012</span></strong>. There were <span id = "recentproj-num">5,562</span> <span id ="recentproj-textnum">fewer</span> people (<span id = "recentproj_percent">-9.5%</span>) in prison than experts projected for <span id ="recentproj_yr">2015</span> in the absence of reform.</p></div>
 
 
 <!-- On December 31st, 2015, the state probation system supervised 12,418 individuals, a 8% increase from 2010. -->
@@ -255,18 +265,24 @@
 
     <p class="block-ratio-stat"><span id = "tot_savings">$20,000,000</span></p>
 
-    <p class="block-ratio-label">Total Reinvestment:</p>
+    <p class="block-ratio-label">Total Reinvestment**:</p>
 
     <p class="block-ratio-stat"><span id = "tot_reinvest">$17,660,000</span></p>
 
-    <div class="div-reinvestment-context-block">
+    <div class="div-reinvestment-context-block dummy_text" id = "dummy_savings_text">
+      Georgia invested more than <strong>$17.5 million</strong> upfront into
+      accountability courts, substance abuse programs and risk assessment tool
+      development.
+    </div>
+    <div class="div-reinvestment-context-block" id = "savings_text">
       Georgia invested more than <strong>$17.5 million</strong> upfront into
       accountability courts, substance abuse programs and risk assessment tool
       development.
     </div>
 
     <div class="block-savings-disclaimer">
-      <span class="disclaimer-asterisk">*&nbsp;</span>Limited to State Published Savings
+      <div><span class="disclaimer-asterisk">*&nbsp;</span>Limited to state published figures</div>
+      <div><span class="disclaimer-asterisk">**&nbsp;</span>Includes upfront investment and subsequent investment from savings or averted costs</div>
     </div>
   </div>
 
@@ -285,10 +301,10 @@
           <div class="div-more-info">
             <h3>More About <span class = "state_name_text">Georgia</span></h3>
 
-            <ul class="ul-list">
+            <ul class="ul-list" id = "more_info_list">
               <li class="list-item">Georgia has significantly reduced the jail backlog of
               individuals awaiting transfer to a prison or other facility. Prior to
-              reform, the state spent more than $20 million annually&nbsp; on subsidies
+              reform, the state spent more than $20 million annually on subsidies
               to local jails to house these people. In FY2015, Georgia spent only $5,760.
               <span class="inline-footnote-number">2</span></li>
 
@@ -297,11 +313,11 @@
               "inline-footnote-number">3</span></li>
             </ul>
 
-            <ul class="ul-footnotes w-list-unstyled">
-              <li class="ul-footnotes-item"><span class="inline-footnote-number">1</span>
-              Update information architecture goals nomenclature audit</li>
+            <ul class="ul-footnotes w-list-unstyled" id = "footnotes_list">
+              <li class="ul-footnotes-item"><span class="inline-footnote-number footer">1</span>
+               Update information architecture goals nomenclature audit</li>
 
-              <li class="ul-footnotes-item"><span class="inline-footnote-number">2</span>
+              <li class="ul-footnotes-item"><span class="inline-footnote-number footer">2</span>
               Relevant images curation inventory findability needs audio ecosystems
               model. Audio ecosystems quality tag images governance, analysis data
               publishing everything accessibility. Personalization translation
@@ -310,16 +326,16 @@
               wireframes research, stakeholders analysis personalization delivery
               translation.<span class="inline-footnote-number">&nbsp;</span></li>
 
-              <li class="ul-footnotes-item"><span class="inline-footnote-number">3</span>
+              <li class="ul-footnotes-item"><span class="inline-footnote-number footer">3</span>
               Qualitative accessibility writing taxonomy Kissane information architecture
               prototypes, users tag data planning.</li>
             </ul>
           </div>
 
           <div class="div-state-nav">
-            <a class="print w-button" href="#">&nbsp; <span class=
+            <a class="nav_button prev print w-button" href="#">&nbsp; <span class=
             "icon-font">&#61700;&nbsp;</span>Previous State</a><a class=
-            "next print w-button" href="#">Next State&nbsp;<span class=
+            "nav_button next print w-button" href="#">Next State&nbsp;<span class=
             "icon-font">&#61701;</span></a>
           </div>
         </div>
@@ -392,17 +408,22 @@
         </div>
       </div>
     </div>
-  </div><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"
-  type="text/javascript">
-</script><script src=
+  </div>
+<script type="text/javascript" src = "js/vendor/jquery-1.12.4.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+  <script src=
 "https://daks2k3a4ib2z.cloudfront.net/5785627de5e18fa37e63632e/js/webflow.36c960515.js"
-type="text/javascript">
-</script>
+type="text/javascript"></script>
   <script type="text/javascript" src = "js/vendor/d3.v3.min.js"></script>
-  <script type="text/javascript" src = "js/vendor/jquery-1.12.4.min.js"></script>
+  
+
   <script src="js/vendor/countup.min.js"></script>
   <script type="text/javascript" src="js/vendor/pym.min.js"></script>
   <script type="text/javascript" src = "data/textData.js"></script>
+  <script type="text/javascript" src = "data/top_text.js"></script>
+  <script type="text/javascript" src = "data/savings_text.js"></script>
+  <script type="text/javascript" src = "data/more_info.js"></script>
+  <script type="text/javascript" src = "data/footnotes.js"></script>
   <script type="text/javascript" src = "js/vendor/interpolatePath.js"></script>
   <script type="text/javascript" src = "js/main_index.js"></script>
 

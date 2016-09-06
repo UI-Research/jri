@@ -1,10 +1,11 @@
+var oldState = "Georgia"
 function getActiveCategory(){
   var tab = d3.select("#tab_container .tab.active")
   return tab.node().id.replace("tab_","")
   // return "PRI"
 }
 function getActiveState(){
-  return $(".styled-select.states select").val()
+  return $("#state-selector").val()
   // return "Georgia"
 }
 
@@ -117,8 +118,8 @@ function drawChart(){
   else if(IS_TABLET) container_height = 400
   else container_height = 400
   // var container_height = container_width/scalar
-
-  var margin = {top: 90, right: 40, bottom: 50, left: 70},
+  var leftMargin = (IS_MOBILE) ? 45 : 70;
+  var margin = {top: 90, right: 40, bottom: 50, left: leftMargin},
       width = (IS_TABLET) ? container_width - margin.left - margin.right : container_width*.7 - margin.left - margin.right,
       height = (IS_TABLET) ? container_height-90 - margin.top - margin.bottom : container_height - 40 - margin.top - margin.bottom;
   d3.select(".tab.gap").style("width", function(){
@@ -140,13 +141,17 @@ function drawChart(){
 
   var xAxis = d3.svg.axis()
       .scale(x)
-      .orient("bottom");
+      .orient("bottom")
+      .tickFormat(d3.time.format("%Y"));
+  if (IS_MOBILE) xAxis.ticks(3)
+  else xAxis.ticks(d3.time.years, 1)
 
+  var yFormat = (IS_MOBILE) ? d3.format("s") : d3.format(",")
   var yAxis = d3.svg.axis()
       .scale(y)
       .orient("left")
       .ticks((Math.floor(width/60) > 8) ? 8 : Math.floor(width/60))
-      .tickFormat(d3.format(","));
+      .tickFormat(yFormat);
 
   var svg = d3.select("#chart").insert("svg",".div-dash-block")
       .attr("width", width + margin.left + margin.right)
@@ -162,7 +167,7 @@ function drawChart(){
   bisectDate = d3.bisector(function(d) { return parseFloat(d.year); }).left
   function mousemove() {
 // return typeof(d[selector]) != "undefined" && d[selector] != 0
-    var x0 = x.invert(d3.mouse(this)[0]-margin.left)
+    var x0 = x.invert(d3.mouse(this)[0]-margin.left+20)
     var year = x0.getFullYear()
     d3.selectAll(".active.dot").classed("active",false)
     d3.selectAll(".active.pdot").classed("active",false)
@@ -303,34 +308,66 @@ function drawChart(){
       })
       .attr("r",6)
 
-    $(".styled-select.states").on("click",function () {
-        var element = $(this).children("select")[0],
-            worked = false;
-        if(document.createEvent) { // all browsers
-            var e = document.createEvent("MouseEvents");
-            e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false,false, false, false, 0, null);
-            worked = element.dispatchEvent(e);
-        } else if (element.fireEvent) { // ie
-            worked = element.fireEvent("onmousedown");
-        }
-        if (!worked) { // unknown browser / error
-            alert("It didn't worked in your browser.");
-        }
-    });
 
-    $(".styled-select select")
-      .change(function(){
-        updateChart($(".styled-select.states select").val(), getActiveCategory());
-        updateText($(".styled-select.states select").val(), getActiveCategory());
+    // $("#state-selector")
+    //   .change(function(){
+    //     updateChart($("#state-selector").val(), getActiveCategory());
+    //     updateText($("#state-selector").val(), getActiveCategory());
+    //     var m = $(this);
+    //     if(m.val() == ""){
+    //       m.css("color", "#818385");
+    //     }else{ m.css("color", "#333")}
+    // });
+  if(IS_MOBILE){
+    $("#mobile_tabs").selectmenu({
+     change: function(event, data){
+          var category = data.item.value.replace("tab_","")
+          d3.selectAll("#tab_container .tab").classed("active",false)
+          d3.select("#tab_container #tab_" + category).classed("active",true)
+          updateChart(getActiveState(), category)
+          updateText(getActiveState(), category)
+          // console.log(data.item.value)
+      }
+    });
+  }
+  $( "#state-selector" ).selectmenu({
+    change: function(event, data){
+             updateChart($("#state-selector").val(), getActiveCategory());
+        updateText($("#state-selector").val(), getActiveCategory());
         var m = $(this);
         if(m.val() == ""){
           m.css("color", "#818385");
         }else{ m.css("color", "#333")}
-    });
+ 
+    }
+  });
+    d3.selectAll(".nav_button")
+      .on("click", function(){
+        var stateList = ["Alabama","Alaska","Arkansas","Delaware","Georgia","Hawaii","Idaho","Kansas","Kentucky","Louisiana","Michigan","Mississippi","Missouri","Nebraska","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","Utah","Washington","West_Virginia"]
+        var current = stateList.indexOf($("#state-selector").val());
+        var newState;
+        if(d3.select(this).classed("prev")){
+          if(current == 0){
+            newState = stateList.length-1
+          }else{
+            newState = current-1
+          }
+        }else{
+          if(current == stateList.length - 1){
+            newState = 0
+          }else{
+            newState = current+1
+          }
+        }
+        $("#state-selector").val(stateList[newState])
+        $("#state-selector-button .ui-selectmenu-text").text(stateList[newState].replace(/_/g," "))
+        updateChart(stateList[newState], getActiveCategory());
+        updateText(stateList[newState], getActiveCategory());
+      })    
 
     var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
     if (isFirefox){
-      $(".styled-select select").css("pointer-events","visible");
+      $("#state-selector").css("pointer-events","visible");
     }
 
     d3.selectAll("#tab_container .tab")
@@ -345,7 +382,45 @@ function drawChart(){
           updateText(getActiveState(), category)
         }
       })
+    function fadeText(objID, newText){
+      d3.select("#dummy_" + objID)
+        .html(newText)
+        .style("width", function(){
+          return  d3.select("#" + objID).node().getBoundingClientRect().width
+        })
+      var top_end = d3.select("#dummy_" + objID).node().getBoundingClientRect().height
+      d3.select("#" + objID)
+        .transition()
+        .style("height",top_end + "px")
+        .style("opacity",.2)
+        .each("end", function(){
+          d3.select(this).transition().style("opacity",1)
+          d3.select(this).html(newText)
+        })
+    }
+    
     function updateText(state, category){
+
+      // d3.select("#top_text").html(TOP_TEXT[state])
+      if(state != oldState){
+        fadeText("top_text", TOP_TEXT[state])
+        fadeText("savings_text", SAVINGS_TEXT[state])
+        var more_info_list = d3.select("#more_info_list")
+        more_info_list.selectAll("li").remove()
+        for(var i = 0; i<MORE_INFO[state].length; i++){
+          more_info_list.append("li")
+            .attr("class","list-item")
+            .html(MORE_INFO[state][i])
+        }
+        var footnotes_list = d3.select("#footnotes_list")
+        footnotes_list.selectAll("li").remove()
+        for(var i = 0; i<FOOTNOTES[state].length; i++){
+          footnotes_list.append("li")
+            .attr("class","ul-footnotes-item")
+            .html('<span class="inline-footnote-number footer">' + String(i+1) + "</span>&nbsp;" + FOOTNOTES[state][i])
+        }
+      }
+      oldState = state;
       d3.selectAll(".caption").style("display","none")
       console.log(category)
       d3.select("#" + category + "-caption").style("display","inline")
@@ -473,6 +548,12 @@ function drawChart(){
         x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
       }
 
+    xAxis
+      .scale(x)
+      .orient("bottom")
+      .tickFormat(d3.time.format("%Y"));
+  if (IS_MOBILE) xAxis.ticks(3)
+  else xAxis.ticks(d3.time.years, 1)
 
       y.domain([0, Math.max(max*1.5, pmax*1.5)])
       line = d3.svg.line()
@@ -558,7 +639,7 @@ function drawChart(){
 
     d3.select("svg")
     .on("mousemove", function(){
-      var x0 = x.invert(d3.mouse(this)[0]-margin.left)
+      var x0 = x.invert(d3.mouse(this)[0]-margin.left+20)
       var year = x0.getFullYear()
       d3.selectAll(".active.dot").classed("active",false)
       d3.selectAll(".active.pdot").classed("active",false)
@@ -601,5 +682,32 @@ if(IS_TABLET){
 }
 
 drawChart()
+
+
+    // $(".styled-select.states").on("click",function () {
+    //     var element = $(this).children("select")[0],
+    //         worked = false;
+    //     if(document.createEvent) { // all browsers
+    //         var e = document.createEvent("MouseEvents");
+    //         e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false,false, false, false, 0, null);
+    //         worked = element.dispatchEvent(e);
+    //     } else if (element.fireEvent) { // ie
+    //         worked = element.fireEvent("onmousedown");
+    //     }
+    //     if (!worked) { // unknown browser / error
+    //         console.log("There was an error with the dropdown menu");
+    //     }
+    // });
+// $(".styled-select.states").on("update", function(){
+//   console.log(this)
+// })
+$( function() {
+  $( "#state-selector" ).selectmenu({
+    change: function(event, data){
+
+    }
+  });
+});
+
 
 $(window).on("resize",drawChart)
