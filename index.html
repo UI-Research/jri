@@ -11,6 +11,7 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <base target="_blank" />
    <!-- <meta name="viewport" content="width=device-width"> -->
+  <link href="css/print.css" rel="stylesheet" media="print" type="text/css" />
   <link rel="stylesheet" type="text/css" href="css/main.css">
 
   <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
@@ -51,6 +52,7 @@
 <body>
   <div id = "is_tablet"></div>
   <div id = "is_mobile"></div>
+
   <div class="div-floating-wrapper w-hidden-small w-hidden-tiny" data-ix="start-dataviz">
     <div class="div-mol-1col no-fill">
       <div class="div-mol-2col w-clearfix">
@@ -69,28 +71,33 @@
     </div>
   </div>
 
-  <div class="section-navigation">
-    <div class="div-mol-1col">
-      <div class="w-row">
-        <div class=
-        "col-no-padding w-clearfix w-col w-col-10 w-col-small-10 w-col-tiny-10">
-          <img class="img-brand" src=
-          "http://uploads.webflow.com/5785627de5e18fa37e63632e/5785627de5e18fa37e636340_logo-mini-dark.png" />
 
-          <div class="block-feature-title w-hidden-tiny">
-            Features : : Justice Reinvestment Initiative State Data Tracker
-          </div>
-        </div>
+              <div id="header-pinned" class="no-touch">
+  
+       
+               <a target="_blank" href="http://www.urban.org" title="Home" rel="home" class="site-logo"></a>
+            <div class="title"><span class="feature-link"><a href="http://www.urban.org/features" class="title-linkback" alt="Urban Institute logo">Features</a> <span>: :</span> </span><a href="index.html" class="title-linkback">Justice Reinvestment Initiative</a>
+            </div>
+            <div class="share-icons">
+                <div class="shareThisP">
+                    <span onclick="toggle_visibility('shareBox');">
+                            <div class="shareThisB"></div>
+                        </span>
+                    <div class="shareThisW" id="shareBox">
 
-        <div class="col-no-padding share w-col w-col-2 w-col-small-2 w-col-tiny-2">
-          <div class="block-feature-title">
-            share
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+                        <div class="addthis_toolbox addthis_default_style  "addthis:title="" addthis:url="">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//urbn.is/choices" target="_blank" class="addthis_button_facebook at300b" title="Facebook" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);"><span class="at_a11y">Share on facebook</span></span></a>
 
+                            <a href="http://twitter.com/intent/tweet?text=.%40urbaninstitute%20feature%3A%20Some%20teens%20who%20engage%20in%20risky%20behavior%20are%20motivated%20to%20do%20so%20by%20hunger%20http%3A%2F%2Furbn.is%2Fchoices" target="_blank" class="addthis_button_twitter at300b" title="Tweet" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-twitter" style="background-color: rgb(44, 168, 210);"><span class="at_a11y">Share on twitter</span></span></a>
+
+                            <a href="mailto:%20?Subject=New feature from the Urban Institute &amp;Body=Hi! I thought you'd be interested in this new feature from the Urban Institute: “Impossible Choices” http://urbn.is/choices" target="_blank" class="addthis_button_email at300b" target="_blank" title="Email" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-email" style="background-color: rgb(115, 138, 141);"><span class="at_a11y">Share on email</span></span></a>
+                            <div class="atclear"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
   <!-- <div class="nav-spacer"></div> -->
 
   <div class="section-banner">

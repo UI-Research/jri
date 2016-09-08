@@ -70,18 +70,18 @@ p {
 }
 
 a {
-  padding: 14px;
+  /*padding: 14px;*/
   color: #1696d2;
-  font-size: 14px;
-  line-height: 14px;
+  /*font-size: 14px;*/
+  /*line-height: 14px;*/
   text-decoration: none;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
 }
 
 a:hover {
-  background-color: #000;
+/*  background-color: #000;
   color: #fff;
-  text-decoration: none;
+  text-decoration: none;*/
 }
 
 .section-navigation {
@@ -719,8 +719,8 @@ width: 25%;
     line-height: 36px;
   }
   a {
-    font-size: 12px;
-    line-height: 12px;
+/*    font-size: 12px;
+    line-height: 12px;*/
   }
   .section-navigation {
     display: block;
@@ -866,8 +866,8 @@ width: 25%;
     line-height: 36px;
   }
   a {
-    color: #1696d2;
-    text-decoration: none;
+/*    color: #1696d2;
+    text-decoration: none;*/
   }
   .section-banner {
     height: 200px;
