@@ -16,8 +16,8 @@
 .div-dash-col-right {
   /*width: 25%;*/
   /*float: right;*/
-  padding-bottom: 1px;
-width: 25%;
+  	padding-bottom: 1px;
+	width: 25%;
     display: inline-block;
     /*float: right;  */
 }
@@ -28,7 +28,7 @@ width: 25%;
 }
 
 .styled-select.states{
-	display: none;
+	/*display: none;*/
 }
 
 #l_main, #l_proj{
@@ -40,6 +40,7 @@ width: 25%;
 	width: 100%;
     margin-left: 20px;
     margin-top: 30px;
+    display: inline;
     /*clear: */
 }
 p{
@@ -53,14 +54,29 @@ p{
 /******************************************************/
 
 
-@media (max-width: 775px) {
+@media (max-width: 767px) {
+	.div-utilities{
+		padding-left: 0 !important;
+		border: none !important;
+    	margin-top: -40px;
+    	margin-bottom: 30px;
+	}
 	#is_tablet{
 		display: block !important;
 	}
 }
-@media (max-width: 515px) {
+@media (max-width: 540px) {
 	#is_mobile{
 		display: block !important;
+	}
+	#tab_container{
+		display: none;
+	}
+	#mobile_tabs-button{
+		display: block !important;
+	}
+	.caption p{
+		margin-left: 20px;
 	}
 }
 #is_tablet, #is_mobile{
@@ -79,7 +95,7 @@ p{
 #chart{
 	/*position: relative;*/
 }
-@media (max-width: 775px) {
+@media (max-width: 767px) {
 	#chart{
 		width: 90%;
 	}
@@ -121,6 +137,17 @@ path.domain{
 	font-family: Lato;
 }
 
+
+
+/********************************************************/
+/******************** CAPTIONS *************************/
+/******************************************************/
+
+#PRO-caption, #PAR-caption{
+	display: none;
+}
+
+
 /********************************************************/
 /********************** TABS ***************************/
 /******************************************************/
@@ -144,6 +171,9 @@ path.domain{
 	border-bottom: 1px solid black;
 	float: left;
 	height: 20px;
+	-webkit-box-sizing: initial; 
+    -moz-box-sizing: initial;
+    box-sizing: initial; 
 }
 .tab.gap{
 	/*width: calc(100% - 750px);*/
@@ -211,7 +241,7 @@ path.domain{
 /******************** TOOLTIP **************************/
 /******************************************************/
 #tooltip{
-	position: absolute;
+	position: fixed;
 	opacity: 0;
 	top: 0;
 	left: 0;
@@ -225,6 +255,9 @@ path.domain{
 	box-shadow: 5px 5px 0px 0px rgba(210,210,210,0.55);
 	padding: 6px;
 	height: 24px;
+	-webkit-box-sizing: initial; 
+    -moz-box-sizing: initial;
+    box-sizing: initial; 
 }
 .tt_year{
 	margin-right: 3px;
@@ -251,6 +284,17 @@ path.domain{
 #l_proj{
 	left: 270px;
 }
+@media (max-width: 540px) {
+	#l_main{
+		top: 58 !important;
+	}
+	#l_proj{
+		top: 88 !important;
+		left: 20px !important;
+	}
+}
+
+
 #l_main_key, #l_proj_key{
 	width: 40px;
     height: 4px;
@@ -267,4 +311,41 @@ path.domain{
 }
 #l_proj_key{
 	background: #fdbf11;
+}
+
+/********************************************************/
+/****************** MISC_LAYOUT ************************/
+/******************************************************/
+.dummy_text{
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+.savings-emph{
+	font-weight: bold;
+}
+.disclaimer-asterisk{
+	/*display: block;*/
+}
+#state-selector, #mobile_tabs, #mobile_tabs-button{
+	display: none;
+}
+.ul-footnotes-item a{
+	font-size: 11px;
+    line-height: 14px;
+    font-style: italic;
+    text-transform: none;
+    padding:0;
+}
+.ul-footnotes-item a:hover{
+	background-color: none;
+	background: none;
+	color: #1696d2;
+	text-decoration: underline;
+}
+.inline-footnote-number.footer{
+	top: 0px;
+}
+#top_text_wrapper{
+	z-index: -1;
 }

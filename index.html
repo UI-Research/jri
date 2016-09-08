@@ -12,7 +12,6 @@
   <base target="_blank" />
    <!-- <meta name="viewport" content="width=device-width"> -->
   <link rel="stylesheet" type="text/css" href="css/main.css">
-  <link href="css/print.css" rel="stylesheet" media="print" type="text/css" />
 
   <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
     <meta charset="utf-8">
@@ -45,9 +44,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">-->
       
     <!--fonts for the site -->
-      <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato:100,200,300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="css/urban-header.css">
   <script src="https://daks2k3a4ib2z.cloudfront.net/0globals/modernizr-2.7.1.js" type="text/javascript"></script>
 
 
@@ -153,61 +150,47 @@
             </div> -->
 	<!-- <div class="styled-select states"> -->
 	 <select name = "state-selector" id = "state-selector">
-		<option value = "Georgia">Georgia</option>
-		<option value = "Alabama">Alabama</option>
-		<option value = "Alaska">Alaska</option>
 		<option value = "Arkansas">Arkansas</option>
 		<option value = "Delaware">Delaware</option>
 		<option value = "Hawaii">Hawaii</option>
+    <option value = "Georgia">Georgia</option>
 		<option value = "Idaho">Idaho</option>
 		<option value = "Kansas">Kansas</option>
-		<option value = "Kentucky">Kentucky</option>
-		<option value = "Louisiana">Louisiana</option>
-		<option value = "Michigan">Michigan</option>
 		<option value = "Mississippi">Mississippi</option>
 		<option value = "Missouri">Missouri</option>
-		<option value = "Nebraska">Nebraska</option>
 		<option value = "New_Hampshire">New Hampshire</option>
 		<option value = "North_Carolina">North Carolina</option>
 		<option value = "Ohio">Ohio</option>
 		<option value = "Oklahoma">Oklahoma</option>
 		<option value = "Oregon">Oregon</option>
-		<option value = "Pennsylvania">Pennsylvania</option>
+    <option value = "Pennsylvania">Pennsylvania</option>
 		<option value = "South_Carolina">South Carolina</option>
 		<option value = "South_Dakota">South Dakota</option>
-		<option value = "Utah">Utah</option>
-		<option value = "Washington">Washington</option>
 		<option value = "West_Virginia">West Virginia</option>
 	 </select>
 	<!-- </div> -->
 
           </div>
 
-          <h2 class="jri-state"><span class = "state_name_text">Georgia</span></h2>
+          <h2 class="jri-state"><span class = "state_name_text"></span></h2>
         </div>
 
         <div class="div-mol-2col-left" id = "top_text_wrapper">
           <div class="div-subsection-block first">
-            <p id = "dummy_top_text" class = "dummy_text">In 2012, Georgia passed comprehensive justice reinvestment reform through
-            H.B.1176 which reclassified certain drug and property offenses, revised
-            sentencing enhancements and mandatory minimums, expanded the use of
-            electronic monitoring, authorized the use of graduated sanctions in response
-            to probation violations, required the use of evidence based supervision
-            practices, and streamlined the transfer process from jail to prison.</p>
-            <p id = "top_text">In 2012, Georgia passed comprehensive justice reinvestment reform through
-            H.B.1176 which reclassified certain drug and property offenses, revised
-            sentencing enhancements and mandatory minimums, expanded the use of
-            electronic monitoring, authorized the use of graduated sanctions in response
-            to probation violations, required the use of evidence based supervision
-            practices, and streamlined the transfer process from jail to prison.</p>
+            <p id = "dummy_top_text" class = "dummy_text"></p>
+            <p id = "top_text"></p>
           </div>
         </div>
 
         <div class="div-mol-2col-right">
           <div class="div-utilities">
-            <a class="w-button" data-ix="hide-ratio" href="#">DOWNLOAD STATE
-            DATA</a><a class="print w-button" href="/"><span class=
-            "icon-font">&#61487;</span>&nbsp; Print This REport</a>
+            <div id =  "download-button" class="w-button" data-ix="hide-ratio" href="#"><div id = "dl-text">DOWNLOAD 
+            DATA</div>
+            <div id = "dl-state" class="dl-menu"><span class = "state_name_text"></span> data</div>
+            <div id = "dl-natl" class = "dl-menu">All data</a></div>
+            </div>
+            <div id = "print-button" class="print w-button" href="/"><span class=
+            "icon-font">&#61487;</span>&nbsp; Print This Report</div>
           </div>
         </div>
       </div>
@@ -235,39 +218,50 @@
     <div id = "legend">
       <div id = "l_main">
         <div id = "l_main_key"></div>
-        <div id = "l_main_text">Actual <span>Prison</span> Population</div>
+        <div id = "l_main_text"><span>Actual Prison</span> Population</div>
       </div>
       <div id = "l_proj">
         <div id = "l_proj_key"></div>
-        <div id = "l_proj_text">Baseline Prison Projection</div>
+        <div id = "l_proj_text">Baseline Prison Projection<span class="inline-footnote-number">1</span></div>
       </div>
     </div>
+      <div id = "Delaware-note" class = "nodata-note">Separate counts of probation and parole populations were unavailable. Parole was abolished in Delaware in 1985. The parole population is estimated to be less than 5% of the total population based on data reported by the <a href = "http://www.bjs.gov/content/pub/pdf/ppus14.pdf">Bureau of Justice Statistics</a>. Probation and Parole population counts are as of June 30th of each year. Parole and probation counts include those on Home Confinement, who numbered 588 in 2015, and does not include those under supervision pretrial.</div>
+      <div id = "West_Virginia-note" class = "nodata-note">West Virginia does not maintain state-level probation population counts.</div>
+
     <div id = "chart">
       <div id = "tooltip">
         <!-- <div id = "tt_year"></div> -->
         <div id = "tt_main"><span class ="tt_year"></span><span id = "tt_main_text"></span><span id = "tt_main_val"></span></div>
         <div id = "tt_proj"><span class ="tt_year"></span><span id = "tt_proj_text"></span><span id = "tt_proj_val"></span></div>
       </div>
-<div id = 'PRI-caption' class="caption div-dash-block"><p><span id = "recentpri_dt">In </span><span id = "recentpri_yr">2015</span>, <span class = "state_name_text">Georgia</span> prisons held <span id = "recentpri-num">53,102</span> individuals, <strong><span id = "recentpri_article">a</span> <span id = "recentpri_percent">5.1%</span> <span id = "recentpri_textpercent">decrease</span> from <span id = "pri_base_yr">2012</span></strong>. There were <span id = "recentproj-num">5,562</span> <span id ="recentproj-textnum">fewer</span> people (<span id = "recentproj_percent">-9.5%</span>) in prison than experts projected for <span id ="recentproj_yr">2015</span> in the absence of reform.</p></div>
+<div id = 'PRI-caption' class="caption div-dash-block"><p><span id = "recentpri_dt"></span> <span id = "recentpri_yr"></span>, <span class = "state_name_text"></span> prisons held <span id = "recentpri-num"></span> individuals, <strong><span id = "recentpri_article"></span> <span id = "recentpri_percent"></span> <span id = "recentpri_textpercent"></span> from <span id = "pri_base_yr"></span></strong>. There were <span id = "recentproj-num"></span> <span id ="recentproj-textnum"></span> individuals (<span id = "recentproj_percent"></span>) in prison than experts projected for <span id ="recentproj_yr"></span> in the absence of reform.</p>
+
+<div class ="div-dash-block">
+<ul class="ul-footnotes w-list-unstyled" id = "footnotes_list">
+<li class="ul-footnotes-item"><span class="inline-footnote-number footer">1</span>
+The baseline prison projection was calculated in the year prior to legislation passage and reflects the expected size of the prison population over the following several years if there were no changes to policy or practice.</li>
+</ul>
+</div>
+</div>
 
 
 <!-- On December 31st, 2015, the state probation system supervised 12,418 individuals, a 8% increase from 2010. -->
 
-<div id = 'PRO-caption' class="caption div-dash-block"><p><span id = "recentpro_dt">In </span><span id = "recentpro_yr">2015</span>, the <span class = "state_name_text">Georgia</span> probation system supervised <span id = "recentpro-num">167,388</span> individuals, <strong><span id = "recentpro_article">an</span> <span id = "recentpro_percent">5.1%</span> <span id = "recentpro_textpercent">increase</span> from <span id = "pro_base_yr">2012</span></strong>.</p></div>
+<div id = 'PRO-caption' class="caption div-dash-block"><p><span id = "recentpro_dt"></span> <span id = "recentpro_yr"></span>, the <span class = "state_name_text"></span> probation population was <span id = "recentpro-num"></span> individuals, <strong><span id = "recentpro_article"></span> <span id = "recentpro_percent"></span> <span id = "recentpro_textpercent"></span> from <span id = "pro_base_yr"></span></strong>.</p></div>
 
-<div id = 'PAR-caption' class="caption div-dash-block"><p><span id = "recentpar_dt">In </span><span id = "recentpar_yr">2015</span>, the <span class = "state_name_text">Georgia</span> parole system supervised <span id = "recentpar-num">167,388</span> individuals, <strong><span id = "recentpar_article">an</span> <span id = "recentpar_percent">5.1%</span> <span id = "recentpar_textpercent">increase</span> from <span id = "par_base_yr">2012</span></strong>.</p></div>
+<div id = 'PAR-caption' class="caption div-dash-block"><p><span id = "recentpar_dt"></span> <span id = "recentpar_yr"></span>, the <span class = "state_name_text"></span> parole population was <span id = "recentpar-num"></span> individuals, <strong><span id = "recentpar_article"></span> <span id = "recentpar_percent"></span> <span id = "recentpar_textpercent"></span> from <span id = "par_base_yr"></span></strong>.</p></div>
 
     </div>
 
 
   <div class="div-dash-col-right div-reinvestment-ratio">
-    <p class="block-ratio-label">Total Savings*:</p>
+    <p class="block-ratio-label">Savings/Averted Costs*:</p>
 
-    <p class="block-ratio-stat"><span id = "tot_savings">$20,000,000</span></p>
+    <p class="block-ratio-stat"><span id = "tot_savings"></span></p>
 
-    <p class="block-ratio-label">Total Reinvestment**:</p>
+    <p class="block-ratio-label">State JRI Investment**:</p>
 
-    <p class="block-ratio-stat"><span id = "tot_reinvest">$17,660,000</span></p>
+    <p class="block-ratio-stat"><span id = "tot_reinvest"></span></p>
 
     <div class="div-reinvestment-context-block dummy_text" id = "dummy_savings_text">
       Georgia invested more than <strong>$17.5 million</strong> upfront into
@@ -281,7 +275,7 @@
     </div>
 
     <div class="block-savings-disclaimer">
-      <div><span class="disclaimer-asterisk">*&nbsp;</span>Limited to state published figures</div>
+      <div><span class="disclaimer-asterisk">*&nbsp;</span>Limited to state reported figures through September 2016</div>
       <div><span class="disclaimer-asterisk">**&nbsp;</span>Includes upfront investment and subsequent investment from savings or averted costs</div>
     </div>
   </div>
@@ -299,21 +293,12 @@
       <div class="div-mol-2col w-clearfix">
         <div class="div-mol-2col-left">
           <div class="div-more-info">
-            <h3>More About <span class = "state_name_text">Georgia</span></h3>
+            <h3>More About <span class = "state_name_text"></span></h3>
 
             <ul class="ul-list" id = "more_info_list">
-              <li class="list-item">Georgia has significantly reduced the jail backlog of
-              individuals awaiting transfer to a prison or other facility. Prior to
-              reform, the state spent more than $20 million annually on subsidies
-              to local jails to house these people. In FY2015, Georgia spent only $5,760.
-              <span class="inline-footnote-number">2</span></li>
-
-              <li class="list-item">Placeholder for key findings from the policy
-              assessment of the impact of sentencing reforms <span class=
-              "inline-footnote-number">3</span></li>
             </ul>
 
-            <ul class="ul-footnotes w-list-unstyled" id = "footnotes_list">
+<!--             <ul class="ul-footnotes w-list-unstyled" id = "footnotes_list">
               <li class="ul-footnotes-item"><span class="inline-footnote-number footer">1</span>
                Update information architecture goals nomenclature audit</li>
 
@@ -329,14 +314,14 @@
               <li class="ul-footnotes-item"><span class="inline-footnote-number footer">3</span>
               Qualitative accessibility writing taxonomy Kissane information architecture
               prototypes, users tag data planning.</li>
-            </ul>
+            </ul> -->
           </div>
 
           <div class="div-state-nav">
-            <a class="nav_button prev print w-button" href="#">&nbsp; <span class=
-            "icon-font">&#61700;&nbsp;</span>Previous State</a><a class=
-            "nav_button next print w-button" href="#">Next State&nbsp;<span class=
-            "icon-font">&#61701;</span></a>
+            <div class="nav_button prev print w-button">&nbsp; <span class=
+            "icon-font">&#61700;&nbsp;</span>Previous State</div><div class=
+            "nav_button next print w-button">Next State&nbsp;<span class=
+            "icon-font">&#61701;</span></div>
           </div>
         </div>
       </div>
@@ -387,23 +372,19 @@
 
             <h5>Research</h5>
 
-            <p><span class="span-inline-link">Samantha Harvell</span></p>
+            <p><span class="span-inline-link"><a href = "http://www.urban.org/author/samantha-harvell">Samantha Harvell</a></span></p>
 
             <h5>Design and Development</h5>
 
-            <p><span class="span-inline-link">John Wehmann</span> and <span class=
-            "span-inline-link">Ben Chartoff</span></p>
-
-            <h5>Writing</h5>
-
-            <p><span class="span-inline-link">Name</span></p>
+            <p><span class="span-inline-link"><a href = "http://www.urban.org/author/john-wehmann">John Wehmann</a></span> and <span class=
+            "span-inline-link"><a href = "http://www.urban.org/author/benjamin-chartoff">Ben Chartoff</a></span></p>
 
             <h5>Editorial</h5>
 
-            <p><span class="span-inline-link">Fiona Blackshaw</span></p>
+            <p><span class="span-inline-link"><a href = "http://www.urban.org/author/daniel-matos">Daniel Matos</a></span></p>
 
-            <p>Copyright &#169;&nbsp;Urban Institute&nbsp;2016.&nbsp;View this project on
-            Github.</p>
+            <p>Copyright &#169;&nbsp;Urban Institute&nbsp;2016.&nbsp;<a id = "github" href = "https://github.com/urbaninstitute/justice-reform-initiative">View this project on
+            Github.</a></p>
           </div>
         </div>
       </div>
@@ -411,9 +392,7 @@
   </div>
 <script type="text/javascript" src = "js/vendor/jquery-1.12.4.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
-  <script src=
-"https://daks2k3a4ib2z.cloudfront.net/5785627de5e18fa37e63632e/js/webflow.36c960515.js"
-type="text/javascript"></script>
+
   <script type="text/javascript" src = "js/vendor/d3.v3.min.js"></script>
   
 
@@ -423,7 +402,6 @@ type="text/javascript"></script>
   <script type="text/javascript" src = "data/top_text.js"></script>
   <script type="text/javascript" src = "data/savings_text.js"></script>
   <script type="text/javascript" src = "data/more_info.js"></script>
-  <script type="text/javascript" src = "data/footnotes.js"></script>
   <script type="text/javascript" src = "js/vendor/interpolatePath.js"></script>
   <script type="text/javascript" src = "js/main_index.js"></script>
 

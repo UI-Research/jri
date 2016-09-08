@@ -9,13 +9,13 @@ function getActiveState(){
   // return "Georgia"
 }
 
-function countup_val(val_id, new_val){
+function countup_val(val_id, new_val, delay){
   var prefix, separator, suffix, precision
   if(val_id == "tot_savings" || val_id == "tot_reinvest") prefix = "$"
   else prefix = ""
 
   if(val_id.search("_percent") != -1){
-    suffix = "%";
+    suffix = " percent";
     precision = 1;
   }else{
     suffix = '';
@@ -27,6 +27,7 @@ function countup_val(val_id, new_val){
 
 
   var current_val = parseFloat(d3.select("#" + val_id).text().replace("$","").replace(/\,/g,""))
+  if(isNaN(current_val)) current_val = 0;
   var countup_options = {
     useEasing : true, 
     useGrouping : true,
@@ -35,8 +36,13 @@ function countup_val(val_id, new_val){
     prefix : prefix, 
     suffix : suffix
   };
-  var amount_countup = new CountUp(val_id, current_val, new_val, precision, .5, countup_options);
-  amount_countup.start();
+  if(delay){
+    var format = d3.format(separator + "." + precision + "f")
+    d3.select("#" + val_id).text(prefix + String(format(new_val)) + suffix)
+  }else{
+    var amount_countup = new CountUp(val_id, current_val, new_val, precision, .5, countup_options);
+    amount_countup.start();
+  }
 }
 
 function getArticle(val){
@@ -158,11 +164,11 @@ function drawChart(){
       .attr("height", height + margin.top + margin.bottom)
             .on("mousemove", mousemove)
             .on("mouseout",hideTooltip)
-
-
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
+  d3.selectAll(".nodata-note")
+    .style("width", (width + margin.left + margin.right - .2*width) + "px")
+    .style("margin", (.1*width) + "px")
 
   bisectDate = d3.bisector(function(d) { return parseFloat(d.year); }).left
   function mousemove() {
@@ -251,7 +257,7 @@ function drawChart(){
       .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) + height))
 
     var pointer = svg.append("g")
-          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) - 137) + "," + height/2 + ")")
+          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) - 137) + "," + height/1.4 + ")")
 
         pointer
           .append("polygon")
@@ -341,9 +347,36 @@ function drawChart(){
  
     }
   });
+    d3.select("#dl-natl")
+      .on("click", function(){
+        window.location = "data/download/All_Data.csv"
+      })
+    d3.select("#dl-state")
+      .on("click", function(){
+        window.location = "data/download/" + getActiveState() + ".csv"
+      })
+    d3.select("#print-button")
+      .on("click", function(){
+        window.print()
+      })
+    d3.select("#download-button")
+      .on("mouseover", function(){
+        d3.selectAll(".dl-menu").transition()
+          .style("height","40px")
+          .style("padding-top","6px")
+        d3.select("#dl-state")
+          .style("border-bottom","1px solid #9d9d9d")
+      })
+      .on("mouseout", function(){
+        d3.selectAll(".dl-menu").transition()
+          .style("height","0px")
+          .style("padding-top","0px")
+        d3.select("#dl-state")
+          .style("border-bottom","none")
+      })
     d3.selectAll(".nav_button")
       .on("click", function(){
-        var stateList = ["Alabama","Alaska","Arkansas","Delaware","Georgia","Hawaii","Idaho","Kansas","Kentucky","Louisiana","Michigan","Mississippi","Missouri","Nebraska","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","Utah","Washington","West_Virginia"]
+        var stateList = ["Arkansas","Delaware","Hawaii","Georgia","Idaho","Kansas","Mississippi","Missouri","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","West_Virginia"]
         var current = stateList.indexOf($("#state-selector").val());
         var newState;
         if(d3.select(this).classed("prev")){
@@ -382,43 +415,65 @@ function drawChart(){
           updateText(getActiveState(), category)
         }
       })
-    function fadeText(objID, newText){
+    function fadeText(objID, newText, delay){
+      // console.log(delay)
       d3.select("#dummy_" + objID)
         .html(newText)
         .style("width", function(){
           return  d3.select("#" + objID).node().getBoundingClientRect().width
         })
       var top_end = d3.select("#dummy_" + objID).node().getBoundingClientRect().height
-      d3.select("#" + objID)
-        .transition()
-        .style("height",top_end + "px")
-        .style("opacity",.2)
-        .each("end", function(){
-          d3.select(this).transition().style("opacity",1)
-          d3.select(this).html(newText)
-        })
+      if(delay){
+        d3.select("#" + objID)
+          .style("height",top_end + "px")
+          .style("opacity",.2)
+          .style("opacity",1)
+          .html(newText)
+      }else{
+        d3.select("#" + objID)
+          .transition()
+          .style("height",top_end + "px")
+          .style("opacity",.2)
+          .each("end", function(){
+            d3.select(this).transition().style("opacity",1)
+            d3.select(this).html(newText)
+          })
+      }
     }
     
-    function updateText(state, category){
-
+    function updateText(state, category, delay){
+      console.log(state, category)
+      if ((state == "Delaware" && category == "PAR") || (state == "West_Virginia" && category == "PRO")){
+        d3.select("#" + category + "-caption p")
+          .transition()
+          .style("opacity",0)
+      }else{
+        d3.selectAll(".caption p")
+          .transition()
+          .style("opacity",1)
+      }
+ 
       // d3.select("#top_text").html(TOP_TEXT[state])
       if(state != oldState){
-        fadeText("top_text", TOP_TEXT[state])
-        fadeText("savings_text", SAVINGS_TEXT[state])
+        fadeText("top_text", TOP_TEXT[state], delay)
+        fadeText("savings_text", SAVINGS_TEXT[state], delay)
         var more_info_list = d3.select("#more_info_list")
+        var more_info_div = d3.select(".div-more-info")
         more_info_list.selectAll("li").remove()
+        if (MORE_INFO[state].length == 0){
+          console.log(state)
+          more_info_div
+            .style("display","none")
+        }else{
+          more_info_div
+            .style("display","block")
+        }
         for(var i = 0; i<MORE_INFO[state].length; i++){
           more_info_list.append("li")
             .attr("class","list-item")
             .html(MORE_INFO[state][i])
         }
-        var footnotes_list = d3.select("#footnotes_list")
-        footnotes_list.selectAll("li").remove()
-        for(var i = 0; i<FOOTNOTES[state].length; i++){
-          footnotes_list.append("li")
-            .attr("class","ul-footnotes-item")
-            .html('<span class="inline-footnote-number footer">' + String(i+1) + "</span>&nbsp;" + FOOTNOTES[state][i])
-        }
+
       }
       oldState = state;
       d3.selectAll(".caption").style("display","none")
@@ -432,18 +487,18 @@ function drawChart(){
 
       var base_yr_data = data.filter(function(d){ return d.year == JRI[state]["base_yr"]})[0]
 
-      countup_val("tot_savings", JRI[state]["tot_savings"])
-      countup_val("tot_reinvest", JRI[state]["tot_reinvest"])
+      countup_val("tot_savings", JRI[state]["tot_savings"], delay)
+      countup_val("tot_reinvest", JRI[state]["tot_reinvest"], delay)
       d3.selectAll(".state_name_text").text(state.replace(/_/g," "))
 
 //*************** PRISON TAB
-      countup_val("recentpri_yr", JRI[state]["recentpri_yr"])
-      countup_val("recentpri-num", recentpri_yr_data[state + "-PRI"])
-      countup_val("recentpri_percent", Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"]) )
-      countup_val("pri_base_yr", JRI[state]["base_yr"])
-      countup_val("recentproj-num", Math.abs(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]))
-      countup_val("recentproj_percent", 100*(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]) / recentproj_yr_data[state+"-PROJ"])
-      countup_val("recentproj_yr", JRI[state]["recentproj_yr"])
+      countup_val("recentpri_yr", JRI[state]["recentpri_yr"], delay)
+      countup_val("recentpri-num", recentpri_yr_data[state + "-PRI"], delay)
+      countup_val("recentpri_percent", Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"]) , delay)
+      countup_val("pri_base_yr", JRI[state]["base_yr"], delay)
+      countup_val("recentproj-num", Math.abs(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]), delay)
+      countup_val("recentproj_percent", 100*(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]) / recentproj_yr_data[state+"-PROJ"], delay)
+      countup_val("recentproj_yr", JRI[state]["recentproj_yr"], delay)
 
       d3.select("#recentpri_article").text(getArticle(Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"])))
 
@@ -467,52 +522,56 @@ function drawChart(){
       }
 
 //*************** PROBATION TAB
-      countup_val("recentpro_yr", JRI[state]["recentpro_yr"])
-      countup_val("recentpro-num", recentpro_yr_data[state + "-PRO"])
-      countup_val("recentpro_percent", Math.abs(100*(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"])/base_yr_data[state + "-PRO"]) )
-      countup_val("pro_base_yr", JRI[state]["base_yr"])
+      if(state != "West_Virginia"){
 
-      d3.select("#recentpro_article").text(getArticle(Math.abs(100*(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"])/base_yr_data[state + "-PRO"])))
+        countup_val("recentpro_yr", JRI[state]["recentpro_yr"], delay)
+        countup_val("recentpro-num", recentpro_yr_data[state + "-PRO"], delay)
+        countup_val("recentpro_percent", Math.abs(100*(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"])/base_yr_data[state + "-PRO"]) , delay)
+        countup_val("pro_base_yr", JRI[state]["base_yr"], delay)
 
-
-
-      if(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"] < 0){
-        d3.select("#recentpro_textpercent").text("decrease")
-      }else{
-        d3.select("#recentpro_textpercent").text("increase")
-      }
+        d3.select("#recentpro_article").text(getArticle(Math.abs(100*(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"])/base_yr_data[state + "-PRO"])))
 
 
-      if(JRI[state]["recentpro_dt"] == ""){
-        d3.select("#recentpro_dt").text("In ")
-      }else{
-        d3.select("#recentpro_dt").text(JRI[state]["recentpro_dt"])
+
+        if(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"] < 0){
+          d3.select("#recentpro_textpercent").text("decrease")
+        }else{
+          d3.select("#recentpro_textpercent").text("increase")
+        }
+
+
+        if(JRI[state]["recentpro_dt"] == ""){
+          d3.select("#recentpro_dt").text("In ")
+        }else{
+          d3.select("#recentpro_dt").text(JRI[state]["recentpro_dt"])
+        }
       }
 //*************** PAROLE TAB
-      countup_val("recentpar_yr", JRI[state]["recentpar_yr"])
-      countup_val("recentpar-num", recentpar_yr_data[state + "-PAR"])
-      countup_val("recentpar_percent", Math.abs(100*(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"])/base_yr_data[state + "-PAR"]) )
-      countup_val("par_base_yr", JRI[state]["base_yr"])
+      if(state != "Delaware"){
+        countup_val("recentpar_yr", JRI[state]["recentpar_yr"], delay)
+        countup_val("recentpar-num", recentpar_yr_data[state + "-PAR"], delay)
+        countup_val("recentpar_percent", Math.abs(100*(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"])/base_yr_data[state + "-PAR"]) , delay)
+        countup_val("par_base_yr", JRI[state]["base_yr"], delay)
 
-      d3.select("#recentpar_article").text(getArticle(Math.abs(100*(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"])/base_yr_data[state + "-PAR"])))
+        d3.select("#recentpar_article").text(getArticle(Math.abs(100*(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"])/base_yr_data[state + "-PAR"])))
 
 
 
-      if(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"] < 0){
-        d3.select("#recentpar_textpercent").text("decrease")
-      }else{
-        d3.select("#recentpar_textpercent").text("increase")
+        if(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"] < 0){
+          d3.select("#recentpar_textpercent").text("decrease")
+        }else{
+          d3.select("#recentpar_textpercent").text("increase")
+        }
+
+
+        if(JRI[state]["recentpar_dt"] == ""){
+          d3.select("#recentpar_dt").text("In ")
+        }else{
+          d3.select("#recentpar_dt").text(JRI[state]["recentpar_dt"])
+        }
+
+
       }
-
-
-      if(JRI[state]["recentpar_dt"] == ""){
-        d3.select("#recentpar_dt").text("In ")
-      }else{
-        d3.select("#recentpar_dt").text(JRI[state]["recentpar_dt"])
-      }
-
-
-
 
     }
 
@@ -522,7 +581,35 @@ function drawChart(){
 
     function updateChart(state, category){
       hideTooltip();
+      if ((state == "Delaware" && category == "PAR") || (state == "West_Virginia" && category == "PRO")){
+        d3.select("#chart")
+          .style("pointer-events","none")
+          .transition()
+          .style("opacity",0)
+        d3.select("#legend")
+          .style("pointer-events","none")
+          .transition()
+          .style("opacity",0)
+        d3.select("#" + state + "-note")
+          .style("pointer-events","visible")
+          .transition()
+          .style("opacity",1)
+        return false;
+      }
+        d3.selectAll(".nodata-note")
+          .style("pointer-events","none")
+          .transition()
+          .style("opacity",0)
+      d3.select("#chart")
+        .style("pointer-events","visible")
+        .transition()
+        .style("opacity",1)
+      d3.select("#legend")
+        .style("pointer-events","visible")
+        .transition()
+        .style("opacity",1)
       var selector = state + "-" + category
+      console.log(selector)
       var pselector = state + "-PROJ"
       var slice = data.filter(function(d){ return typeof(d[selector]) != "undefined" && d[selector] != 0})
       var pslice = data.filter(function(d){ return typeof(d[pselector]) != "undefined" && d[pselector] != 0})
@@ -536,7 +623,7 @@ function drawChart(){
           .transition()
           .style("opacity", 1)
       }
-      var FULL = {"PRI" : "Prison", "PAR": "Parole", "PRO": "Probation"}
+      var FULL = {"PRI" : "Actual Prison", "PAR": "Parole", "PRO": "Probation"}
       d3.select("#l_main_text span").text(FULL[category])
       // x.domain(d3.extent(slice, function(d) { return formatDate.parse(d.year) }));
       var max = d3.max(slice, function(d){ return +d[selector]})
@@ -625,7 +712,7 @@ function drawChart(){
 
       pointer
         .transition()
-        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state]["leg_yr"])) - 137) + "," + height/2 + ")")
+        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state]["leg_yr"])) - 137) + "," + height/1.4 + ")")
 
 
 
@@ -671,6 +758,8 @@ function drawChart(){
       })
 
     }
+      // updateChart(getActiveState(), getActiveCategory())
+  updateText(getActiveState(), getActiveCategory(), true)
 
 
   });
@@ -679,9 +768,11 @@ if(IS_TABLET){
 }else{
   d3.select("body").style("height", function(){ return d3.select("#chart").node().getBoundingClientRect().height + 30})
 }
+
 }
 
 drawChart()
+
 
 
     // $(".styled-select.states").on("click",function () {
@@ -710,4 +801,4 @@ $( function() {
 });
 
 
-$(window).on("resize",drawChart)
+$(window).on("resize",drawChart)  

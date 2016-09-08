@@ -700,7 +700,7 @@ width: 25%;
 
 .inline-footnote-number {
   position: relative;
-  top: -2px;
+  top: -6px;
   display: inline-block;
   color: #f140a8;
   font-size: 10px;

@@ -343,9 +343,83 @@ path.domain{
 	color: #1696d2;
 	text-decoration: underline;
 }
+.nodata-note a{
+	text-transform: none;
+    padding:0;
+    font-size: 16px;
+    line-height: 24px;
+}
+.nodata-note a:hover{
+	background-color: none;
+	background: none;
+	color: #1696d2;
+	text-decoration: underline;
+}
+.span-inline-link a, #github{
+	cursor: pointer;
+	text-transform: none;
+    padding:0;
+    font-size: 14px;
+    line-height: 24px;	
+}
+.span-inline-link a:hover, #github:hover{
+	background-color: none;
+	background: none;
+	color: #1696d2;
+	text-decoration: underline;
+}
 .inline-footnote-number.footer{
 	top: 0px;
 }
 #top_text_wrapper{
 	z-index: -1;
+}
+#download-button{
+	width: 179px;
+    text-align: center;
+}
+#download-button:hover, #print-button:hover{
+	background-color: black;
+	color: white;
+}
+#print-button{
+	text-transform: uppercase;
+	font-size: 14px;
+}
+#download-button{
+	padding: 0;
+}
+#dl-text{
+	padding: 9 15 9 15px;
+}
+#dl-state, #dl-natl{
+	overflow: hidden;
+	height: 0px;
+	padding-top: 0px;
+	color: #555;
+	background-color: #efefef;
+}
+#dl-state:hover, #dl-natl:hover{
+	background-color: #9d9d9d;
+	color: white;
+}
+#dl-state{
+	/*border-bottom: none;*/
+}
+#dl-natl{
+	/*background-color: #9d9d9d*/
+}
+.nodata-note{
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+.nav_button{
+	text-transform: uppercase;
+	font-size: 12px;
+}
+.nav_button:hover{
+	background: black;
+	background-color: black;
+	color: white;
 }

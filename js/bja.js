@@ -1,10 +1,61 @@
+var oldState = "Georgia"
 function getActiveCategory(){
   var tab = d3.select("#tab_container .tab.active")
   return tab.node().id.replace("tab_","")
+  // return "PRI"
+}
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 function getActiveState(){
-  // return $(".styled-select.states select").val()
-  return "Georgia"
+  // return $("#state-selector").val()
+  // return "Georgia"
+  console.log(getParameterByName("state"))
+  return getParameterByName("state")
+
+}
+
+function countup_val(val_id, new_val){
+  var prefix, separator, suffix, precision
+  if(val_id == "tot_savings" || val_id == "tot_reinvest") prefix = "$"
+  else prefix = ""
+
+  if(val_id.search("_percent") != -1){
+    suffix = "%";
+    precision = 1;
+  }else{
+    suffix = '';
+    precision = 0;
+  }
+
+  if(val_id.search("_yr") != -1) separator = ''
+  else separator = ','
+
+
+  var current_val = parseFloat(d3.select("#" + val_id).text().replace("$","").replace(/\,/g,""))
+  var countup_options = {
+    useEasing : true, 
+    useGrouping : true,
+    separator : separator, 
+    decimal : '.', 
+    prefix : prefix, 
+    suffix : suffix
+  };
+  var amount_countup = new CountUp(val_id, current_val, new_val, precision, .5, countup_options);
+  amount_countup.start();
+}
+
+function getArticle(val){
+  val = Math.max( Math.round(val * 10) / 10, 2.8 ).toFixed(2);
+  var num = String(val).split(".")[0]
+  if(num == "8" || num == "18" || num == "80" || num == "11") return "an"
+  else return "a"
 }
 
 function moveTooltip(dot){
@@ -60,20 +111,28 @@ function hideTooltip(){
     .style("opacity",0)
 }
 function drawChart(container_width){
+  // console.log(foo)
+  // container_width = $("h2.jri-state")[0].getBoundingClientRect().width
   var IS_TABLET = d3.select("#is_tablet").style("display") == "block"
   var IS_MOBILE = d3.select("#is_mobile").style("display") == "block"
 
-  d3.select("#tab_PRI").text(function(){return (IS_MOBILE) ? "Prison" : "Prison Population" })
-  d3.select("#tab_PRO").text(function(){return (IS_MOBILE) ? "Probation" : "Probation Population" })
-  d3.select("#tab_PAR").text(function(){return (IS_MOBILE) ? "Parole" : "Parole Population" })
+  // d3.select("#tab_PRI").text(function(){return (IS_MOBILE) ? "Prison" : "Prison Population" })
+  // d3.select("#tab_PRO").text(function(){return (IS_MOBILE) ? "Probation" : "Probation Population" })
+  // d3.select("#tab_PAR").text(function(){return (IS_MOBILE) ? "Parole" : "Parole Population" })
 
   // console.log(container_width)
 
   d3.selectAll("svg").remove()
   var defaultSelector = getActiveState() + "-" + getActiveCategory();
   var pdefaultSelector = getActiveState() + "-" + "PROJ"
-  var container_height = d3.select("#contents").node().getBoundingClientRect().height
-  var margin = {top: 90, right: 40, bottom: 30, left: 70},
+  // var container_height = d3.select("#contents").node().getBoundingClientRect().height
+  var container_height;
+  if(IS_MOBILE) container_height = 400
+  else if(IS_TABLET) container_height = 400
+  else container_height = 400
+  // var container_height = container_width/scalar
+  var leftMargin = (IS_MOBILE) ? 45 : 70;
+  var margin = {top: 90, right: 40, bottom: 50, left: leftMargin},
       width = (IS_TABLET) ? container_width - margin.left - margin.right : container_width*.7 - margin.left - margin.right,
       height = (IS_TABLET) ? container_height-90 - margin.top - margin.bottom : container_height - 40 - margin.top - margin.bottom;
   d3.select(".tab.gap").style("width", function(){
@@ -95,13 +154,17 @@ function drawChart(container_width){
 
   var xAxis = d3.svg.axis()
       .scale(x)
-      .orient("bottom");
+      .orient("bottom")
+      .tickFormat(d3.time.format("%Y"));
+  if (IS_MOBILE) xAxis.ticks(3)
+  else xAxis.ticks(d3.time.years, 1)
 
+  var yFormat = (IS_MOBILE) ? d3.format("s") : d3.format(",")
   var yAxis = d3.svg.axis()
       .scale(y)
       .orient("left")
       .ticks((Math.floor(width/60) > 8) ? 8 : Math.floor(width/60))
-      .tickFormat(d3.format(","));
+      .tickFormat(yFormat);
 
   var svg = d3.select("#chart").insert("svg",".div-dash-block")
       .attr("width", width + margin.left + margin.right)
@@ -117,7 +180,7 @@ function drawChart(container_width){
   bisectDate = d3.bisector(function(d) { return parseFloat(d.year); }).left
   function mousemove() {
 // return typeof(d[selector]) != "undefined" && d[selector] != 0
-    var x0 = x.invert(d3.mouse(this)[0]-margin.left)
+    var x0 = x.invert(d3.mouse(this)[0]-margin.left+20)
     var year = x0.getFullYear()
     d3.selectAll(".active.dot").classed("active",false)
     d3.selectAll(".active.pdot").classed("active",false)
@@ -151,14 +214,12 @@ function drawChart(container_width){
       .attr('d', 'M-2,2 l4,-4 M0,8 l8,-8 M6,10 l4,-4')
       .attr('stroke', '#d2d2d2')
       .attr('stroke-width', 1);
-var data = [{"Alabama-PAR": "", "Alabama-PRI": "", "Alabama-PRO": "", "Alabama-PROJ": "", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "", "Arkansas-PRI": "", "Arkansas-PRO": "", "Arkansas-PROJ": "", "Delaware-PAR": "", "Delaware-PRI": "", "Delaware-PRO": "", "Delaware-PROJ": "", "Georgia-PAR": "", "Georgia-PRI": "", "Georgia-PRO": "", "Georgia-PROJ": "", "Hawaii-PAR": "", "Hawaii-PRI": "", "Hawaii-PRO": "", "Hawaii-PROJ": "", "Idaho-PAR": "", "Idaho-PRI": "", "Idaho-PRO": "", "Idaho-PROJ": "", "Kansas-PAR": "", "Kansas-PRI": "", "Kansas-PRO": "", "Kansas-PROJ": "", "Kentucky-PAR": "", "Kentucky-PRI": "", "Kentucky-PRO": "", "Kentucky-PROJ": "", "Louisiana-PAR": "", "Louisiana-PRI": "", "Louisiana-PRO": "", "Louisiana-PROJ": "", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "", "Mississippi-PRI": "", "Mississippi-PRO": "", "Mississippi-PROJ": "", "Missouri-PAR": "", "Missouri-PRI": "", "Missouri-PRO": "", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "", "Nebraska-PRO": "", "Nebraska-PROJ": "", "New_Hampshire-PAR": "", "New_Hampshire-PRI": "2870.0", "New_Hampshire-PRO": "", "New_Hampshire-PROJ": "", "North_Carolina-PAR": "", "North_Carolina-PRI": "", "North_Carolina-PRO": "", "North_Carolina-PROJ": "", "Ohio-PAR": "", "Ohio-PRI": "", "Ohio-PRO": "", "Ohio-PROJ": "", "Oklahoma-PAR": "", "Oklahoma-PRI": "", "Oklahoma-PRO": "", "Oklahoma-PROJ": "", "Oregon-PAR": "", "Oregon-PRI": "", "Oregon-PRO": "", "Oregon-PROJ": "", "Pennsylvania-PAR": "", "Pennsylvania-PRI": "", "Pennsylvania-PRO": "", "Pennsylvania-PROJ": "", "South_Carolina-PAR": "2261.0", "South_Carolina-PRI": "23887.0", "South_Carolina-PRO": "26760.0", "South_Carolina-PROJ": "", "South_Dakota-PAR": "", "South_Dakota-PRI": "", "South_Dakota-PRO": "", "South_Dakota-PROJ": "", "Utah-PAR": "", "Utah-PRI": "", "Utah-PRO": "", "Utah-PROJ": "", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "", "West_Virginia-PRI": "", "West_Virginia-PRO": "", "West_Virginia-PROJ": "", "year": "2007"}, {"Alabama-PAR": "", "Alabama-PRI": "", "Alabama-PRO": "", "Alabama-PROJ": "", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "19974.0", "Arkansas-PRI": "14686.0", "Arkansas-PRO": "30997.0", "Arkansas-PROJ": "", "Delaware-PAR": "", "Delaware-PRI": "", "Delaware-PRO": "", "Delaware-PROJ": "", "Georgia-PAR": "", "Georgia-PRI": "", "Georgia-PRO": "", "Georgia-PROJ": "", "Hawaii-PAR": "", "Hawaii-PRI": "", "Hawaii-PRO": "", "Hawaii-PROJ": "", "Idaho-PAR": "", "Idaho-PRI": "", "Idaho-PRO": "", "Idaho-PROJ": "", "Kansas-PAR": "", "Kansas-PRI": "", "Kansas-PRO": "", "Kansas-PROJ": "", "Kentucky-PAR": "", "Kentucky-PRI": "22389.0", "Kentucky-PRO": "", "Kentucky-PROJ": "", "Louisiana-PAR": "", "Louisiana-PRI": "38228.0", "Louisiana-PRO": "", "Louisiana-PROJ": "", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "", "Mississippi-PRI": "", "Mississippi-PRO": "", "Mississippi-PROJ": "", "Missouri-PAR": "", "Missouri-PRI": "30415.0", "Missouri-PRO": "", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "", "Nebraska-PRO": "", "Nebraska-PROJ": "", "New_Hampshire-PAR": "", "New_Hampshire-PRI": "2682.0", "New_Hampshire-PRO": "", "New_Hampshire-PROJ": "", "North_Carolina-PAR": "", "North_Carolina-PRI": "39326.0", "North_Carolina-PRO": "", "North_Carolina-PROJ": "", "Ohio-PAR": "", "Ohio-PRI": "50371.0", "Ohio-PRO": "", "Ohio-PROJ": "", "Oklahoma-PAR": "", "Oklahoma-PRI": "", "Oklahoma-PRO": "", "Oklahoma-PROJ": "", "Oregon-PAR": "", "Oregon-PRI": "", "Oregon-PRO": "", "Oregon-PROJ": "", "Pennsylvania-PAR": "", "Pennsylvania-PRI": "", "Pennsylvania-PRO": "", "Pennsylvania-PROJ": "", "South_Carolina-PAR": "1911.0", "South_Carolina-PRI": "25066.0", "South_Carolina-PRO": "26986.0", "South_Carolina-PROJ": "", "South_Dakota-PAR": "", "South_Dakota-PRI": "", "South_Dakota-PRO": "", "South_Dakota-PROJ": "", "Utah-PAR": "", "Utah-PRI": "", "Utah-PRO": "", "Utah-PROJ": "", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "", "West_Virginia-PRI": "", "West_Virginia-PRO": "", "West_Virginia-PROJ": "", "year": "2008"}, {"Alabama-PAR": "21445.0", "Alabama-PRI": "", "Alabama-PRO": "", "Alabama-PROJ": "", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "21445.0", "Arkansas-PRI": "15171.0", "Arkansas-PRO": "29793.0", "Arkansas-PROJ": "", "Delaware-PAR": "", "Delaware-PRI": "", "Delaware-PRO": "", "Delaware-PROJ": "", "Georgia-PAR": "21307.0", "Georgia-PRI": "56411.0", "Georgia-PRO": "151959.0", "Georgia-PROJ": "", "Hawaii-PAR": "1869.0", "Hawaii-PRI": "6005.0", "Hawaii-PRO": "20586.0", "Hawaii-PROJ": "", "Idaho-PAR": "2208.0", "Idaho-PRI": "", "Idaho-PRO": "8077.0", "Idaho-PROJ": "", "Kansas-PAR": "3713.0", "Kansas-PRI": "", "Kansas-PRO": "", "Kansas-PROJ": "", "Kentucky-PAR": "", "Kentucky-PRI": "21445.0", "Kentucky-PRO": "", "Kentucky-PROJ": "", "Louisiana-PAR": "23021.0", "Louisiana-PRI": "39780.0", "Louisiana-PRO": "", "Louisiana-PROJ": "", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "", "Mississippi-PRI": "", "Mississippi-PRO": "", "Mississippi-PROJ": "", "Missouri-PAR": "17803.0", "Missouri-PRI": "30563.0", "Missouri-PRO": "53398.0", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "", "Nebraska-PRO": "", "Nebraska-PROJ": "", "New_Hampshire-PAR": "1803.0", "New_Hampshire-PRI": "2917.0", "New_Hampshire-PRO": "4562.0", "New_Hampshire-PROJ": "2917.0", "North_Carolina-PAR": "2067.0", "North_Carolina-PRI": "40824.0", "North_Carolina-PRO": "109540.0", "North_Carolina-PROJ": "", "Ohio-PAR": "13637.0", "Ohio-PRI": "50921.0", "Ohio-PRO": "14927.0", "Ohio-PROJ": "", "Oklahoma-PAR": "3706.0", "Oklahoma-PRI": "26755.0", "Oklahoma-PRO": "27464.0", "Oklahoma-PROJ": "", "Oregon-PAR": "", "Oregon-PRI": "", "Oregon-PRO": "", "Oregon-PROJ": "", "Pennsylvania-PAR": "23224.0", "Pennsylvania-PRI": "51487.0", "Pennsylvania-PRO": "7876.0", "Pennsylvania-PROJ": "", "South_Carolina-PAR": "1653.0", "South_Carolina-PRI": "24734.0", "South_Carolina-PRO": "26694.0", "South_Carolina-PROJ": "24612.0", "South_Dakota-PAR": "", "South_Dakota-PRI": "", "South_Dakota-PRO": "", "South_Dakota-PROJ": "", "Utah-PAR": "", "Utah-PRI": "", "Utah-PRO": "", "Utah-PROJ": "", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "1491.0", "West_Virginia-PRI": "", "West_Virginia-PRO": "", "West_Virginia-PROJ": "", "year": "2009"}, {"Alabama-PAR": "21774.0", "Alabama-PRI": "", "Alabama-PRO": "", "Alabama-PROJ": "", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "21774.0", "Arkansas-PRI": "16176.0", "Arkansas-PRO": "28156.0", "Arkansas-PROJ": "15916.0", "Delaware-PAR": "", "Delaware-PRI": "", "Delaware-PRO": "", "Delaware-PROJ": "", "Georgia-PAR": "22403.0", "Georgia-PRI": "56035.0", "Georgia-PRO": "156554.0", "Georgia-PROJ": "", "Hawaii-PAR": "1862.0", "Hawaii-PRI": "5987.0", "Hawaii-PRO": "N/A", "Hawaii-PROJ": "", "Idaho-PAR": "2378.0", "Idaho-PRI": "", "Idaho-PRO": "8111.0", "Idaho-PROJ": "", "Kansas-PAR": "3800.0", "Kansas-PRI": "8864.0", "Kansas-PRO": "", "Kansas-PROJ": "", "Kentucky-PAR": "", "Kentucky-PRI": "20117.0", "Kentucky-PRO": "", "Kentucky-PROJ": "20117.0", "Louisiana-PAR": "23210.0", "Louisiana-PRI": "39391.0", "Louisiana-PRO": "", "Louisiana-PROJ": "", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "", "Mississippi-PRI": "", "Mississippi-PRO": "", "Mississippi-PROJ": "", "Missouri-PAR": "17730.0", "Missouri-PRI": "30623.0", "Missouri-PRO": "52190.0", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "", "Nebraska-PRO": "", "Nebraska-PROJ": "", "New_Hampshire-PAR": "1869.0", "New_Hampshire-PRI": "2755.0", "New_Hampshire-PRO": "4502.0", "New_Hampshire-PROJ": "2878.0", "North_Carolina-PAR": "2061.0", "North_Carolina-PRI": "40102.0", "North_Carolina-PRO": "107414.0", "North_Carolina-PROJ": "", "Ohio-PAR": "10774.0", "Ohio-PRI": "50987.0", "Ohio-PRO": "11500.0", "Ohio-PROJ": "50987.0", "Oklahoma-PAR": "3538.0", "Oklahoma-PRI": "27378.0", "Oklahoma-PRO": "24711.0", "Oklahoma-PROJ": "", "Oregon-PAR": "13382.0", "Oregon-PRI": "13924.0", "Oregon-PRO": "17423.0", "Oregon-PROJ": "", "Pennsylvania-PAR": "24633.0", "Pennsylvania-PRI": "51321.0", "Pennsylvania-PRO": "8140.0", "Pennsylvania-PROJ": "", "South_Carolina-PAR": "1587.0", "South_Carolina-PRI": "24710.0", "South_Carolina-PRO": "26157.0", "South_Carolina-PROJ": "25565.0", "South_Dakota-PAR": "2803.0", "South_Dakota-PRI": "3450.0", "South_Dakota-PRO": "3326.0", "South_Dakota-PROJ": "", "Utah-PAR": "", "Utah-PRI": "", "Utah-PRO": "", "Utah-PROJ": "", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "1264.0", "West_Virginia-PRI": "6483.0", "West_Virginia-PRO": "", "West_Virginia-PROJ": "", "year": "2010"}, {"Alabama-PAR": "23407.0", "Alabama-PRI": "", "Alabama-PRO": "", "Alabama-PROJ": "", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "23407.0", "Arkansas-PRI": "15035.0", "Arkansas-PRO": "29741.0", "Arkansas-PROJ": "16767.0", "Delaware-PAR": "", "Delaware-PRI": "6593.0", "Delaware-PRO": "16523.0", "Delaware-PROJ": "6600.0", "Georgia-PAR": "23729.0", "Georgia-PRI": "56330.0", "Georgia-PRO": "163709.0", "Georgia-PROJ": "", "Hawaii-PAR": "1839.0", "Hawaii-PRI": "6071.0", "Hawaii-PRO": "23063.0", "Hawaii-PROJ": "", "Idaho-PAR": "2515.0", "Idaho-PRI": "7578.0", "Idaho-PRO": "8204.0", "Idaho-PROJ": "", "Kansas-PAR": "3852.0", "Kansas-PRI": "9186.0", "Kansas-PRO": "", "Kansas-PROJ": "", "Kentucky-PAR": "10656.0", "Kentucky-PRI": "21684.0", "Kentucky-PRO": "23121.0", "Kentucky-PROJ": "20900.0", "Louisiana-PAR": "25256.0", "Louisiana-PRI": "39709.0", "Louisiana-PRO": "", "Louisiana-PROJ": "39311.0", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "6829.0", "Mississippi-PRI": "21367.0", "Mississippi-PRO": "27235.0", "Mississippi-PROJ": "", "Missouri-PAR": "17929.0", "Missouri-PRI": "30833.0", "Missouri-PRO": "54110.0", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "", "Nebraska-PRO": "", "Nebraska-PROJ": "", "New_Hampshire-PAR": "2156.0", "New_Hampshire-PRI": "2444.0", "New_Hampshire-PRO": "4215.0", "New_Hampshire-PROJ": "2923.0", "North_Carolina-PAR": "1900.0", "North_Carolina-PRI": "41130.0", "North_Carolina-PRO": "103882.0", "North_Carolina-PROJ": "41130.0", "Ohio-PAR": "11729.0", "Ohio-PRI": "50237.0", "Ohio-PRO": "11985.0", "Ohio-PROJ": "51297.0", "Oklahoma-PAR": "3300.0", "Oklahoma-PRI": "26692.0", "Oklahoma-PRO": "21629.0", "Oklahoma-PROJ": "26692.0", "Oregon-PAR": "13358.0", "Oregon-PRI": "13937.0", "Oregon-PRO": "17605.0", "Oregon-PROJ": "", "Pennsylvania-PAR": "26486.0", "Pennsylvania-PRI": "51638.0", "Pennsylvania-PRO": "8235.0", "Pennsylvania-PROJ": "51638.0", "South_Carolina-PAR": "1728.0", "South_Carolina-PRI": "23939.0", "South_Carolina-PRO": "25902.0", "South_Carolina-PROJ": "26082.0", "South_Dakota-PAR": "2851.0", "South_Dakota-PRI": "3434.0", "South_Dakota-PRO": "3682.0", "South_Dakota-PROJ": "", "Utah-PAR": "", "Utah-PRI": "", "Utah-PRO": "", "Utah-PROJ": "", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "1466.0", "West_Virginia-PRI": "6869.0", "West_Virginia-PRO": "", "West_Virginia-PROJ": "", "year": "2011"}, {"Alabama-PAR": "23657.0", "Alabama-PRI": "26747.0", "Alabama-PRO": "", "Alabama-PROJ": "", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "23657.0", "Arkansas-PRI": "14615.0", "Arkansas-PRO": "29528.0", "Arkansas-PROJ": "17440.0", "Delaware-PAR": "", "Delaware-PRI": "6607.0", "Delaware-PRO": "16223.0", "Delaware-PROJ": "6600.0", "Georgia-PAR": "22480.0", "Georgia-PRI": "55933.0", "Georgia-PRO": "163400.0", "Georgia-PROJ": "55933.0", "Hawaii-PAR": "1632.0", "Hawaii-PRI": "6060.0", "Hawaii-PRO": "22654.0", "Hawaii-PROJ": "6060.0", "Idaho-PAR": "2839.0", "Idaho-PRI": "8097.0", "Idaho-PRO": "11456.0", "Idaho-PROJ": "", "Kansas-PAR": "4114.0", "Kansas-PRI": "9374.0", "Kansas-PRO": "", "Kansas-PROJ": "9374.0", "Kentucky-PAR": "10338.0", "Kentucky-PRI": "21801.0", "Kentucky-PRO": "22658.0", "Kentucky-PROJ": "21037.0", "Louisiana-PAR": "25834.0", "Louisiana-PRI": "40170.0", "Louisiana-PRO": "", "Louisiana-PROJ": "39247.0", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "6949.0", "Mississippi-PRI": "21972.0", "Mississippi-PRO": "28293.0", "Mississippi-PROJ": "", "Missouri-PAR": "16931.0", "Missouri-PRI": "31247.0", "Missouri-PRO": "51811.0", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "4609.0", "Nebraska-PRO": "", "Nebraska-PROJ": "", "New_Hampshire-PAR": "1885.0", "New_Hampshire-PRI": "2563.0", "New_Hampshire-PRO": "3803.0", "New_Hampshire-PROJ": "2960.0", "North_Carolina-PAR": "1829.0", "North_Carolina-PRI": "38387.0", "North_Carolina-PRO": "103163.0", "North_Carolina-PROJ": "41987.0", "Ohio-PAR": "13944.0", "Ohio-PRI": "49713.0", "Ohio-PRO": "12137.0", "Ohio-PROJ": "52164.0", "Oklahoma-PAR": "3300.0", "Oklahoma-PRI": "25935.0", "Oklahoma-PRO": "21629.0", "Oklahoma-PROJ": "27159.0", "Oregon-PAR": "13422.0", "Oregon-PRI": "14285.0", "Oregon-PRO": "17377.0", "Oregon-PROJ": "", "Pennsylvania-PAR": "27913.0", "Pennsylvania-PRI": "51757.0", "Pennsylvania-PRO": "8324.0", "Pennsylvania-PROJ": "51722.0", "South_Carolina-PAR": "1626.0", "South_Carolina-PRI": "23334.0", "South_Carolina-PRO": "27824.0", "South_Carolina-PROJ": "26861.0", "South_Dakota-PAR": "2811.0", "South_Dakota-PRI": "3546.0", "South_Dakota-PRO": "4325.0", "South_Dakota-PROJ": "3636.0", "Utah-PAR": "2993.0", "Utah-PRI": "6960.0", "Utah-PRO": "11394.0", "Utah-PROJ": "", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "1498.0", "West_Virginia-PRI": "7070.0", "West_Virginia-PRO": "", "West_Virginia-PROJ": "7146.0", "year": "2012"}, {"Alabama-PAR": "22721.0", "Alabama-PRI": "26569.0", "Alabama-PRO": "", "Alabama-PROJ": "", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "22721.0", "Arkansas-PRI": "17211.0", "Arkansas-PRO": "28646.0", "Arkansas-PROJ": "18147.0", "Delaware-PAR": "", "Delaware-PRI": "6991.0", "Delaware-PRO": "15995.0", "Delaware-PROJ": "6600.0", "Georgia-PAR": "25020.0", "Georgia-PRI": "53856.0", "Georgia-PRO": "164484.0", "Georgia-PROJ": "56664.0", "Hawaii-PAR": "1589.0", "Hawaii-PRI": "5643.0", "Hawaii-PRO": "21510.0", "Hawaii-PROJ": "6132.0", "Idaho-PAR": "2939.0", "Idaho-PRI": "8221.0", "Idaho-PRO": "11478.0", "Idaho-PROJ": "8160.0", "Kansas-PAR": "3221.0", "Kansas-PRI": "9581.0", "Kansas-PRO": "", "Kansas-PROJ": "9680.0", "Kentucky-PAR": "12228.0", "Kentucky-PRI": "20047.0", "Kentucky-PRO": "22459.0", "Kentucky-PROJ": "21174.0", "Louisiana-PAR": "26501.0", "Louisiana-PRI": "39299.0", "Louisiana-PRO": "", "Louisiana-PROJ": "39178.0", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "6483.0", "Mississippi-PRI": "22492.0", "Mississippi-PRO": "29936.0", "Mississippi-PROJ": "22497.0", "Missouri-PAR": "15996.0", "Missouri-PRI": "31537.0", "Missouri-PRO": "48468.0", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "4760.0", "Nebraska-PRO": "", "Nebraska-PROJ": "", "New_Hampshire-PAR": "1942.0", "New_Hampshire-PRI": "2643.0", "New_Hampshire-PRO": "3896.0", "New_Hampshire-PROJ": "2989.0", "North_Carolina-PAR": "1612.0", "North_Carolina-PRI": "36227.0", "North_Carolina-PRO": "98436.0", "North_Carolina-PROJ": "42013.0", "Ohio-PAR": "16088.0", "Ohio-PRI": "50419.0", "Ohio-PRO": "12642.0", "Ohio-PROJ": "52784.0", "Oklahoma-PAR": "3059.0", "Oklahoma-PRI": "26539.0", "Oklahoma-PRO": "21085.0", "Oklahoma-PROJ": "27569.0", "Oregon-PAR": "13628.0", "Oregon-PRI": "14664.0", "Oregon-PRO": "17385.0", "Oregon-PROJ": "14600.0", "Pennsylvania-PAR": "30025.0", "Pennsylvania-PRI": "51382.0", "Pennsylvania-PRO": "8091.0", "Pennsylvania-PROJ": "52279.0", "South_Carolina-PAR": "1622.0", "South_Carolina-PRI": "23680.0", "South_Carolina-PRO": "29173.0", "South_Carolina-PROJ": "27810.0", "South_Dakota-PAR": "2871.0", "South_Dakota-PRI": "3623.0", "South_Dakota-PRO": "5011.0", "South_Dakota-PROJ": "3717.0", "Utah-PAR": "3283.0", "Utah-PRI": "7072.0", "Utah-PRO": "11203.0", "Utah-PROJ": "", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "1813.0", "West_Virginia-PRI": "6785.0", "West_Virginia-PRO": "", "West_Virginia-PROJ": "7531.0", "year": "2013"}, {"Alabama-PAR": "22414.0", "Alabama-PRI": "26029.0", "Alabama-PRO": "", "Alabama-PROJ": "26029.0", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "22414.0", "Arkansas-PRI": "17850.0", "Arkansas-PRO": "27756.0", "Arkansas-PROJ": "18688.0", "Delaware-PAR": "", "Delaware-PRI": "6876.0", "Delaware-PRO": "16227.0", "Delaware-PROJ": "6650.0", "Georgia-PAR": "25195.0", "Georgia-PRI": "53131.0", "Georgia-PRO": "166207.0", "Georgia-PROJ": "57492.0", "Hawaii-PAR": "1647.0", "Hawaii-PRI": "5993.0", "Hawaii-PRO": "20908.0", "Hawaii-PROJ": "6163.0", "Idaho-PAR": "3213.0", "Idaho-PRI": "8120.0", "Idaho-PRO": "10644.0", "Idaho-PROJ": "8267.0", "Kansas-PAR": "3211.0", "Kansas-PRI": "9612.0", "Kansas-PRO": "", "Kansas-PROJ": "9916.0", "Kentucky-PAR": "11659.0", "Kentucky-PRI": "20981.0", "Kentucky-PRO": "22771.0", "Kentucky-PROJ": "21311.0", "Louisiana-PAR": "27481.0", "Louisiana-PRI": "38030.0", "Louisiana-PRO": "", "Louisiana-PROJ": "39235.0", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "8057.0", "Mississippi-PRI": "20624.0", "Mississippi-PRO": "30881.0", "Mississippi-PROJ": "22869.0", "Missouri-PAR": "15243.0", "Missouri-PRI": "31942.0", "Missouri-PRO": "44493.0", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "5039.0", "Nebraska-PRO": "", "Nebraska-PROJ": "5039.0", "New_Hampshire-PAR": "2185.0", "New_Hampshire-PRI": "2755.0", "New_Hampshire-PRO": "3765.0", "New_Hampshire-PROJ": "3012.0", "North_Carolina-PAR": "1467.0", "North_Carolina-PRI": "37665.0", "North_Carolina-PRO": "94020.0", "North_Carolina-PROJ": "42267.0", "Ohio-PAR": "16633.0", "Ohio-PRI": "50510.0", "Ohio-PRO": "12248.0", "Ohio-PROJ": "53413.0", "Oklahoma-PAR": "3204.0", "Oklahoma-PRI": "27561.0", "Oklahoma-PRO": "21586.0", "Oklahoma-PROJ": "27887.0", "Oregon-PAR": "14105.0", "Oregon-PRI": "14539.0", "Oregon-PRO": "17697.0", "Oregon-PROJ": "14861.0", "Pennsylvania-PAR": "31726.0", "Pennsylvania-PRI": "50756.0", "Pennsylvania-PRO": "8084.0", "Pennsylvania-PROJ": "52236.0", "South_Carolina-PAR": "1618.0", "South_Carolina-PRI": "22315.0", "South_Carolina-PRO": "28021.0", "South_Carolina-PROJ": "27903.0", "South_Dakota-PAR": "2692.0", "South_Dakota-PRI": "3627.0", "South_Dakota-PRO": "5415.0", "South_Dakota-PROJ": "3833.0", "Utah-PAR": "3312.0", "Utah-PRI": "7024.0", "Utah-PRO": "11983.0", "Utah-PROJ": "7072.0", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "2074.0", "West_Virginia-PRI": "6896.0", "West_Virginia-PRO": "", "West_Virginia-PROJ": "7821.0", "year": "2014"}, {"Alabama-PAR": "21708.0", "Alabama-PRI": "25201.0", "Alabama-PRO": "", "Alabama-PROJ": "26029.0", "Alaska-PAR": "", "Alaska-PRI": "", "Alaska-PRO": "", "Alaska-PROJ": "", "Arkansas-PAR": "21708.0", "Arkansas-PRI": "", "Arkansas-PRO": "27127.0", "Arkansas-PROJ": "19222.0", "Delaware-PAR": "", "Delaware-PRI": "6704.0", "Delaware-PRO": "16089.0", "Delaware-PROJ": "6675.0", "Georgia-PAR": "23859.0", "Georgia-PRI": "53102.0", "Georgia-PRO": "167388.0", "Georgia-PROJ": "58664.0", "Hawaii-PAR": "1545.0", "Hawaii-PRI": "6024.0", "Hawaii-PRO": "20828.0", "Hawaii-PROJ": "6193.0", "Idaho-PAR": "3723.0", "Idaho-PRI": "8162.0", "Idaho-PRO": "10880.0", "Idaho-PROJ": "8506.0", "Kansas-PAR": "3406.0", "Kansas-PRI": "9822.0", "Kansas-PRO": "", "Kansas-PROJ": "10154.0", "Kentucky-PAR": "11588.0", "Kentucky-PRI": "", "Kentucky-PRO": "22314.0", "Kentucky-PROJ": "21448.0", "Louisiana-PAR": "", "Louisiana-PRI": "36377.0", "Louisiana-PRO": "", "Louisiana-PROJ": "39335.0", "Michigan-PAR": "", "Michigan-PRI": "", "Michigan-PRO": "", "Michigan-PROJ": "", "Mississippi-PAR": "9692.0", "Mississippi-PRI": "18789.0", "Mississippi-PRO": "35145.0", "Mississippi-PROJ": "23230.0", "Missouri-PAR": "15288.0", "Missouri-PRI": "32330.0", "Missouri-PRO": "41136.0", "Missouri-PROJ": "", "Nebraska-PAR": "", "Nebraska-PRI": "5345.0", "Nebraska-PRO": "", "Nebraska-PROJ": "5290.0", "New_Hampshire-PAR": "2320.0", "New_Hampshire-PRI": "2715.0", "New_Hampshire-PRO": "3692.0", "New_Hampshire-PROJ": "3029.0", "North_Carolina-PAR": "1407.0", "North_Carolina-PRI": "37379.0", "North_Carolina-PRO": "89106.0", "North_Carolina-PROJ": "42562.0", "Ohio-PAR": "17541.0", "Ohio-PRI": "50407.0", "Ohio-PRO": "12418.0", "Ohio-PROJ": "53858.0", "Oklahoma-PAR": "", "Oklahoma-PRI": "27889.0", "Oklahoma-PRO": "", "Oklahoma-PROJ": "28232.0", "Oregon-PAR": "14122.0", "Oregon-PRI": "14655.0", "Oregon-PRO": "17369.0", "Oregon-PROJ": "15021.0", "Pennsylvania-PAR": "33076.0", "Pennsylvania-PRI": "49914.0", "Pennsylvania-PRO": "8193.0", "Pennsylvania-PROJ": "51693.0", "South_Carolina-PAR": "2007.0", "South_Carolina-PRI": "21773.0", "South_Carolina-PRO": "26806.0", "South_Carolina-PROJ": "", "South_Dakota-PAR": "2627.0", "South_Dakota-PRI": "3588.0", "South_Dakota-PRO": "5918.0", "South_Dakota-PROJ": "3942.0", "Utah-PAR": "3693.0", "Utah-PRI": "6521.0", "Utah-PRO": "12784.0", "Utah-PROJ": "7356.0", "Washington-PAR": "", "Washington-PRI": "", "Washington-PRO": "", "Washington-PROJ": "", "West_Virginia-PAR": "2088.0", "West_Virginia-PRI": "7118.0", "West_Virginia-PRO": "", "West_Virginia-PROJ": "8072.0", "year": "2015"}, {"Alabama-PROJ": "26029.0", "Alaska-PROJ": "", "Arkansas-PROJ": "19734.0", "Delaware-PROJ": "", "Georgia-PROJ": "59553.0", "Hawaii-PROJ": "6224.0", "Idaho-PROJ": "8751.0", "Kansas-PROJ": "10312.0", "Kentucky-PROJ": "21584.0", "Louisiana-PROJ": "", "Michigan-PROJ": "", "Mississippi-PROJ": "23500.0", "Missouri-PROJ": "", "Nebraska-PROJ": "5370.0", "New_Hampshire-PROJ": "", "North_Carolina-PROJ": "42898.0", "Ohio-PROJ": "", "Oklahoma-PROJ": "28534.0", "Oregon-PROJ": "15220.0", "Pennsylvania-PROJ": "51151.0", "South_Carolina-PROJ": "", "South_Dakota-PROJ": "4070.0", "Utah-PROJ": "7498.0", "Washington-PROJ": "", "West_Virginia-PROJ": "8304.0", "year": "2016"}, {"Alabama-PROJ": "26029.0", "Alaska-PROJ": "", "Arkansas-PROJ": "", "Delaware-PROJ": "", "Georgia-PROJ": "59732.0", "Hawaii-PROJ": "6255.0", "Idaho-PROJ": "9001.0", "Kansas-PROJ": "10624.0", "Kentucky-PROJ": "", "Louisiana-PROJ": "", "Michigan-PROJ": "", "Mississippi-PROJ": "23611.0", "Missouri-PROJ": "", "Nebraska-PROJ": "5480.0", "New_Hampshire-PROJ": "", "North_Carolina-PROJ": "43220.0", "Ohio-PROJ": "", "Oklahoma-PROJ": "28798.0", "Oregon-PROJ": "15351.0", "Pennsylvania-PROJ": "", "South_Carolina-PROJ": "", "South_Dakota-PROJ": "4213.0", "Utah-PROJ": "7649.0", "Washington-PROJ": "", "West_Virginia-PROJ": "8633.0", "year": "2017"}, {"Alabama-PROJ": "26029.0", "Alaska-PROJ": "", "Arkansas-PROJ": "", "Delaware-PROJ": "", "Georgia-PROJ": "", "Hawaii-PROJ": "6287.0", "Idaho-PROJ": "9253.0", "Kansas-PROJ": "10819.0", "Kentucky-PROJ": "", "Louisiana-PROJ": "", "Michigan-PROJ": "", "Mississippi-PROJ": "23780.0", "Missouri-PROJ": "", "Nebraska-PROJ": "5572.0", "New_Hampshire-PROJ": "", "North_Carolina-PROJ": "", "Ohio-PROJ": "", "Oklahoma-PROJ": "29072.0", "Oregon-PROJ": "15502.0", "Pennsylvania-PROJ": "", "South_Carolina-PROJ": "", "South_Dakota-PROJ": "4336.0", "Utah-PROJ": "", "Washington-PROJ": "", "West_Virginia-PROJ": "8893.0", "year": "2018"}, {"Alabama-PROJ": "26029.0", "Alaska-PROJ": "", "Arkansas-PROJ": "", "Delaware-PROJ": "", "Georgia-PROJ": "", "Hawaii-PROJ": "", "Idaho-PROJ": "9408.0", "Kansas-PROJ": "", "Kentucky-PROJ": "", "Louisiana-PROJ": "", "Michigan-PROJ": "", "Mississippi-PROJ": "23903.0", "Missouri-PROJ": "", "Nebraska-PROJ": "5589.0", "New_Hampshire-PROJ": "", "North_Carolina-PROJ": "", "Ohio-PROJ": "", "Oklahoma-PROJ": "", "Oregon-PROJ": "", "Pennsylvania-PROJ": "", "South_Carolina-PROJ": "", "South_Dakota-PROJ": "", "Utah-PROJ": "", "Washington-PROJ": "", "West_Virginia-PROJ": "", "year": "2019"}, {"Alabama-PROJ": "", "Alaska-PROJ": "", "Arkansas-PROJ": "", "Delaware-PROJ": "", "Georgia-PROJ": "", "Hawaii-PROJ": "", "Idaho-PROJ": "", "Kansas-PROJ": "", "Kentucky-PROJ": "", "Louisiana-PROJ": "", "Michigan-PROJ": "", "Mississippi-PROJ": "23984.0", "Missouri-PROJ": "", "Nebraska-PROJ": "5581.0", "New_Hampshire-PROJ": "", "North_Carolina-PROJ": "", "Ohio-PROJ": "", "Oklahoma-PROJ": "", "Oregon-PROJ": "", "Pennsylvania-PROJ": "", "South_Carolina-PROJ": "", "South_Dakota-PROJ": "", "Utah-PROJ": "", "Washington-PROJ": "", "West_Virginia-PROJ": "", "year": "2020"}]
-console.dir(data)
-console.log(defaultSelector)
-  // d3.json("data/jridata.json", function(error, data) {
+
+  d3.json("data/jridata.json", function(error, data) {
     var slice = data.filter(function(d){ return typeof(d[defaultSelector]) != "undefined" && d[defaultSelector] != 0})
     var pslice = data.filter(function(d){ return typeof(d[pdefaultSelector]) != "undefined" && d[pdefaultSelector] != 0})
 
-    // if (error) throw error;
+    if (error) throw error;
 
     x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
     y.domain([0, d3.max(slice, function(d){ return +d[defaultSelector]*1.5})])
@@ -195,15 +256,15 @@ console.log(defaultSelector)
       .attr("x",0)
       .attr("y",0)
       .attr("height",height)
-      .attr("width", x(formatDate.parse(JRI[getActiveState()])))
+      .attr("width", x(formatDate.parse(JRI[getActiveState()]["leg_yr"])))
       .style("fill",'url(#diagonalHatch')
       .style("pointer-events","none")
       .style("stroke","#5c5859")
       .style("stroke-width","2px")
-      .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()])) + height))
+      .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) + height))
 
     var pointer = svg.append("g")
-          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()])) - 137) + "," + height/2 + ")")
+          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) - 137) + "," + height/2 + ")")
 
         pointer
           .append("polygon")
@@ -260,33 +321,66 @@ console.log(defaultSelector)
       })
       .attr("r",6)
 
-    $(".styled-select").click(function () {
-        var element = $(this).children("select")[0],
-            worked = false;
-        if(document.createEvent) { // all browsers
-            var e = document.createEvent("MouseEvents");
-            e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false,false, false, false, 0, null);
-            worked = element.dispatchEvent(e);
-        } else if (element.fireEvent) { // ie
-            worked = element.fireEvent("onmousedown");
-        }
-        if (!worked) { // unknown browser / error
-            alert("It didn't worked in your browser.");
-        }
-    });
 
-    $(".styled-select select")
-      .change(function(){
-        updateChart($(".styled-select.states select").val(), getActiveCategory());
+    // $("#state-selector")
+    //   .change(function(){
+    //     updateChart($("#state-selector").val(), getActiveCategory());
+    //     updateText($("#state-selector").val(), getActiveCategory());
+    //     var m = $(this);
+    //     if(m.val() == ""){
+    //       m.css("color", "#818385");
+    //     }else{ m.css("color", "#333")}
+    // });
+  if(IS_MOBILE){
+    $("#mobile_tabs").selectmenu({
+     change: function(event, data){
+          var category = data.item.value.replace("tab_","")
+          d3.selectAll("#tab_container .tab").classed("active",false)
+          d3.select("#tab_container #tab_" + category).classed("active",true)
+          updateChart(getActiveState(), category)
+          updateText(getActiveState(), category)
+          // console.log(data.item.value)
+      }
+    });
+  }
+  $( "#state-selector" ).selectmenu({
+    change: function(event, data){
+             updateChart($("#state-selector").val(), getActiveCategory());
+        updateText($("#state-selector").val(), getActiveCategory());
         var m = $(this);
         if(m.val() == ""){
           m.css("color", "#818385");
         }else{ m.css("color", "#333")}
-    });
+ 
+    }
+  });
+    d3.selectAll(".nav_button")
+      .on("click", function(){
+        var stateList = ["Alabama","Alaska","Arkansas","Delaware","Georgia","Hawaii","Idaho","Kansas","Kentucky","Louisiana","Michigan","Mississippi","Missouri","Nebraska","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","Utah","Washington","West_Virginia"]
+        var current = stateList.indexOf($("#state-selector").val());
+        var newState;
+        if(d3.select(this).classed("prev")){
+          if(current == 0){
+            newState = stateList.length-1
+          }else{
+            newState = current-1
+          }
+        }else{
+          if(current == stateList.length - 1){
+            newState = 0
+          }else{
+            newState = current+1
+          }
+        }
+        $("#state-selector").val(stateList[newState])
+        $("#state-selector-button .ui-selectmenu-text").text(stateList[newState].replace(/_/g," "))
+        updateChart(stateList[newState], getActiveCategory());
+        updateText(stateList[newState], getActiveCategory());
+      })    
 
     var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
     if (isFirefox){
-      $(".styled-select select").css("pointer-events","visible");
+      $("#state-selector").css("pointer-events","visible");
     }
 
     d3.selectAll("#tab_container .tab")
@@ -298,12 +392,149 @@ console.log(defaultSelector)
           d3.selectAll("#tab_container .tab").classed("active",false)
           d3.select(this).classed("active",true)
           updateChart(getActiveState(), category)
+          updateText(getActiveState(), category)
         }
       })
+    function fadeText(objID, newText){
+      d3.select("#dummy_" + objID)
+        .html(newText)
+        .style("width", function(){
+          return  d3.select("#" + objID).node().getBoundingClientRect().width
+        })
+      var top_end = d3.select("#dummy_" + objID).node().getBoundingClientRect().height
+      d3.select("#" + objID)
+        .transition()
+        .style("height",top_end + "px")
+        .style("opacity",.2)
+        .each("end", function(){
+          d3.select(this).transition().style("opacity",1)
+          d3.select(this).html(newText)
+        })
+    }
+    
+    function updateText(state, category){
+
+      // d3.select("#top_text").html(TOP_TEXT[state])
+      if(state != oldState){
+        fadeText("top_text", TOP_TEXT[state])
+        fadeText("savings_text", SAVINGS_TEXT[state])
+        var more_info_list = d3.select("#more_info_list")
+        more_info_list.selectAll("li").remove()
+        for(var i = 0; i<MORE_INFO[state].length; i++){
+          more_info_list.append("li")
+            .attr("class","list-item")
+            .html(MORE_INFO[state][i])
+        }
+        var footnotes_list = d3.select("#footnotes_list")
+        footnotes_list.selectAll("li").remove()
+        for(var i = 0; i<FOOTNOTES[state].length; i++){
+          footnotes_list.append("li")
+            .attr("class","ul-footnotes-item")
+            .html('<span class="inline-footnote-number footer">' + String(i+1) + "</span>&nbsp;" + FOOTNOTES[state][i])
+        }
+      }
+      oldState = state;
+      d3.selectAll(".caption").style("display","none")
+      console.log(category)
+      d3.select("#" + category + "-caption").style("display","inline")
+      // console.log(data)
+      var recentpri_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentpri_yr"]})[0]
+      var recentproj_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentproj_yr"]})[0]
+      var recentpro_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentpro_yr"]})[0]
+      var recentpar_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentpar_yr"]})[0]
+
+      var base_yr_data = data.filter(function(d){ return d.year == JRI[state]["base_yr"]})[0]
+
+      countup_val("tot_savings", JRI[state]["tot_savings"])
+      countup_val("tot_reinvest", JRI[state]["tot_reinvest"])
+      d3.selectAll(".state_name_text").text(state.replace(/_/g," "))
+
+//*************** PRISON TAB
+      countup_val("recentpri_yr", JRI[state]["recentpri_yr"])
+      countup_val("recentpri-num", recentpri_yr_data[state + "-PRI"])
+      countup_val("recentpri_percent", Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"]) )
+      countup_val("pri_base_yr", JRI[state]["base_yr"])
+      countup_val("recentproj-num", Math.abs(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]))
+      countup_val("recentproj_percent", 100*(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]) / recentproj_yr_data[state+"-PROJ"])
+      countup_val("recentproj_yr", JRI[state]["recentproj_yr"])
+
+      d3.select("#recentpri_article").text(getArticle(Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"])))
+
+
+      if(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"] < 0){
+        d3.select("#recentpri_textpercent").text("decrease")
+      }else{
+        d3.select("#recentpri_textpercent").text("increase")
+      }
+      if(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"] < 0){
+        d3.select("#recentproj-textnum").text("fewer")
+      }else{
+        d3.select("#recentproj-textnum").text("more")
+      }
+
+
+      if(JRI[state]["recentpri_dt"] == ""){
+        d3.select("#recentpri_dt").text("In ")
+      }else{
+        d3.select("#recentpri_dt").text(JRI[state]["recentpri_dt"])
+      }
+
+//*************** PROBATION TAB
+      countup_val("recentpro_yr", JRI[state]["recentpro_yr"])
+      countup_val("recentpro-num", recentpro_yr_data[state + "-PRO"])
+      countup_val("recentpro_percent", Math.abs(100*(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"])/base_yr_data[state + "-PRO"]) )
+      countup_val("pro_base_yr", JRI[state]["base_yr"])
+
+      d3.select("#recentpro_article").text(getArticle(Math.abs(100*(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"])/base_yr_data[state + "-PRO"])))
+
+
+
+      if(recentpro_yr_data[state + "-PRO"] - base_yr_data[state + "-PRO"] < 0){
+        d3.select("#recentpro_textpercent").text("decrease")
+      }else{
+        d3.select("#recentpro_textpercent").text("increase")
+      }
+
+
+      if(JRI[state]["recentpro_dt"] == ""){
+        d3.select("#recentpro_dt").text("In ")
+      }else{
+        d3.select("#recentpro_dt").text(JRI[state]["recentpro_dt"])
+      }
+//*************** PAROLE TAB
+      countup_val("recentpar_yr", JRI[state]["recentpar_yr"])
+      countup_val("recentpar-num", recentpar_yr_data[state + "-PAR"])
+      countup_val("recentpar_percent", Math.abs(100*(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"])/base_yr_data[state + "-PAR"]) )
+      countup_val("par_base_yr", JRI[state]["base_yr"])
+
+      d3.select("#recentpar_article").text(getArticle(Math.abs(100*(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"])/base_yr_data[state + "-PAR"])))
+
+
+
+      if(recentpar_yr_data[state + "-PAR"] - base_yr_data[state + "-PAR"] < 0){
+        d3.select("#recentpar_textpercent").text("decrease")
+      }else{
+        d3.select("#recentpar_textpercent").text("increase")
+      }
+
+
+      if(JRI[state]["recentpar_dt"] == ""){
+        d3.select("#recentpar_dt").text("In ")
+      }else{
+        d3.select("#recentpar_dt").text(JRI[state]["recentpar_dt"])
+      }
+
+
+
+
+    }
+
+
+
+
 
     function updateChart(state, category){
       hideTooltip();
-      console.log(state, category)
       var selector = state + "-" + category
       var pselector = state + "-PROJ"
       var slice = data.filter(function(d){ return typeof(d[selector]) != "undefined" && d[selector] != 0})
@@ -330,6 +561,12 @@ console.log(defaultSelector)
         x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
       }
 
+    xAxis
+      .scale(x)
+      .orient("bottom")
+      .tickFormat(d3.time.format("%Y"));
+  if (IS_MOBILE) xAxis.ticks(3)
+  else xAxis.ticks(d3.time.years, 1)
 
       y.domain([0, Math.max(max*1.5, pmax*1.5)])
       line = d3.svg.line()
@@ -346,7 +583,11 @@ console.log(defaultSelector)
       mainLine
         .datum(slice)
         .transition()
-        .attr("d", line);
+        .attrTween('d', function (d) {
+          var previous = d3.select(this).attr('d');
+          var current = line(d);
+          return d3.interpolatePath(previous, current);
+        });
 
 
       mainDot
@@ -367,7 +608,11 @@ console.log(defaultSelector)
           .datum(pslice)
           .transition()
           .style("opacity",1)
-          .attr("d", pline);
+          .attrTween('d', function (d) {
+            var previous = d3.select(this).attr('d');
+            var current = pline(d);
+            return d3.interpolatePath(previous, current);
+          });
       projDot
         .data(data)
         .attr("class",function(d){
@@ -388,12 +633,12 @@ console.log(defaultSelector)
       yAxis.scale(y)
     jri
       .transition()
-      .attr("width", x(formatDate.parse(JRI[state])))
-      .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[state])) + "," + height + "," + (x(formatDate.parse(JRI[state])) + height))
+      .attr("width", x(formatDate.parse(JRI[state]["leg_yr"])))
+      .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[state]["leg_yr"])) + "," + height + "," + (x(formatDate.parse(JRI[state]["leg_yr"])) + height))
 
       pointer
         .transition()
-        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state])) - 137) + "," + height/2 + ")")
+        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state]["leg_yr"])) - 137) + "," + height/2 + ")")
 
 
 
@@ -407,7 +652,7 @@ console.log(defaultSelector)
 
     d3.select("svg")
     .on("mousemove", function(){
-      var x0 = x.invert(d3.mouse(this)[0]-margin.left)
+      var x0 = x.invert(d3.mouse(this)[0]-margin.left+20)
       var year = x0.getFullYear()
       d3.selectAll(".active.dot").classed("active",false)
       d3.selectAll(".active.pdot").classed("active",false)
@@ -441,14 +686,45 @@ console.log(defaultSelector)
     }
 
 
-  // });
+  });
 if(IS_TABLET){
-  d3.select("body").style("height", function(){ return d3.select("#contents").node().getBoundingClientRect().height})
+  // d3.select("body").style("height", function(){ return d3.select("#contents").node().getBoundingClientRect().height})
 }else{
-  console.log("foo")
-  d3.select("body").style("height", function(){ return d3.select("#chart").node().getBoundingClientRect().height + 30})
+  // d3.select("body").style("height", function(){ return d3.select("#chart").node().getBoundingClientRect().height + 30})
 }
 }
 
-// drawChart(900)
-var child = new pym.Child({ renderCallback: drawChart, polling: 500 });
+drawChart()
+
+
+    // $(".styled-select.states").on("click",function () {
+    //     var element = $(this).children("select")[0],
+    //         worked = false;
+    //     if(document.createEvent) { // all browsers
+    //         var e = document.createEvent("MouseEvents");
+    //         e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false,false, false, false, 0, null);
+    //         worked = element.dispatchEvent(e);
+    //     } else if (element.fireEvent) { // ie
+    //         worked = element.fireEvent("onmousedown");
+    //     }
+    //     if (!worked) { // unknown browser / error
+    //         console.log("There was an error with the dropdown menu");
+    //     }
+    // });
+// $(".styled-select.states").on("update", function(){
+//   console.log(this)
+// })
+$( function() {
+  $( "#state-selector" ).selectmenu({
+    change: function(event, data){
+
+    }
+  });
+});
+
+
+// $(window).on("resize",drawChart)
+var pymChild = new pym.Child({ renderCallback: drawChart });
+
+
+
