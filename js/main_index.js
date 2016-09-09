@@ -213,7 +213,6 @@ function drawChart(){
     var pslice = data.filter(function(d){ return typeof(d[pdefaultSelector]) != "undefined" && d[pdefaultSelector] != 0})
 
     if (error) throw error;
-
     x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
     y.domain([0, d3.max(slice, function(d){ return +d[defaultSelector]*1.5})])
 
@@ -257,19 +256,19 @@ function drawChart(){
       .style("stroke-dasharray", "0," + x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) + "," + height + "," + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) + height))
 
     var pointer = svg.append("g")
-          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) - 137) + "," + height/1.4 + ")")
+          .attr("transform", "translate(" + (x(formatDate.parse(JRI[getActiveState()]["leg_yr"])) - 117) + "," + height/1.4 + ")")
 
         pointer
           .append("polygon")
-          .attr("points","0,24.8 119.8,24.8 136,12.1 119.8,0 0,0")
+          .attr("points","0,24.8 99.8,24.8 116,12.1 99.8,0 0,0")
           .attr("fill","#5c5859")
           .attr("stroke","#5c5859")
           .attr("stroke-width","2px")
         pointer.append("text")
-          .text("JRI Implementation")
+          .text("JRI Enactment")
           .style("font-size","12px")
           .attr("dy",17)
-          .attr("dx",5)
+          .attr("dx",10)
           .style("font-weight","500")
           .style("fill","white")
           .style("letter-spacing",".7px")
@@ -376,7 +375,7 @@ function drawChart(){
       })
     d3.selectAll(".nav_button")
       .on("click", function(){
-        var stateList = ["Arkansas","Delaware","Hawaii","Georgia","Idaho","Kansas","Mississippi","Missouri","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","West_Virginia"]
+        var stateList = ["Arkansas","Delaware","Georgia","Hawaii","Idaho","Kansas","Mississippi","Missouri","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","West_Virginia"]
         var current = stateList.indexOf($("#state-selector").val());
         var newState;
         if(d3.select(this).classed("prev")){
@@ -630,9 +629,14 @@ function drawChart(){
       var pmax = (category == "PRI") ? d3.max(pslice, function(d){ return +d[pselector]}) : max
 
       if(category != "PRI"){
-        x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(slice, function(d){ return formatDate.parse(d.year)})]);
+
+          x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(slice, function(d){ return formatDate.parse(d.year)})]);
       }else{
-        x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
+        if(state == "South_Carolina"){
+          x.domain([formatDate.parse("2007"),formatDate.parse("2015")])
+        }else{
+          x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
+        }
       }
 
     xAxis
@@ -712,7 +716,7 @@ function drawChart(){
 
       pointer
         .transition()
-        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state]["leg_yr"])) - 137) + "," + height/1.4 + ")")
+        .attr("transform", "translate(" + (x(formatDate.parse(JRI[state]["leg_yr"])) - 117) + "," + height/1.4 + ")")
 
 
 
