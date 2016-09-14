@@ -53,6 +53,9 @@ function getArticle(val){
 }
 
 function moveTooltip(dot){
+        if(dot == null){
+          return false
+        }
         var TT_WIDTH = 200
         var d = d3.select(dot).datum()
         var main_val = d[getActiveState() + "-" + getActiveCategory()]
@@ -294,7 +297,12 @@ function drawChart(){
         return x(formatDate.parse(d.year))
       })
       .attr("cy", function(d){
-         return y(+d[defaultSelector])
+        // console.log(d[defaultSelector])
+         if(d[defaultSelector] == undefined){
+          return -1000
+         }else{
+          return y(+d[defaultSelector])
+        }
       })
       .attr("r",6)
 
@@ -325,6 +333,16 @@ function drawChart(){
     // });
   if(IS_MOBILE){
     $("#mobile_tabs").selectmenu({
+     change: function(event, data){
+          var category = data.item.value.replace("tab_","")
+          d3.selectAll("#tab_container .tab").classed("active",false)
+          d3.select("#tab_container #tab_" + category).classed("active",true)
+          updateChart(getActiveState(), category)
+          updateText(getActiveState(), category)
+          // console.log(data.item.value)
+      }
+    });
+    $("#nc_tabs").selectmenu({
      change: function(event, data){
           var category = data.item.value.replace("tab_","")
           d3.selectAll("#tab_container .tab").classed("active",false)
@@ -441,7 +459,58 @@ function drawChart(){
     }
     
     function updateText(state, category, delay){
-      console.log(state, category)
+      var NC_EDGE = (state == "North_Carolina")
+      if(NC_EDGE){
+        d3.selectAll(".nc-parole-uc").text("Post-Release Supervision")
+        d3.selectAll(".nc-parole-lc").text("post-release supervision")
+        d3.selectAll("#tab_container .tab")
+          .style("height","40px")
+        d3.selectAll("#tab_container .tab:not(#tab_PAR)")
+          .style("padding-top","18px")
+          .style("padding-bottom","0px")
+        d3.selectAll("#tab_container #tab_PAR")
+          .style("width","170px")
+        d3.select(".tab.gap").style("width", function(){
+          if(IS_TABLET){
+            return container_width - 70 - (150+10)*3
+          }else{
+            return container_width*.7 - 70 - (150+50)*3
+          }
+        })
+        if(IS_MOBILE){
+          d3.select("#mobile_tabs-button").style("display","none")
+          d3.select("#nc_tabs-button").style("display","block")
+        }else{
+          d3.select("#mobile_tabs-button").style("display","none")
+          d3.select("#nc_tabs-button").style("display","none")
+        }
+      }else{
+        d3.selectAll(".nc-parole-uc").text("Parole")
+        d3.selectAll(".nc-parole-lc").text("parole")
+        d3.select("#mobile_tabs .tab_PAR").text("Parole Population")
+        if(IS_MOBILE){
+          d3.select("#mobile_tabs-button").style("display","block")
+          d3.select("#nc_tabs-button").style("display","none")
+        }else{
+          d3.select("#mobile_tabs-button").style("display","none")
+          d3.select("#nc_tabs-button").style("display","none")
+        }
+        d3.selectAll("#tab_container .tab")
+          .style("height","20px")
+        d3.selectAll("#tab_container .tab:not(#tab_PAR)")
+          .style("padding-top","9px")
+          .style("padding-bottom","9px")
+        d3.selectAll("#tab_container #tab_PAR")
+          .style("width","150px")
+        d3.select(".tab.gap").style("width", function(){
+          if(IS_TABLET){
+            return container_width - 50 - (150+10)*3
+          }else{
+            return container_width*.7 - 50 - (150+50)*3
+          }
+        })
+      }
+
       if ((state == "Delaware" && category == "PAR") || (state == "West_Virginia" && category == "PRO")){
         d3.select("#" + category + "-caption p")
           .transition()
@@ -453,9 +522,9 @@ function drawChart(){
       }
  
       // d3.select("#top_text").html(TOP_TEXT[state])
-      if(state != oldState){
-        fadeText("top_text", TOP_TEXT[state], delay)
-        fadeText("savings_text", SAVINGS_TEXT[state], delay)
+      // if(state != oldState){
+        fadeText("top_text", TOP_TEXT[state], state == oldState)
+        fadeText("savings_text", SAVINGS_TEXT[state], state == oldState)
         var more_info_list = d3.select("#more_info_list")
         var more_info_div = d3.select(".div-more-info")
         more_info_list.selectAll("li").remove()
@@ -473,7 +542,7 @@ function drawChart(){
             .html(MORE_INFO[state][i])
         }
 
-      }
+      // }
       oldState = state;
       d3.selectAll(".caption").style("display","none")
       console.log(category)
@@ -579,6 +648,7 @@ function drawChart(){
 
 
     function updateChart(state, category){
+      var NC_EDGE = (state == "North_Carolina" && category == "PAR")
       hideTooltip();
       if ((state == "Delaware" && category == "PAR") || (state == "West_Virginia" && category == "PRO")){
         d3.select("#chart")
@@ -623,7 +693,8 @@ function drawChart(){
           .style("opacity", 1)
       }
       var FULL = {"PRI" : "Actual Prison", "PAR": "Parole", "PRO": "Probation"}
-      d3.select("#l_main_text span").text(FULL[category])
+      if(NC_EDGE) d3.select("#l_main_text span").text("Post-Release Supervision")
+      else d3.select("#l_main_text span").text(FULL[category])
       // x.domain(d3.extent(slice, function(d) { return formatDate.parse(d.year) }));
       var max = d3.max(slice, function(d){ return +d[selector]})
       var pmax = (category == "PRI") ? d3.max(pslice, function(d){ return +d[pselector]}) : max
@@ -773,6 +844,7 @@ if(IS_TABLET){
   d3.select("body").style("height", function(){ return d3.select("#chart").node().getBoundingClientRect().height + 30})
 }
 
+
 }
 
 drawChart()
@@ -805,7 +877,9 @@ $( function() {
 });
 
 
-$(window).on("resize",drawChart)  
+$(window).on("resize",function(){
+  drawChart();
+})  
 
 
 function toggle_visibility(id) {

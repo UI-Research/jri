@@ -421,8 +421,11 @@ p{
 		display: none;
 	}
 	#mobile_tabs-button{
-		display: block !important;
+		display: block;
 	}
+    #nc_tabs-button{
+        display: block;
+    }
 	.caption p{
 		margin-left: 20px;
 	}
@@ -543,7 +546,7 @@ path.domain{
 
 @media (max-width: 991px) {
 	.tab{
-			padding: 9 5 9 5px !important;
+	   padding: 9 5 9 5px;
 	}
 }
 /********************************************************/
@@ -675,7 +678,7 @@ path.domain{
 .disclaimer-asterisk{
 	/*display: block;*/
 }
-#state-selector, #mobile_tabs, #mobile_tabs-button{
+#state-selector, #mobile_tabs, #mobile_tabs-button, #nc_tabs, #nc_tabs-button{
 	display: none;
 }
 .ul-footnotes-item a{
