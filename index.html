@@ -218,13 +218,18 @@
     <select id = "nc_tabs" name = "nc_tabs">
       <option value = "tab_PRI">Prison Population</option>
       <option value = "tab_PRO">Probation Population</option>
-      <option value = "tab_PAR">Post-Release Supervision</option>
+      <option value = "tab_PAR">Post-Release Supervision Population</option>
+    </select>
+    <select id = "ks_tabs" name = "ks_tabs">
+      <option value = "tab_PRI">Prison Population</option>
+      <option value = "tab_PRO">Community Corrections Population</option>
+      <option value = "tab_PAR">Post-incarceration Management Population</option>
     </select>
 
     <div id = "tab_container">
       <div class ="tab active" id="tab_PRI">Prison Population</div>
-      <div class ="tab" id="tab_PRO">Probation Population</div>
-      <div class ="tab" id="tab_PAR"><span class = "nc-parole-uc">Parole</span> Population</div>
+      <div class ="tab ks_tab" id="tab_PRO"><span class = "nc-prob-uc">Probation</span> Population</div>
+      <div class ="tab ks_tab" id="tab_PAR"><span class = "nc-parole-uc">Parole</span> Population</div>
       <div class ="tab gap" id="tab_GAP"></div>
     </div>
     <div id = "legend">
@@ -259,7 +264,7 @@ The baseline prison projection was calculated in the year prior to legislation p
 
 <!-- On December 31st, 2015, the state probation system supervised 12,418 individuals, a 8% increase from 2010. -->
 
-<div id = 'PRO-caption' class="caption div-dash-block"><p><span id = "recentpro_dt"></span> <span id = "recentpro_yr"></span>, the <span class = "state_name_text"></span> probation population was <span id = "recentpro-num"></span> individuals, <strong><span id = "recentpro_article"></span> <span id = "recentpro_percent"></span> <span id = "recentpro_textpercent"></span> from <span id = "pro_base_yr"></span></strong>.</p></div>
+<div id = 'PRO-caption' class="caption div-dash-block"><p><span id = "recentpro_dt"></span> <span id = "recentpro_yr"></span>, the <span class = "state_name_text"></span> <span class = "nc-prob-lc">probation</span> population was <span id = "recentpro-num"></span> individuals, <strong><span id = "recentpro_article"></span> <span id = "recentpro_percent"></span> <span id = "recentpro_textpercent"></span> from <span id = "pro_base_yr"></span></strong>.</p></div>
 
 <div id = 'PAR-caption' class="caption div-dash-block"><p><span id = "recentpar_dt"></span> <span id = "recentpar_yr"></span>, the <span class = "state_name_text"></span> <span class = "nc-parole-lc">parole</span> population was <span id = "recentpar-num"></span> individuals, <strong><span id = "recentpar_article"></span> <span id = "recentpar_percent"></span> <span id = "recentpar_textpercent"></span> from <span id = "par_base_yr"></span></strong>.</p></div>
 

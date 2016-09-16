@@ -426,6 +426,9 @@ p{
     #nc_tabs-button{
         display: block;
     }
+    #ks_tabs-button{
+        display: block;
+    }
 	.caption p{
 		margin-left: 20px;
 	}
@@ -678,7 +681,7 @@ path.domain{
 .disclaimer-asterisk{
 	/*display: block;*/
 }
-#state-selector, #mobile_tabs, #mobile_tabs-button, #nc_tabs, #nc_tabs-button{
+#state-selector, #mobile_tabs, #mobile_tabs-button, #nc_tabs, #nc_tabs-button, #ks_tabs, #ks_tabs-button{
 	display: none;
 }
 .ul-footnotes-item a{
