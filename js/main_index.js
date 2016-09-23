@@ -352,6 +352,16 @@ function drawChart(){
           // console.log(data.item.value)
       }
     });
+    $("#or_tabs").selectmenu({
+     change: function(event, data){
+          var category = data.item.value.replace("tab_","")
+          d3.selectAll("#tab_container .tab").classed("active",false)
+          d3.select("#tab_container #tab_" + category).classed("active",true)
+          updateChart(getActiveState(), category)
+          updateText(getActiveState(), category)
+          // console.log(data.item.value)
+      }
+    });
     $("#ks_tabs").selectmenu({
      change: function(event, data){
           var category = data.item.value.replace("tab_","")
@@ -470,6 +480,7 @@ function drawChart(){
     
     function updateText(state, category, delay){
       var NC_EDGE = (state == "North_Carolina")
+      var OR_EDGE = (state == "Oregon")
       var KS_EDGE = (state == "Kansas")
       if(NC_EDGE){
         d3.selectAll(".nc-parole-uc").text("Post-Release Supervision")
@@ -494,10 +505,45 @@ function drawChart(){
           d3.select("#mobile_tabs-button").style("display","none")
           d3.select("#ks_tabs-button").style("display","none")
           d3.select("#nc_tabs-button").style("display","block")
+          d3.select("#or_tabs-button").style("display","none")
         }else{
           d3.select("#mobile_tabs-button").style("display","none")
           d3.select("#nc_tabs-button").style("display","none")
           d3.select("#ks_tabs-button").style("display","none")
+          d3.select("#or_tabs-button").style("display","none")
+        }
+      }
+      else if(OR_EDGE){
+        d3.selectAll(".nc-parole-uc").text("Post-Prison Supervision")
+        d3.selectAll(".nc-parole-lc").text("post-prison supervision")
+        d3.selectAll(".nc-prob-uc").text("Probation")
+        d3.selectAll(".nc-prob-lc").text("probation")
+        d3.selectAll("#tab_container .tab")
+          .style("height","40px")
+        d3.selectAll("#tab_container .tab:not(#tab_PAR)")
+          .style("padding-top","18px")
+          .style("padding-bottom","0px")
+        d3.selectAll("#tab_container #tab_PAR")
+          .style("width","170px")
+        d3.select(".tab.gap").style("width", function(){
+          if(IS_TABLET){
+            return container_width - 70 - (150+10)*3
+          }else{
+            return container_width*.7 - 70 - (150+50)*3
+          }
+        })
+        if(IS_MOBILE){
+          d3.select("#mobile_tabs-button").style("display","none")
+          d3.select("#ks_tabs-button").style("display","none")
+          d3.select("#nc_tabs-button").style("display","none")
+          d3.select("#or_tabs-button").style("display","block")
+
+        }else{
+          d3.select("#mobile_tabs-button").style("display","none")
+          d3.select("#nc_tabs-button").style("display","none")
+          d3.select("#ks_tabs-button").style("display","none")
+          d3.select("#or_tabs-button").style("display","none")
+
         }
       }
       else if(KS_EDGE){
@@ -511,6 +557,8 @@ function drawChart(){
           .style("padding-top","18px")
           .style("padding-bottom","0px")
         d3.selectAll(".ks_tab")
+          .style("padding-top","9px")
+          .style("padding-bottom","9px")
           .style("width","180px")
           .style("padding-left","20px")
           .style("padding-right","20px")
@@ -525,10 +573,12 @@ function drawChart(){
           d3.select("#mobile_tabs-button").style("display","none")
           d3.select("#ks_tabs-button").style("display","block")
           d3.select("#nc_tabs-button").style("display","none")
+          d3.select("#or_tabs-button").style("display","none")
         }else{
           d3.select("#mobile_tabs-button").style("display","none")
           d3.select("#nc_tabs-button").style("display","none")
           d3.select("#ks_tabs-button").style("display","none")
+          d3.select("#or_tabs-button").style("display","none")
         }
       }else{
         d3.selectAll(".nc-parole-uc").text("Parole")
@@ -541,10 +591,12 @@ function drawChart(){
           d3.select("#mobile_tabs-button").style("display","block")
           d3.select("#nc_tabs-button").style("display","none")
           d3.select("#ks_tabs-button").style("display","none")
+          d3.select("#or_tabs-button").style("display","none")
         }else{
           d3.select("#mobile_tabs-button").style("display","none")
           d3.select("#nc_tabs-button").style("display","none")
           d3.select("#ks_tabs-button").style("display","none")
+          d3.select("#or_tabs-button").style("display","none")
         }
         d3.selectAll("#tab_container .tab")
           .style("height","20px")
@@ -700,6 +752,7 @@ function drawChart(){
 
     function updateChart(state, category){
       var NC_EDGE = (state == "North_Carolina" && category == "PAR")
+      var OR_EDGE = (state == "Oregon" && category == "PAR")
       var KS_EDGE_PAR = (state == "Kansas" && category == "PAR")
       var KS_EDGE_PRO = (state == "Kansas" && category == "PRO")
 
@@ -748,8 +801,9 @@ function drawChart(){
       }
       var FULL = {"PRI" : "Actual Prison", "PAR": "Parole", "PRO": "Probation"}
       if(NC_EDGE) d3.select("#l_main_text span").text("Post-Release Supervision")
+      else if(OR_EDGE) d3.select("#l_main_text span").text("Post-Prison Supervision")
       else if(KS_EDGE_PRO) d3.select("#l_main_text span").text("Community Corrections")
-      else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Post-incarceration Management")
+      else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Post-Incarceration Management")
       else d3.select("#l_main_text span").text(FULL[category])
       // x.domain(d3.extent(slice, function(d) { return formatDate.parse(d.year) }));
       var max = d3.max(slice, function(d){ return +d[selector]})

@@ -426,6 +426,9 @@ p{
     #nc_tabs-button{
         display: block;
     }
+    #or_tabs-button{
+        display: block;
+    }
     #ks_tabs-button{
         display: block;
     }
@@ -681,7 +684,7 @@ path.domain{
 .disclaimer-asterisk{
 	/*display: block;*/
 }
-#state-selector, #mobile_tabs, #mobile_tabs-button, #nc_tabs, #nc_tabs-button, #ks_tabs, #ks_tabs-button{
+#state-selector, #mobile_tabs, #mobile_tabs-button, #nc_tabs, #nc_tabs-button, #ks_tabs, #ks_tabs-button, #or_tabs, #or_tabs-button{
 	display: none;
 }
 .ul-footnotes-item a{
