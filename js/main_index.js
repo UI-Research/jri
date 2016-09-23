@@ -252,7 +252,7 @@ function drawChart(){
       .attr("y",0)
       .attr("height",height)
       .attr("width", x(formatDate.parse(JRI[getActiveState()]["leg_yr"])))
-      .style("fill",'url(#diagonalHatch')
+      .style("fill",'url(#diagonalHatch)')
       .style("pointer-events","none")
       .style("stroke","#5c5859")
       .style("stroke-width","2px")
@@ -474,6 +474,8 @@ function drawChart(){
       if(NC_EDGE){
         d3.selectAll(".nc-parole-uc").text("Post-Release Supervision")
         d3.selectAll(".nc-parole-lc").text("post-release supervision")
+        d3.selectAll(".nc-prob-uc").text("Probation")
+        d3.selectAll(".nc-prob-lc").text("probation")
         d3.selectAll("#tab_container .tab")
           .style("height","40px")
         d3.selectAll("#tab_container .tab:not(#tab_PAR)")
@@ -531,6 +533,9 @@ function drawChart(){
       }else{
         d3.selectAll(".nc-parole-uc").text("Parole")
         d3.selectAll(".nc-parole-lc").text("parole")
+        d3.selectAll(".nc-prob-uc").text("Probation")
+        d3.selectAll(".nc-prob-lc").text("probation")
+
         d3.select("#mobile_tabs .tab_PAR").text("Parole Population")
         if(IS_MOBILE){
           d3.select("#mobile_tabs-button").style("display","block")
