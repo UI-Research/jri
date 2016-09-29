@@ -483,8 +483,8 @@ function drawChart(){
       var OR_EDGE = (state == "Oregon")
       var KS_EDGE = (state == "Kansas")
       if(NC_EDGE){
-        d3.selectAll(".nc-parole-uc").text("Post-Release Supervision")
-        d3.selectAll(".nc-parole-lc").text("post-release supervision")
+        d3.selectAll(".nc-parole-uc").text("Postrelease Supervision")
+        d3.selectAll(".nc-parole-lc").text("postrelease supervision")
         d3.selectAll(".nc-prob-uc").text("Probation")
         d3.selectAll(".nc-prob-lc").text("probation")
         d3.selectAll("#tab_container .tab")
@@ -514,8 +514,8 @@ function drawChart(){
         }
       }
       else if(OR_EDGE){
-        d3.selectAll(".nc-parole-uc").text("Post-Prison Supervision")
-        d3.selectAll(".nc-parole-lc").text("post-prison supervision")
+        d3.selectAll(".nc-parole-uc").text("Postprison Supervision")
+        d3.selectAll(".nc-parole-lc").text("postprison supervision")
         d3.selectAll(".nc-prob-uc").text("Probation")
         d3.selectAll(".nc-prob-lc").text("probation")
         d3.selectAll("#tab_container .tab")
@@ -547,8 +547,8 @@ function drawChart(){
         }
       }
       else if(KS_EDGE){
-        d3.selectAll(".nc-parole-uc").text("Post-incarceration Management")
-        d3.selectAll(".nc-parole-lc").text("post-incarceration management")
+        d3.selectAll(".nc-parole-uc").text("Postincarceration Management")
+        d3.selectAll(".nc-parole-lc").text("postincarceration management")
         d3.selectAll(".nc-prob-uc").text("Community Corrections")
         d3.selectAll(".nc-prob-lc").text("community corrections")
         d3.selectAll("#tab_container .tab")
@@ -668,16 +668,22 @@ function drawChart(){
       countup_val("recentpri_percent", Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"]) , delay)
       countup_val("pri_base_yr", JRI[state]["base_yr"], delay)
       countup_val("recentproj-num", Math.abs(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]), delay)
-      countup_val("recentproj_percent", 100*(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]) / recentproj_yr_data[state+"-PROJ"], delay)
+      countup_val("recentproj_percent", Math.abs(100*(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]) / recentproj_yr_data[state+"-PROJ"]), delay)
       countup_val("recentproj_yr", JRI[state]["recentproj_yr"], delay)
 
       d3.select("#recentpri_article").text(getArticle(Math.abs(100*(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"])/base_yr_data[state + "-PRI"])))
 
+      d3.select("#recentproj_article").text(getArticle(Math.abs(100*(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]) / recentproj_yr_data[state+"-PROJ"])))
 
       if(recentpri_yr_data[state + "-PRI"] - base_yr_data[state + "-PRI"] < 0){
         d3.select("#recentpri_textpercent").text("decrease")
       }else{
         d3.select("#recentpri_textpercent").text("increase")
+      }
+      if(100*(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"]) / recentproj_yr_data[state+"-PROJ"] < 0){
+        d3.select("#recentproj_textpercent").text("decrease")
+      }else{
+        d3.select("#recentproj_textpercent").text("increase")
       }
       if(recentproj_yr_data[state+"-PRI"] - recentproj_yr_data[state+"-PROJ"] < 0){
         d3.select("#recentproj-textnum").text("fewer")
@@ -799,11 +805,11 @@ function drawChart(){
           .transition()
           .style("opacity", 1)
       }
-      var FULL = {"PRI" : "Actual Prison", "PAR": "Parole", "PRO": "Probation"}
-      if(NC_EDGE) d3.select("#l_main_text span").text("Post-Release Supervision")
-      else if(OR_EDGE) d3.select("#l_main_text span").text("Post-Prison Supervision")
-      else if(KS_EDGE_PRO) d3.select("#l_main_text span").text("Community Corrections")
-      else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Post-Incarceration Management")
+      var FULL = {"PRI" : "Actual prison", "PAR": "Parole", "PRO": "Probation"}
+      if(NC_EDGE) d3.select("#l_main_text span").text("Postrelease supervision")
+      else if(OR_EDGE) d3.select("#l_main_text span").text("Postprison supervision")
+      else if(KS_EDGE_PRO) d3.select("#l_main_text span").text("Community corrections")
+      else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Postincarceration ,anagement")
       else d3.select("#l_main_text span").text(FULL[category])
       // x.domain(d3.extent(slice, function(d) { return formatDate.parse(d.year) }));
       var max = d3.max(slice, function(d){ return +d[selector]})
