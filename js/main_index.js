@@ -14,6 +14,7 @@ function getInternetExplorerVersion()
     if (re.exec(ua) != null)
       rv = parseFloat( RegExp.$1 );
   }
+  console.log(rv)
   return rv;
 }
 
@@ -657,7 +658,6 @@ function drawChart(){
         var more_info_div = d3.select(".div-more-info")
         more_info_list.selectAll("li").remove()
         if (MORE_INFO[state].length == 0){
-          console.log(state)
           more_info_div
             .style("display","none")
         }else{
@@ -673,7 +673,6 @@ function drawChart(){
       // }
       oldState = state;
       d3.selectAll(".caption").style("display","none")
-      console.log(category)
       d3.select("#" + category + "-caption").style("display","inline")
       // console.log(data)
       var recentpri_yr_data = data.filter(function(d){ return d.year == JRI[state]["recentpri_yr"]})[0]
@@ -816,7 +815,6 @@ function drawChart(){
         .transition()
         .style("opacity",1)
       var selector = state + "-" + category
-      console.log(selector)
       var pselector = state + "-PROJ"
       var slice = data.filter(function(d){ return typeof(d[selector]) != "undefined" && d[selector] != 0})
       var pslice = data.filter(function(d){ return typeof(d[pselector]) != "undefined" && d[pselector] != 0})
