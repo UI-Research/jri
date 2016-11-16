@@ -1,4 +1,25 @@
+IS_IE = false;
 var oldState = "Georgia"
+
+
+function getInternetExplorerVersion()
+// Returns the version of Internet Explorer or a -1
+// (indicating the use of another browser).
+{
+  var rv = -1; // Return value assumes failure.
+  if (navigator.appName == 'Microsoft Internet Explorer')
+  {
+    var ua = navigator.userAgent;
+    var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+    if (re.exec(ua) != null)
+      rv = parseFloat( RegExp.$1 );
+  }
+  return rv;
+}
+
+
+
+
 function getActiveCategory(){
   var tab = d3.select("#tab_container .tab.active")
   return tab.node().id.replace("tab_","")
@@ -108,6 +129,10 @@ function hideTooltip(){
     .style("opacity",0)
 }
 function drawChart(){
+  if(getInternetExplorerVersion() != -1){
+    IS_IE = true;
+  }
+  console.log(IS_IE)
   container_width = $("h2.jri-state")[0].getBoundingClientRect().width
   var IS_TABLET = d3.select("#is_tablet").style("display") == "block"
   var IS_MOBILE = d3.select("#is_mobile").style("display") == "block"
@@ -845,14 +870,21 @@ function drawChart(){
               return y(+d[pselector]);    
           });
 
-      mainLine
+      if(IS_IE){
+        mainLine
         .datum(slice)
         .transition()
-        .attrTween('d', function (d) {
-          var previous = d3.select(this).attr('d');
-          var current = line(d);
-          return d3.interpolatePath(previous, current);
-        });
+        .attr("d", function(d){ return line(d)})
+      }else{
+        mainLine
+          .datum(slice)
+          .transition()
+          .attrTween('d', function (d) {
+            var previous = d3.select(this).attr('d');
+            var current = line(d);
+            return d3.interpolatePath(previous, current);
+          });
+      }
 
 
       mainDot
@@ -869,6 +901,14 @@ function drawChart(){
       })
       
       if(category == "PRI"){
+        if(IS_IE){
+          projLine
+          .datum(pslice)
+          .transition()
+          .style("opacity",1)
+          .attr("d", function(d){ return pline(d)})
+
+        }else{
         projLine
           .datum(pslice)
           .transition()
@@ -878,6 +918,7 @@ function drawChart(){
             var current = pline(d);
             return d3.interpolatePath(previous, current);
           });
+        }
       projDot
         .data(data)
         .attr("class",function(d){
