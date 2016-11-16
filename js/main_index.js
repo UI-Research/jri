@@ -14,7 +14,9 @@ function getInternetExplorerVersion()
     if (re.exec(ua) != null)
       rv = parseFloat( RegExp.$1 );
   }
-  console.log(rv)
+  else if(navigator.appName == "Netscape"){
+    return 0;
+  }
   return rv;
 }
 
