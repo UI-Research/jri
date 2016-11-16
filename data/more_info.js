@@ -2,7 +2,7 @@ var MORE_INFO = {
 	"Mississippi": ["In addition to the reinvestment noted above, the Mississippi Department of Corrections has redirected funds to transitional housing, hiring of more probation and parole agents, a training academy for probation and parole agents, equipment for newly hired agents, electronic monitoring of people on supervision, a newly created Recidivism Reduction Program for community corrections, and additional and improved reentry programs, including Thinking for a Change and other evidence-based programs.","In the first year following enactment of HB 585, almost 5,000 people have been discharged from supervision early due to earned time credits, saving more than 1 million supervision days.","In addition, probation revocations fell 41 percent over the same period."],
 	"Oklahoma": [],
 	"Delaware": [],
-	"Arkansas": ["Early efforts by the Arkansas Department of Correction (DOC), Department of Community Correction, and Parole Board substantially reduced the backlog of people awaiting transfer from jail to prison to an average of 391 in fiscal year 2013. However, this number increased to 2,164 in fiscal year 2014 and to 2,396 in fiscal year 2015.","In response to this growth as well as increases in the average length of stay for people in prison, the DOC added 2,782 beds between January 2010 and January 2016."],
+	"Arkansas": ["Early efforts by the Arkansas Department of Correction (DOC), Department of Community Correction, and Parole Board substantially reduced the backlog of people awaiting transfer from jail to prison to an average of 391 in fiscal year 2013. However, this number increased to 2,164 in fiscal year 2014 and to 2,396 in fiscal year 2015.","In response to this growth, as well as increases in the average length of stay for people in prison, the DOC added 2,782 beds between January 2010 and January 2016."],
 	"New_Hampshire": [],
 	"Idaho": [],
 	"Kansas": [],
@@ -15,5 +15,8 @@ var MORE_INFO = {
 	"West_Virginia": [],
 	"South_Carolina": ["Researchers at the Clemson Institute for Economic and Community Development found that SB 1154 reforms have contributed to the creation of 982 new jobs and a $37 million increase in the state’s gross product."],
 	"North_Carolina": ["Since enacting HB 642, North Carolina has closed 11 prisons and reduced its corrections operating budget.","Between fiscal years 2011 and 2015, annual admissions to prison for probation revocations dropped 65 percent."],
-	"Pennsylvania": ["Between fiscal years 2012 and 2015, the number of eligible cases that received a parole hearing increased from 82 percent to 91 percent."]
+	"Pennsylvania": ["Between fiscal years 2012 and 2015, the number of eligible cases that received a parole hearing increased from 82 percent to 91 percent."],
+	"Kentucky": [],
+	"Louisiana": ["In 2016, Louisiana convened the Louisiana Justice Reinvestment Task Force."]
+
 }

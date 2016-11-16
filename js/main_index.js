@@ -413,7 +413,7 @@ function drawChart(){
       })
     d3.selectAll(".nav_button")
       .on("click", function(){
-        var stateList = ["Arkansas","Delaware","Georgia","Hawaii","Idaho","Kansas","Mississippi","Missouri","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","West_Virginia"]
+        var stateList = ["Arkansas","Delaware","Georgia","Hawaii","Idaho","Kansas","Kentucky","Louisiana","Mississippi","Missouri","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","West_Virginia"]
         var current = stateList.indexOf($("#state-selector").val());
         var newState;
         if(d3.select(this).classed("prev")){
