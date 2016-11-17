@@ -794,6 +794,10 @@ function drawChart(container_width){
   var sideHeight = d3.select("#dummy_savings_text").node().getBoundingClientRect().height +  shPadding
   d3.select(".div-reinvestment-ratio")
     .style("height", sideHeight + "px")
+
+      if(IS_IE){
+        d3.selectAll(".tab").style("height", "65px")
+      }
     }
 
 
@@ -887,7 +891,7 @@ function drawChart(container_width){
           .y(function(d) {
               return y(+d[pselector]);    
           });
-          
+
       if(IS_IE){
         mainLine
         .datum(slice)

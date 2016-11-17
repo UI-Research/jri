@@ -19075,6 +19075,10 @@ function countup_val(val_id, new_val, delay){
 
   if(val_id.search("_yr") != -1) separator = ''
   else separator = ','
+  if(new_val == 0){
+    d3.select("#" + val_id).html("&mdash;")
+    return false;
+  }
 
 
   var current_val = parseFloat(d3.select("#" + val_id).text().replace("$","").replace(/\,/g,""))
@@ -19807,6 +19811,10 @@ function drawChart(container_width){
   var sideHeight = d3.select("#dummy_savings_text").node().getBoundingClientRect().height +  shPadding
   d3.select(".div-reinvestment-ratio")
     .style("height", sideHeight + "px")
+
+      if(IS_IE){
+        d3.selectAll(".tab").style("height", "65px")
+      }
     }
 
 
@@ -19900,7 +19908,7 @@ function drawChart(container_width){
           .y(function(d) {
               return y(+d[pselector]);    
           });
-          
+
       if(IS_IE){
         mainLine
         .datum(slice)
