@@ -3,10 +3,8 @@ var oldState = "Georgia"
 
 
 function getInternetExplorerVersion()
-// Returns the version of Internet Explorer or a -1
-// (indicating the use of another browser).
 {
-  var rv = -1; // Return value assumes failure.
+  var rv = -1;
   if (navigator.appName == 'Microsoft Internet Explorer')
   {
     var ua = navigator.userAgent;
@@ -14,8 +12,12 @@ function getInternetExplorerVersion()
     if (re.exec(ua) != null)
       rv = parseFloat( RegExp.$1 );
   }
-  else if(navigator.appName == "Netscape"){
-    return 0;
+  else if (navigator.appName == 'Netscape')
+  {
+    var ua = navigator.userAgent;
+    var re  = new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})");
+    if (re.exec(ua) != null)
+      rv = parseFloat( RegExp.$1 );
   }
   return rv;
 }
