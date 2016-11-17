@@ -58,6 +58,10 @@ function countup_val(val_id, new_val, delay){
 
   if(val_id.search("_yr") != -1) separator = ''
   else separator = ','
+  if(new_val == 0){
+    d3.select("#" + val_id).html("&mdash;")
+    return false;
+  }
 
 
   var current_val = parseFloat(d3.select("#" + val_id).text().replace("$","").replace(/\,/g,""))

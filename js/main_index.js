@@ -48,6 +48,10 @@ function countup_val(val_id, new_val, delay){
 
   if(val_id.search("_yr") != -1) separator = ''
   else separator = ','
+  if(new_val == 0){
+    d3.select("#" + val_id).html("&mdash;")
+    return false;
+  }
 
 
   var current_val = parseFloat(d3.select("#" + val_id).text().replace("$","").replace(/\,/g,""))
@@ -135,7 +139,6 @@ function drawChart(){
   if(getInternetExplorerVersion() != -1){
     IS_IE = true;
   }
-  console.log(IS_IE)
   container_width = $("h2.jri-state")[0].getBoundingClientRect().width
   var IS_TABLET = d3.select("#is_tablet").style("display") == "block"
   var IS_MOBILE = d3.select("#is_mobile").style("display") == "block"
@@ -441,7 +444,7 @@ function drawChart(){
       })
     d3.selectAll(".nav_button")
       .on("click", function(){
-        var stateList = ["Arkansas","Delaware","Georgia","Hawaii","Idaho","Kansas","Kentucky","Louisiana","Mississippi","Missouri","New_Hampshire","North_Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","South_Carolina","South_Dakota","West_Virginia"]
+        var stateList = ["Arkansas","Delaware","Georgia","Hawaii","Idaho","Kansas","Kentucky","Louisiana","Mississippi","Missouri","New_Hampshire","North_Carolina","Ohio","Oregon","Pennsylvania","South_Carolina","South_Dakota","West_Virginia"]
         var current = stateList.indexOf($("#state-selector").val());
         var newState;
         if(d3.select(this).classed("prev")){
@@ -774,6 +777,9 @@ function drawChart(){
         }
 
 
+      }
+      if(IS_IE){
+        d3.selectAll(".tab").style("height", "65px")
       }
 
     }
