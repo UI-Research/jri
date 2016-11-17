@@ -262,17 +262,16 @@ function drawChart(container_width){
 
     x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
     y.domain([0, d3.max(slice, function(d){ return +d[defaultSelector]*1.5})])
-
-
-  var line = d3.svg.line()
-      .x(function(d) { return x(formatDate.parse(d.year)); })
-      .y(function(d) {
-          return y(+d[defaultSelector]);    
-      });
+  
   var pline = d3.svg.line()
       .x(function(d) { return x(formatDate.parse(d.year)); })
       .y(function(d) {
           return y(+d[pdefaultSelector]);    
+      });
+  var line = d3.svg.line()
+      .x(function(d) { return x(formatDate.parse(d.year)); })
+      .y(function(d) {
+          return y(+d[defaultSelector]);    
       });
 
 
@@ -320,15 +319,16 @@ function drawChart(container_width){
           .style("fill","white")
           .style("letter-spacing",".7px")
 
-    var mainLine = svg.append("path")
-        .datum(slice)
-        .attr("class", "line")
-        .attr("d", line);
     var projLine = svg.append("path")
         .datum(pslice)
         .attr("class", "proj_line")
         .attr("d", pline)
         .style("opacity", function(){ return (getActiveCategory() == "PRI") ? 1 : 0});
+
+    var mainLine = svg.append("path")
+        .datum(slice)
+        .attr("class", "line")
+        .attr("d", line);
 
     var mainDot = svg.selectAll(".dot")
       .data(data)
