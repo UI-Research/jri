@@ -459,24 +459,24 @@ p{
 }
 .line{
 	stroke: #1696d2;
-	stroke-width: 3px;
+	stroke-width: 2px;
 	fill: none;
 }
 .proj_line{
 	stroke: #fdbf11;
-	stroke-width: 3px;
+	stroke-width: 2px;
 	fill: none;
 }
 .dot{
 	fill: none;
 	stroke: none;
-	stroke-width: 3px;
+	stroke-width: 2px;
 	pointer-events: none;
 }
 .pdot{
 	fill: none;
 	stroke: none;
-	stroke-width: 3px;
+	stroke-width: 2px;
 	pointer-events: none;	
 }
 .dot.active{
@@ -654,11 +654,11 @@ path.domain{
 
 #l_main_key, #l_proj_key{
 	width: 40px;
-    height: 4px;
+    height: 2px;
     float: left;
     margin-right: 10px;
     border-radius: 13px;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 #l_main_text, #l_proj_text{
 	float: left;

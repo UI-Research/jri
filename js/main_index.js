@@ -308,16 +308,16 @@ function drawChart(){
           .style("font-weight","500")
           .style("fill","white")
           .style("letter-spacing",".7px")
-
-    var mainLine = svg.append("path")
-        .datum(slice)
-        .attr("class", "line")
-        .attr("d", line);
     var projLine = svg.append("path")
         .datum(pslice)
         .attr("class", "proj_line")
         .attr("d", pline)
         .style("opacity", function(){ return (getActiveCategory() == "PRI") ? 1 : 0});
+
+    var mainLine = svg.append("path")
+        .datum(slice)
+        .attr("class", "line")
+        .attr("d", line);
 
     var mainDot = svg.selectAll(".dot")
       .data(data)
