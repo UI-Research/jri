@@ -105,7 +105,7 @@ function moveTooltip(dot){
         var year = d.year
         d3.selectAll(".tt_year").text(year)
         if(main_val != 0 && ! isNaN(main_val)){
-          d3.select("#tt_main_text").text("Population: ")
+          d3.select("#tt_main_text").text("population: ")
           d3.select("#tt_main_val").text(comma(main_val))
         }else{
           d3.select("#tt_main_text").text("")
@@ -114,7 +114,7 @@ function moveTooltip(dot){
           d3.select("#tooltip").style("height","36px")
         }
         if(proj_val != 0 && ! isNaN(proj_val) && getActiveCategory() == "PRI"){
-          d3.select("#tt_proj_text").text("Projected Population: ")
+          d3.select("#tt_proj_text").text("projection: ")
           d3.select("#tt_proj_val").text(comma(proj_val))
         }else{
           d3.select("#tt_proj_text").text("")
@@ -123,7 +123,7 @@ function moveTooltip(dot){
           d3.select("#tooltip").style("height","24px")
         }
         if( (proj_val != 0 && ! isNaN(proj_val) && getActiveCategory() == "PRI") && (main_val != 0 && ! isNaN(main_val)) ){
-            d3.select("#tooltip").style("height","62px")
+            d3.select("#tooltip").style("height","47px")
         }
 
         if(dot == null){
@@ -311,7 +311,7 @@ function drawChart(container_width){
           .attr("stroke","#5c5859")
           .attr("stroke-width","2px")
         pointer.append("text")
-          .text("JRI Enactment")
+          .text("JRI enactment")
           .style("font-size","12px")
           .attr("dy",17)
           .attr("dx",10)
