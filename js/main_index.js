@@ -516,8 +516,8 @@ function drawChart(){
       var OR_EDGE = (state == "Oregon")
       var KS_EDGE = (state == "Kansas")
       if(NC_EDGE){
-        d3.selectAll(".nc-parole-uc").text("Postrelease Supervision")
-        d3.selectAll(".nc-parole-lc").text("postrelease supervision")
+        d3.selectAll(".nc-parole-uc").text("Postprison Supervision")
+        d3.selectAll(".nc-parole-lc").text("postprison supervision")
         d3.selectAll(".nc-prob-uc").text("Probation")
         d3.selectAll(".nc-prob-lc").text("probation")
         d3.selectAll("#tab_container .tab")
@@ -839,7 +839,7 @@ function drawChart(){
           .style("opacity", 1)
       }
       var FULL = {"PRI" : "Actual prison", "PAR": "Parole", "PRO": "Probation"}
-      if(NC_EDGE) d3.select("#l_main_text span").text("Postrelease supervision")
+      if(NC_EDGE) d3.select("#l_main_text span").text("Postprison supervision")
       else if(OR_EDGE) d3.select("#l_main_text span").text("Postprison supervision")
       else if(KS_EDGE_PRO) d3.select("#l_main_text span").text("Community corrections")
       else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Postincarceration ,anagement")

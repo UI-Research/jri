@@ -18,6 +18,6 @@ var MORE_INFO = {
 	"North_Carolina": ["Since enacting HB 642, North Carolina closed 11 prisons and reduced its corrections operating budget.", "Annual admissions to prison for probation revocations dropped 65 percent between fiscal years 2011 and 2015."],
 	"Pennsylvania": ["The number of eligible cases that received a parole hearing increased from 82 to 91 percent between fiscal years 2012 and 2015."],
 	"Kentucky": [],
-	"Louisiana": ["In 2016, Louisiana convened the Louisiana Justice Reinvestment Task Force."]
+	"Louisiana": []
 
 }
