@@ -18936,7 +18936,7 @@ var MORE_INFO = {
 	"North_Carolina": ["Since enacting HB 642, North Carolina closed 11 prisons and reduced its corrections operating budget.", "Annual admissions to prison for probation revocations dropped 65 percent between fiscal years 2011 and 2015."],
 	"Pennsylvania": ["The number of eligible cases that received a parole hearing increased from 82 to 91 percent between fiscal years 2012 and 2015."],
 	"Kentucky": [],
-	"Louisiana": ["In 2016, Louisiana convened the Louisiana Justice Reinvestment Task Force."]
+	"Louisiana": []
 
 }
 var SAVINGS_TEXT = {
@@ -19123,7 +19123,7 @@ function moveTooltip(dot){
         var year = d.year
         d3.selectAll(".tt_year").text(year)
         if(main_val != 0 && ! isNaN(main_val)){
-          d3.select("#tt_main_text").text("Population: ")
+          d3.select("#tt_main_text").text("population: ")
           d3.select("#tt_main_val").text(comma(main_val))
         }else{
           d3.select("#tt_main_text").text("")
@@ -19132,7 +19132,7 @@ function moveTooltip(dot){
           d3.select("#tooltip").style("height","36px")
         }
         if(proj_val != 0 && ! isNaN(proj_val) && getActiveCategory() == "PRI"){
-          d3.select("#tt_proj_text").text("Projected Population: ")
+          d3.select("#tt_proj_text").text("projection: ")
           d3.select("#tt_proj_val").text(comma(proj_val))
         }else{
           d3.select("#tt_proj_text").text("")
@@ -19141,7 +19141,7 @@ function moveTooltip(dot){
           d3.select("#tooltip").style("height","24px")
         }
         if( (proj_val != 0 && ! isNaN(proj_val) && getActiveCategory() == "PRI") && (main_val != 0 && ! isNaN(main_val)) ){
-            d3.select("#tooltip").style("height","62px")
+            d3.select("#tooltip").style("height","47px")
         }
 
         if(dot == null){
@@ -19329,7 +19329,7 @@ function drawChart(container_width){
           .attr("stroke","#5c5859")
           .attr("stroke-width","2px")
         pointer.append("text")
-          .text("JRI Enactment")
+          .text("JRI enactment")
           .style("font-size","12px")
           .attr("dy",17)
           .attr("dx",10)
@@ -19547,8 +19547,8 @@ function drawChart(container_width){
       var OR_EDGE = (state == "Oregon")
       var KS_EDGE = (state == "Kansas")
       if(NC_EDGE){
-        d3.selectAll(".nc-parole-uc").text("Postrelease Supervision")
-        d3.selectAll(".nc-parole-lc").text("postrelease supervision")
+        d3.selectAll(".nc-parole-uc").text("Postprison Supervision")
+        d3.selectAll(".nc-parole-lc").text("postprison supervision")
         d3.selectAll(".nc-prob-uc").text("Probation")
         d3.selectAll(".nc-prob-lc").text("probation")
         d3.selectAll("#tab_container .tab")
@@ -19874,7 +19874,7 @@ function drawChart(container_width){
           .style("opacity", 1)
       }
       var FULL = {"PRI" : "Actual prison", "PAR": "Parole", "PRO": "Probation"}
-      if(NC_EDGE) d3.select("#l_main_text span").text("Postrelease supervision")
+      if(NC_EDGE) d3.select("#l_main_text span").text("Postprison supervision")
       else if(OR_EDGE) d3.select("#l_main_text span").text("Postprison supervision")
       else if(KS_EDGE_PRO) d3.select("#l_main_text span").text("Community corrections")
       else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Postincarceration ,anagement")
