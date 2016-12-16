@@ -770,6 +770,7 @@ path.domain{
 	position: absolute;
 	opacity: 0;
 	pointer-events: none;
+    top: 70px;
 }
 .nav_button{
 	text-transform: uppercase;
