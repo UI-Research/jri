@@ -598,7 +598,7 @@ function drawChart(container_width){
         d3.selectAll(".nc-prob-uc").text("Community Corrections")
         d3.selectAll(".nc-prob-lc").text("community corrections")
         d3.selectAll("#tab_container .tab")
-          .style("height","40px")
+          .style("height","70px")
         d3.selectAll("#tab_container .tab:not(.ks_tab)")
           .style("padding-top","18px")
           .style("padding-bottom","0px")
@@ -859,7 +859,7 @@ function drawChart(container_width){
       if(NC_EDGE) d3.select("#l_main_text span").text("Postprison supervision")
       else if(OR_EDGE) d3.select("#l_main_text span").text("Postprison supervision")
       else if(KS_EDGE_PRO) d3.select("#l_main_text span").text("Community corrections")
-      else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Postincarceration ,anagement")
+      else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Postincarceration management")
       else d3.select("#l_main_text span").text(FULL[category])
       // x.domain(d3.extent(slice, function(d) { return formatDate.parse(d.year) }));
       var max = d3.max(slice, function(d){ return +d[selector]})
