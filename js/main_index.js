@@ -185,8 +185,7 @@ function drawChart(){
       .scale(x)
       .orient("bottom")
       .tickFormat(d3.time.format("%Y"));
-  if (IS_MOBILE) xAxis.ticks(3)
-  else xAxis.ticks(d3.time.years, 1)
+
 
   var yFormat = (IS_MOBILE) ? d3.format("s") : d3.format(",")
   var yAxis = d3.svg.axis()
@@ -247,6 +246,13 @@ function drawChart(){
   d3.json("data/jridata.json", function(error, data) {
     var slice = data.filter(function(d){ return typeof(d[defaultSelector]) != "undefined" && d[defaultSelector] != 0})
     var pslice = data.filter(function(d){ return typeof(d[pdefaultSelector]) != "undefined" && d[pdefaultSelector] != 0})
+
+
+
+  var yearSpan = (Math.round(  (d3.max(pslice, function(d){ return formatDate.parse(d.year)}) - d3.min(slice, function(d){ return formatDate.parse(d.year)}))/(1000*60*60*24*365)  ))
+  if (IS_MOBILE) xAxis.ticks(3)
+  else if(yearSpan > 8) xAxis.ticks(d3.time.years, 2)
+  else xAxis.ticks(d3.time.years, 1)
 
     if (error) throw error;
     x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
@@ -847,15 +853,25 @@ function drawChart(){
       // x.domain(d3.extent(slice, function(d) { return formatDate.parse(d.year) }));
       var max = d3.max(slice, function(d){ return +d[selector]})
       var pmax = (category == "PRI") ? d3.max(pslice, function(d){ return +d[pselector]}) : max
-
+      var yearSpan;
       if(category != "PRI"){
-
           x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(slice, function(d){ return formatDate.parse(d.year)})]);
+          yearSpan = (Math.round(  (d3.max(slice, function(d){ return formatDate.parse(d.year)}) - d3.min(slice, function(d){ return formatDate.parse(d.year)}))/(1000*60*60*24*365)  ))
+          if (IS_MOBILE) xAxis.ticks(3)
+          else if(yearSpan > 8) xAxis.ticks(d3.time.years, 2)
+          else xAxis.ticks(d3.time.years, 1)
+
       }else{
         if(state == "South_Carolina"){
           x.domain([formatDate.parse("2007"),formatDate.parse("2015")])
+          if (IS_MOBILE) xAxis.ticks(3)
+          else xAxis.ticks(d3.time.years, 1)
         }else{
           x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
+          yearSpan = (Math.round(  (d3.max(pslice, function(d){ return formatDate.parse(d.year)}) - d3.min(slice, function(d){ return formatDate.parse(d.year)}))/(1000*60*60*24*365)  ))
+          if (IS_MOBILE) xAxis.ticks(3)
+          else if(yearSpan > 8) xAxis.ticks(d3.time.years, 2)
+          else xAxis.ticks(d3.time.years, 1)
         }
       }
 
@@ -863,8 +879,7 @@ function drawChart(){
       .scale(x)
       .orient("bottom")
       .tickFormat(d3.time.format("%Y"));
-  if (IS_MOBILE) xAxis.ticks(3)
-  else xAxis.ticks(d3.time.years, 1)
+
 
       y.domain([0, Math.max(max*1.5, pmax*1.5)])
       line = d3.svg.line()
