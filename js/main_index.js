@@ -255,7 +255,12 @@ function drawChart(){
   else xAxis.ticks(d3.time.years, 1)
 
     if (error) throw error;
-    x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
+
+    var pmax = d3.max(pslice, function(d){ return formatDate.parse(d.year)})
+    var smax = d3.max(slice, function(d){ return formatDate.parse(d.year)})
+    var xmax = (pmax > smax) ? pmax : smax
+
+    x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), xmax]);
     y.domain([0, d3.max(slice, function(d){ return +d[defaultSelector]*1.5})])
 
 
@@ -850,7 +855,6 @@ function drawChart(){
       else if(KS_EDGE_PRO) d3.select("#l_main_text span").text("Community corrections")
       else if(KS_EDGE_PAR) d3.select("#l_main_text span").text("Postincarceration management")
       else d3.select("#l_main_text span").text(FULL[category])
-      // x.domain(d3.extent(slice, function(d) { return formatDate.parse(d.year) }));
       var max = d3.max(slice, function(d){ return +d[selector]})
       var pmax = (category == "PRI") ? d3.max(pslice, function(d){ return +d[pselector]}) : max
       var yearSpan;
@@ -863,11 +867,16 @@ function drawChart(){
 
       }else{
         if(state == "South_Carolina"){
-          x.domain([formatDate.parse("2007"),formatDate.parse("2015")])
+          x.domain([formatDate.parse("2007"),formatDate.parse("2016")])
           if (IS_MOBILE) xAxis.ticks(3)
           else xAxis.ticks(d3.time.years, 1)
         }else{
-          x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), d3.max(pslice, function(d){ return formatDate.parse(d.year)})]);
+          var pxmax = d3.max(pslice, function(d){ return formatDate.parse(d.year)})
+          var sxmax = d3.max(slice, function(d){ return formatDate.parse(d.year)})
+          var xmax = (pxmax > sxmax) ? pxmax : sxmax
+
+
+          x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), xmax]);
           yearSpan = (Math.round(  (d3.max(pslice, function(d){ return formatDate.parse(d.year)}) - d3.min(slice, function(d){ return formatDate.parse(d.year)}))/(1000*60*60*24*365)  ))
           if (IS_MOBILE) xAxis.ticks(3)
           else if(yearSpan > 8) xAxis.ticks(d3.time.years, 2)

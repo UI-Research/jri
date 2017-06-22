@@ -916,3 +916,10 @@ width: 25%;
   font-weight: 400;
   font-style: normal;
 }
+#date_updated{
+	font-style: italic;
+    font-size: 16px;
+    position: relative;
+    top: -5px;
+    color: #696969;
+}
