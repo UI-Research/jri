@@ -256,9 +256,9 @@ function drawChart(){
 
     if (error) throw error;
 
-    var pmax = d3.max(pslice, function(d){ return formatDate.parse(d.year)})
-    var smax = d3.max(slice, function(d){ return formatDate.parse(d.year)})
-    var xmax = (pmax > smax) ? pmax : smax
+    var pxmax = d3.max(pslice, function(d){ return formatDate.parse(d.year)})
+    var sxmax = d3.max(slice, function(d){ return formatDate.parse(d.year)})
+    var xmax = (pxmax > sxmax) ? pxmax : sxmax
 
     x.domain([d3.min(slice, function(d){ return formatDate.parse(d.year)}), xmax]);
     y.domain([0, d3.max(slice, function(d){ return +d[defaultSelector]*1.5})])
