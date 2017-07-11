@@ -5,7 +5,7 @@ var minifyCSS = require('gulp-minify-css');
 var uglify = require('gulp-uglify'); 
 
 var jsFiles = ['js/vendor/*.js', 'data/more_info.js', 'data/savings_text.js','data/top_text.js', 'data/textData.js', 'js/urban-selects.js', 'js/bja.js'],  
-    jsDest = '';
+    jsDest = '/Users/bchartof/Projects/jri';
 
 gulp.task('scripts', function() {  
     return gulp.src(jsFiles)
@@ -21,5 +21,5 @@ gulp.task('styles', function() {
 	return gulp.src(['css/chart.css','css/bja.css', 'css/vendor/*.css'])
 	    .pipe(minifyCSS())
 	    .pipe(concat('bja.min.css'))
-	    .pipe(gulp.dest(''))
+	    .pipe(gulp.dest('/Users/bchartof/Projects/jri'))
 });
